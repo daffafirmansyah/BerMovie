@@ -318,6 +318,9 @@ function initHomePage() {
     loadHomeCarousel('/tv/popular', 'tvCarousel', 'tv');
     loadHomeCarousel('/movie/top_rated', 'topRatedCarousel', 'movie');
     loadHomeCarousel('/movie/now_playing', 'nowPlayingCarousel', 'movie');
+    // Indonesian content
+    loadHomeCarousel('/discover/movie?with_origin_country=ID', 'indoMoviesCarousel', 'movie');
+    loadHomeCarousel('/discover/tv?with_origin_country=ID', 'indoSeriesCarousel', 'tv');
 }
 
 // ===== MOVIES PAGE =====
@@ -354,6 +357,10 @@ function initMoviesPage() {
     const sortSel = $('#sortFilter');
     const countrySel = $('#countryFilter');
 
+    // Check URL params
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlCountry = urlParams.get('country');
+
     if (genreSel) {
         genreSel.innerHTML = '<option value="">Semua Genre</option>';
         MOVIE_GENRES.forEach(g => {
@@ -372,7 +379,9 @@ function initMoviesPage() {
     }
     if (countrySel) {
         countrySel.onchange = () => { currentCountry = countrySel.value; currentPage=1; loadMovies(); };
-        loadCountries(countrySel);
+        loadCountries(countrySel).then(() => {
+            if (urlCountry) { countrySel.value = urlCountry; currentCountry = urlCountry; }
+        });
     }
     loadMovies();
 }
@@ -413,6 +422,9 @@ function initTvPage() {
     const countrySel = $('#countryFilter');
     const networkSel = $('#networkFilter');
 
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlCountry = urlParams.get('country');
+
     if (genreSel) {
         genreSel.innerHTML = '<option value="">Semua Genre</option>';
         TV_GENRES.forEach(g => {
@@ -431,7 +443,9 @@ function initTvPage() {
     }
     if (countrySel) {
         countrySel.onchange = () => { currentCountry = countrySel.value; currentPage=1; loadTvShows(); };
-        loadCountries(countrySel);
+        loadCountries(countrySel).then(() => {
+            if (urlCountry) { countrySel.value = urlCountry; currentCountry = urlCountry; }
+        });
     }
     if (networkSel) {
         networkSel.innerHTML = '<option value="">Semua Network</option>';
