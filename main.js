@@ -8,6 +8,7 @@ const IMG_CAST = `${IMG}/w185`;
 const NO_POSTER = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="500" height="750" fill="%231a1a2e"><rect width="500" height="750"/><text x="250" y="375" text-anchor="middle" fill="%23666" font-size="24">No Poster</text></svg>');
 const VIDSRV = 'https://vidsrcme.ru/embed';
 const VIDSRV2 = 'https://vidsrc.su/embed';
+const PROXY_URL = ''; // Isi setelah deploy Cloudflare Worker, contoh: 'https://your-worker.workers.dev/proxy?url='
 
 // ===== GENRES =====
 const MOVIE_GENRES = [
@@ -201,16 +202,19 @@ async function openDetail(id, type = 'movie') {
 
 // ===== PLAYER =====
 function getPlayerUrl(id, type, season, episode) {
+    let rawUrl;
     if (currentServer === 'vidsrc') {
-        if (type === 'tv') return `${VIDSRV}/tv?tmdb=${id}&season=${season}&episode=${episode}`;
-        return `${VIDSRV}/movie?tmdb=${id}`;
+        if (type === 'tv') rawUrl = `${VIDSRV}/tv?tmdb=${id}&season=${season}&episode=${episode}`;
+        else rawUrl = `${VIDSRV}/movie?tmdb=${id}`;
     } else if (currentServer === 'vidsrc2') {
-        if (type === 'tv') return `${VIDSRV2}/tv/${id}/${season}/${episode}`;
-        return `${VIDSRV2}/movie/${id}`;
+        if (type === 'tv') rawUrl = `${VIDSRV2}/tv/${id}/${season}/${episode}`;
+        else rawUrl = `${VIDSRV2}/movie/${id}`;
     } else {
-        if (type === 'tv') return `https://www.2embed.cc/embedtv/${id}&s=${season}&e=${episode}`;
-        return `https://www.2embed.cc/embed/${id}`;
+        if (type === 'tv') rawUrl = `https://www.2embed.cc/embedtv/${id}&s=${season}&e=${episode}`;
+        else rawUrl = `https://www.2embed.cc/embed/${id}`;
     }
+    // Jika proxy aktif, wrap URL
+    return PROXY_URL ? PROXY_URL + encodeURIComponent(rawUrl) : rawUrl;
 }
 
 async function openPlayer(id, type, title, season=1, episode=1) {
