@@ -194,32 +194,6 @@ async function openPlayer(id, type, title, season=1, episode=1) {
             $('#playerFrame').src = getPlayerUrl(id, type, s, ep);
         };
     });
-
-    // Floating subtitle overlay — scrollable, on top of video
-    let subOverlay = document.getElementById('subtitleOverlay');
-    if (!subOverlay) {
-        subOverlay = document.createElement('div');
-        subOverlay.id = 'subtitleOverlay';
-        subOverlay.className = 'subtitle-overlay';
-        subOverlay.innerHTML = '<div class="subtitle-handle">Subtitle <span class="subtitle-toggle">Tampilkan</span></div><div class="subtitle-body"><p class="subtitle-text">Memuat...</p></div>';
-        $('.iframe-container').appendChild(subOverlay);
-        subOverlay.querySelector('.subtitle-toggle').onclick = () => {
-            const body = subOverlay.querySelector('.subtitle-body');
-            const open = body.classList.toggle('open');
-            subOverlay.querySelector('.subtitle-toggle').textContent = open ? 'Sembunyikan' : 'Tampilkan';
-        };
-        tmdb(`/${type}/${id}`).then(d => {
-            if (d) {
-                const txt = subOverlay.querySelector('.subtitle-text');
-                let html = (d.overview||'Tidak ada deskripsi.') + '<br><br>';
-                html += '<strong>Genre:</strong> ' + (d.genres?.map(g=>g.name).join(', ')||'-') + '<br>';
-                html += '<strong>Rating:</strong> ★ ' + (d.vote_average?.toFixed(1)||'0.0') + '<br>';
-                if (d.runtime) html += '<strong>Durasi:</strong> ' + Math.floor(d.runtime/60) + 'j ' + (d.runtime%60) + 'm';
-                if (d.release_date || d.first_air_date) html += '<br><strong>Rilis:</strong> ' + (d.release_date||d.first_air_date);
-                txt.innerHTML = html;
-            }
-        });
-    }
 }
 
 async function loadEpisodes(id, season, type, activeEp=1) {
