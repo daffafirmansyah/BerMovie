@@ -541,7 +541,7 @@ function initGlobalEvents() {
     const menuBtn = $('#mobileMenuBtn');
     const mobileMenu = $('#mobileMenu');
     if (menuBtn && mobileMenu) {
-        menuBtn.onclick = () => mobileMenu.classList.toggle('hidden');
+        menuBtn.onclick = () => mobileMenu.classList.toggle('open');
     }
 
     // Close modals
