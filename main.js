@@ -73,7 +73,9 @@ function createCard(item, type) {
             </div>
         </div>
     `;
-    div.onclick = () => openDetail(item.id, mediaType);
+    div.onclick = () => {
+        window.location.href = `detail.html?id=${item.id}&type=${mediaType}`;
+    };
     return div;
 }
 
@@ -266,7 +268,9 @@ async function loadHero() {
     $('#heroTitle').textContent = item.title||item.name;
     $('#heroOverview').textContent = truncate(item.overview, 200);
     $('#heroMeta').innerHTML = `<span class="rating">★ ${rating(item.vote_average)}</span><span>${year(item.release_date||item.first_air_date)}</span><span>${type==='movie'?'🎬 Film':'📺 Series'}</span>`;
-    $('#heroBtn').onclick = () => openDetail(item.id, type);
+    $('#heroBtn').onclick = () => {
+        window.location.href = `detail.html?id=${item.id}&type=${type}`;
+    };
 }
 
 async function loadHomeCarousel(path, containerId, type) {
@@ -548,6 +552,84 @@ function initGlobalEvents() {
         el.onclick = closeAllModals;
     });
     document.onkeydown = e => { if(e.key==='Escape') closeAllModals(); };
+}
+
+// ===== DETAIL PAGE (for detail.html) =====
+async function loadDetailPage(id, type) {
+    const loading = document.getElementById('detailLoading');
+    const page = document.getElementById('detailPage');
+    if (!page) return;
+
+    const [detail, credits, similar] = await Promise.all([
+        tmdb(`/${type}/${id}`),
+        tmdb(`/${type}/${id}/credits`),
+        tmdb(`/${type}/${id}/similar`)
+    ]);
+
+    if (!detail) {
+        loading.textContent = 'Gagal memuat detail. Coba lagi.';
+        return;
+    }
+
+    loading?.classList.add('hidden');
+    page.classList.remove('hidden');
+
+    const title = detail.title || detail.name;
+    const date = detail.release_date || detail.first_air_date;
+    const runtime = detail.runtime || (detail.episode_run_time?.[0]) || 0;
+    const genres = detail.genres?.map(g => g.name).join(', ') || '';
+
+    document.title = `${title} - NontonFilm`;
+
+    document.getElementById('detailHero').style.backgroundImage = `url(${backdropUrl(detail.backdrop_path)})`;
+    document.getElementById('detailTitle').textContent = title;
+    document.getElementById('detailMeta').innerHTML = `
+        <span class="detail-rating">★ ${rating(detail.vote_average)}</span>
+        <span>${year(date)}</span>
+        ${runtime ? `<span>⏱ ${runtime} min</span>` : ''}
+        <span>${type === 'movie' ? '🎬 Film' : '📺 Series'}</span>
+        ${genres ? `<span>${genres}</span>` : ''}
+    `;
+    document.getElementById('detailOverview').textContent = detail.overview || 'Tidak ada deskripsi.';
+
+    const castEl = document.getElementById('detailCast');
+    castEl.innerHTML = '';
+    credits?.cast?.slice(0, 10).forEach(c => {
+        castEl.innerHTML += `<div class="detail-cast-item"><img src="${c.profile_path ? IMG_CAST + c.profile_path : NO_POSTER}" alt="${c.name}" onerror="this.src='${NO_POSTER}'"><p>${c.name}</p></div>`;
+    });
+
+    document.getElementById('detailWatchBtn').onclick = () => openPlayer(id, type, title);
+    document.getElementById('detailTrailerBtn').onclick = () => {
+        const tr = detail.videos?.results?.find(v => v.type==='Trailer'&&v.site==='YouTube');
+        if(tr) window.open(`https://www.youtube.com/watch?v=${tr.key}`,'_blank');
+        else alert('Trailer tidak tersedia');
+    };
+
+    // Seasons (TV)
+    const seasonsSection = document.getElementById('detailSeasons');
+    if (type === 'tv' && detail.seasons?.length) {
+        seasonsSection.classList.remove('hidden');
+        const list = document.getElementById('detailSeasonsList');
+        list.innerHTML = '';
+        detail.seasons.filter(s => s.season_number > 0).forEach(s => {
+            const card = document.createElement('div');
+            card.className = 'season-card';
+            card.innerHTML = `${s.poster_path ? `<img src="${IMG_POSTER}${s.poster_path}" alt="">` : ''}<div class="info"><strong>Season ${s.season_number}</strong><small>${s.episode_count} Episode</small></div>`;
+            card.onclick = () => openPlayer(id, type, title, s.season_number, 1);
+            list.appendChild(card);
+        });
+    } else {
+        seasonsSection?.classList.add('hidden');
+    }
+
+    // Similar
+    const sim = document.getElementById('detailSimilar');
+    sim.innerHTML = '';
+    similar?.results?.slice(0, 10).forEach(i => {
+        const c = createCard(i, type);
+        // Card click already navigates via createCard's onclick
+        sim.appendChild(c);
+    });
 }
 
 // ===== INIT =====
