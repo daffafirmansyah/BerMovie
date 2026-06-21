@@ -38,7 +38,31 @@ const NETWORKS = [
   {id:1286,name:'Nickelodeon'},{id:1288,name:'Cartoon Network'}
 ];
 
-// ===== STATE =====
+// ===== URL STATE =====
+function updateURL() {
+    const params = new URLSearchParams();
+    if (currentGenreId) params.set('genre', currentGenreId);
+    if (currentYear) params.set('year', currentYear);
+    if (currentCountry) params.set('country', currentCountry);
+    if (currentNetwork) params.set('network', currentNetwork);
+    if (currentSort !== 'popularity.desc') params.set('sort', currentSort);
+    if (currentPage > 1) params.set('page', currentPage);
+    const qs = params.toString();
+    const url = window.location.pathname + (qs ? '?' + qs : '');
+    window.history.replaceState(null, '', url);
+}
+
+function getURLParams() {
+    const p = new URLSearchParams(window.location.search);
+    return {
+        genre: p.get('genre') || null,
+        year: p.get('year') || '',
+        country: p.get('country') || '',
+        network: p.get('network') || '',
+        sort: p.get('sort') || 'popularity.desc',
+        page: parseInt(p.get('page') || '1')
+    };
+}
 let currentServer = '2embed';
 let currentPage = 1;
 let currentMediaType = 'movie';
@@ -360,25 +384,31 @@ function initMoviesPage() {
     // Check URL params
     const urlParams = new URLSearchParams(window.location.search);
     const urlCountry = urlParams.get('country');
+    const urlGenre = urlParams.get('genre');
+    const urlYear = urlParams.get('year');
+    const urlSort = urlParams.get('sort');
 
     if (genreSel) {
         genreSel.innerHTML = '<option value="">Semua Genre</option>';
         MOVIE_GENRES.forEach(g => {
             genreSel.innerHTML += `<option value="${g.id}">${g.name}</option>`;
         });
-        genreSel.onchange = () => { currentGenreId = genreSel.value||null; currentPage=1; loadMovies(); };
+        if (urlGenre) { genreSel.value = urlGenre; currentGenreId = urlGenre; }
+        genreSel.onchange = () => { currentGenreId = genreSel.value||null; currentPage=1; loadMovies(); updateURL(); };
     }
     if (yearSel) {
         const now = new Date().getFullYear();
         yearSel.innerHTML = '<option value="">Semua Tahun</option>';
         for (let y = now; y >= 1950; y--) yearSel.innerHTML += `<option value="${y}">${y}</option>`;
-        yearSel.onchange = () => { currentYear = yearSel.value; currentPage=1; loadMovies(); };
+        if (urlYear) { yearSel.value = urlYear; currentYear = urlYear; }
+        yearSel.onchange = () => { currentYear = yearSel.value; currentPage=1; loadMovies(); updateURL(); };
     }
     if (sortSel) {
-        sortSel.onchange = () => { currentSort = sortSel.value; currentPage=1; loadMovies(); };
+        if (urlSort) { sortSel.value = urlSort; currentSort = urlSort; }
+        sortSel.onchange = () => { currentSort = sortSel.value; currentPage=1; loadMovies(); updateURL(); };
     }
     if (countrySel) {
-        countrySel.onchange = () => { currentCountry = countrySel.value; currentPage=1; loadMovies(); };
+        countrySel.onchange = () => { currentCountry = countrySel.value; currentPage=1; loadMovies(); updateURL(); };
         loadCountries(countrySel).then(() => {
             if (urlCountry) { countrySel.value = urlCountry; currentCountry = urlCountry; }
         });
@@ -424,25 +454,32 @@ function initTvPage() {
 
     const urlParams = new URLSearchParams(window.location.search);
     const urlCountry = urlParams.get('country');
+    const urlGenre = urlParams.get('genre');
+    const urlYear = urlParams.get('year');
+    const urlSort = urlParams.get('sort');
+    const urlNetwork = urlParams.get('network');
 
     if (genreSel) {
         genreSel.innerHTML = '<option value="">Semua Genre</option>';
         TV_GENRES.forEach(g => {
             genreSel.innerHTML += `<option value="${g.id}">${g.name}</option>`;
         });
-        genreSel.onchange = () => { currentGenreId = genreSel.value||null; currentPage=1; loadTvShows(); };
+        if (urlGenre) { genreSel.value = urlGenre; currentGenreId = urlGenre; }
+        genreSel.onchange = () => { currentGenreId = genreSel.value||null; currentPage=1; loadTvShows(); updateURL(); };
     }
     if (yearSel) {
         const now = new Date().getFullYear();
         yearSel.innerHTML = '<option value="">Semua Tahun</option>';
         for (let y = now; y >= 1950; y--) yearSel.innerHTML += `<option value="${y}">${y}</option>`;
-        yearSel.onchange = () => { currentYear = yearSel.value; currentPage=1; loadTvShows(); };
+        if (urlYear) { yearSel.value = urlYear; currentYear = urlYear; }
+        yearSel.onchange = () => { currentYear = yearSel.value; currentPage=1; loadTvShows(); updateURL(); };
     }
     if (sortSel) {
-        sortSel.onchange = () => { currentSort = sortSel.value; currentPage=1; loadTvShows(); };
+        if (urlSort) { sortSel.value = urlSort; currentSort = urlSort; }
+        sortSel.onchange = () => { currentSort = sortSel.value; currentPage=1; loadTvShows(); updateURL(); };
     }
     if (countrySel) {
-        countrySel.onchange = () => { currentCountry = countrySel.value; currentPage=1; loadTvShows(); };
+        countrySel.onchange = () => { currentCountry = countrySel.value; currentPage=1; loadTvShows(); updateURL(); };
         loadCountries(countrySel).then(() => {
             if (urlCountry) { countrySel.value = urlCountry; currentCountry = urlCountry; }
         });
@@ -450,7 +487,8 @@ function initTvPage() {
     if (networkSel) {
         networkSel.innerHTML = '<option value="">Semua Network</option>';
         NETWORKS.forEach(n => { networkSel.innerHTML += `<option value="${n.id}">${n.name}</option>`; });
-        networkSel.onchange = () => { currentNetwork = networkSel.value; currentPage=1; loadTvShows(); };
+        if (urlNetwork) { networkSel.value = urlNetwork; currentNetwork = urlNetwork; }
+        networkSel.onchange = () => { currentNetwork = networkSel.value; currentPage=1; loadTvShows(); updateURL(); };
     }
     loadTvShows();
 }
@@ -500,6 +538,7 @@ function initGenrePage() {
         yearSel.onchange = () => {
             currentYear = yearSel.value;
             if(activeGenre) loadGenreResults(activeType, activeGenre.id, activeGenre.name, 1);
+            updateURL();
         };
     }
 
@@ -508,6 +547,7 @@ function initGenrePage() {
         sortSel.onchange = () => {
             currentSort = sortSel.value;
             if(activeGenre) loadGenreResults(activeType, activeGenre.id, activeGenre.name, 1);
+            updateURL();
         };
     }
 
