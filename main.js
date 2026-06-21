@@ -194,6 +194,35 @@ async function openPlayer(id, type, title, season=1, episode=1) {
             $('#playerFrame').src = getPlayerUrl(id, type, s, ep);
         };
     });
+
+    // Inject fullscreen button + info panel
+    const fsBtn = document.getElementById('fullscreenBtn');
+    if (!fsBtn) {
+        const b = document.createElement('button');
+        b.id = 'fullscreenBtn';
+        b.className = 'fullscreen-btn';
+        b.innerHTML = '⛶ Fullscreen';
+        b.onclick = () => toggleFullscreenPlayer(id, type, title);
+        $('#playerTitle').parentNode.appendChild(b);
+    }
+    const infoPanel = document.getElementById('playerInfoPanel');
+    if (!infoPanel) {
+        const el = document.createElement('div');
+        el.id = 'playerInfoPanel';
+        el.className = 'player-info-panel';
+        el.style.display = 'none';
+        el.innerHTML = `<div class="panel-header"><h4>${title}</h4><button class="panel-toggle">Sembunyikan</button></div><div class="panel-scroll"><p class="info-text">Memuat...</p></div>`;
+        el.querySelector('.panel-toggle').onclick = () => { el.classList.toggle('collapsed'); el.querySelector('.panel-scroll').style.display = el.classList.contains('collapsed') ? 'none' : ''; };
+        el.querySelector('.panel-toggle').textContent = 'Sembunyikan';
+        $('.player-content').appendChild(el);
+        // Fetch detail for info panel
+        tmdb(`/${type}/${id}`).then(d => {
+            if (d) {
+                const txt = el.querySelector('.info-text');
+                txt.innerHTML = (d.overview||'Tidak ada deskripsi.') + '<br><br><strong>Genre:</strong> ' + (d.genres?.map(g=>g.name).join(', ')||'-') + '<br><strong>Rating:</strong> ★ ' + d.vote_average?.toFixed(1)||'0.0';
+            }
+        });
+    }
 }
 
 async function loadEpisodes(id, season, type, activeEp=1) {
@@ -224,6 +253,14 @@ function closeAllModals() {
     const f = $('#playerFrame');
     if (f) f.src = '';
     document.body.style.overflow = '';
+    // Exit fullscreen
+    const pc = $('.player-content');
+    if (pc && pc.classList.contains('is-fullscreen')) {
+        pc.classList.remove('is-fullscreen');
+        const panel = $('#playerInfoPanel');
+        if (panel) panel.style.display = 'none';
+    }
+    if (document.fullscreenElement) document.exitFullscreen();
 }
 
 // ===== PAGINATION =====
@@ -631,6 +668,80 @@ async function loadDetailPage(id, type) {
         sim.appendChild(c);
     });
 }
+
+// ===== FULLSCREEN PLAYER =====
+function toggleFullscreenPlayer(id, type, title) {
+    const pc = $('.player-content');
+    if (!pc) return;
+    const isActive = pc.classList.contains('is-fullscreen');
+    if (isActive) {
+        pc.classList.remove('is-fullscreen');
+        const panel = $('#playerInfoPanel');
+        if (panel) panel.style.display = 'none';
+        if (document.fullscreenElement) document.exitFullscreen();
+        document.querySelector('.fullscreen-btn').innerHTML = '⛶ Fullscreen';
+    } else {
+        pc.classList.add('is-fullscreen');
+        const panel = $('#playerInfoPanel');
+        if (panel) {
+            panel.style.display = 'flex';
+            // Scroll capture — prevent scroll from reaching video/fullscreen
+            const scrollEl = panel.querySelector('.panel-scroll');
+            if (scrollEl) {
+                const stopScroll = (e) => {
+                    const t = scrollEl;
+                    const canScrollDown = t.scrollTop + t.clientHeight < t.scrollHeight;
+                    const canScrollUp = t.scrollTop > 0;
+                    const delta = e.deltaY || (e.touches ? e.touches[0].clientY : 0);
+                    if ((delta > 0 && canScrollDown) || (delta < 0 && canScrollUp)) {
+                        e.stopPropagation();
+                        e.preventDefault();
+                    } else if (t.scrollHeight <= t.clientHeight) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }
+                };
+                scrollEl.addEventListener('wheel', stopScroll, { passive: false });
+                scrollEl.addEventListener('touchmove', stopScroll, { passive: false });
+                // Keyboard scroll
+                scrollEl.addEventListener('keydown', (e) => {
+                    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+                        e.stopPropagation();
+                    }
+                });
+            }
+        }
+        pc.requestFullscreen ? pc.requestFullscreen() :
+        pc.webkitRequestFullscreen ? pc.webkitRequestFullscreen() :
+        pc.msRequestFullscreen ? pc.msRequestFullscreen() : null;
+        document.querySelector('.fullscreen-btn').innerHTML = '✕ Keluar';
+    }
+}
+// Listen for fullscreen change (Escape key)
+document.addEventListener('fullscreenchange', () => {
+    if (!document.fullscreenElement) {
+        const pc = $('.player-content');
+        if (pc && pc.classList.contains('is-fullscreen')) {
+            pc.classList.remove('is-fullscreen');
+            const panel = $('#playerInfoPanel');
+            if (panel) panel.style.display = 'none';
+            const fb = document.querySelector('.fullscreen-btn');
+            if (fb) fb.innerHTML = '⛶ Fullscreen';
+        }
+    }
+});
+document.addEventListener('webkitfullscreenchange', () => {
+    if (!document.webkitFullscreenElement) {
+        const pc = $('.player-content');
+        if (pc && pc.classList.contains('is-fullscreen')) {
+            pc.classList.remove('is-fullscreen');
+            const panel = $('#playerInfoPanel');
+            if (panel) panel.style.display = 'none';
+            const fb = document.querySelector('.fullscreen-btn');
+            if (fb) fb.innerHTML = '⛶ Fullscreen';
+        }
+    }
+});
 
 // ===== INIT =====
 document.addEventListener('DOMContentLoaded', () => {
