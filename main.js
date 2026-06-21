@@ -201,7 +201,7 @@ async function openPlayer(id, type, title, season=1, episode=1) {
         const b = document.createElement('button');
         b.id = 'fullscreenBtn';
         b.className = 'fullscreen-btn';
-        b.innerHTML = '⛶ Fullscreen';
+        b.innerHTML = '⛶ Expand';
         b.onclick = () => toggleFullscreenPlayer(id, type, title);
         $('#playerTitle').parentNode.appendChild(b);
     }
@@ -255,10 +255,8 @@ function closeAllModals() {
     document.body.style.overflow = '';
     // Exit fullscreen
     const pc = $('.player-content');
-    const modal = $('#playerModal');
     if (pc && pc.classList.contains('is-fullscreen')) {
         pc.classList.remove('is-fullscreen');
-        if (modal) modal.classList.remove('is-fullscreen');
         const panel = $('#playerInfoPanel');
         if (panel) panel.style.display = 'none';
     }
@@ -677,43 +675,38 @@ function toggleFullscreenPlayer(id, type, title) {
     const modal = $('#playerModal');
     if (!modal) return;
     const isActive = pc.classList.contains('is-fullscreen');
+
     if (isActive) {
+        // EXIT smart fullscreen
         pc.classList.remove('is-fullscreen');
-        modal.classList.remove('is-fullscreen');
         const panel = $('#playerInfoPanel');
         if (panel) panel.style.display = 'none';
-        document.querySelector('.fullscreen-btn').innerHTML = '⛶ Fullscreen';
-        document.body.style.overflow = 'hidden'; // restore modal state
         const guard = document.getElementById('scrollGuard');
         if (guard) guard.style.display = 'none';
+        document.querySelector('.fullscreen-btn').innerHTML = '⛶ Expand';
+        if (document.fullscreenElement) document.exitFullscreen();
     } else {
+        // ENTER smart fullscreen — Fullscreen API on player-content DIV
         pc.classList.add('is-fullscreen');
-        modal.classList.add('is-fullscreen');
+        // Show info panel
         const panel = $('#playerInfoPanel');
         if (panel) {
             panel.style.display = 'flex';
-            // Scroll capture — prevent scroll propagation
             const scrollEl = panel.querySelector('.panel-scroll');
-            if (scrollEl) {
+            if (scrollEl && !scrollEl._hasGuard) {
+                scrollEl._hasGuard = true;
                 scrollEl.addEventListener('wheel', (e) => {
                     const t = scrollEl;
                     const atTop = t.scrollTop <= 0;
                     const atBottom = t.scrollTop + t.clientHeight >= t.scrollHeight;
-                    if ((e.deltaY < 0 && atTop) || (e.deltaY > 0 && atBottom)) {
-                        // At boundary — let browser handle (no-op for volume)
-                    } else {
+                    if (!((e.deltaY < 0 && atTop) || (e.deltaY > 0 && atBottom))) {
                         e.stopPropagation();
                         e.preventDefault();
                     }
                 }, { passive: false });
-                scrollEl.addEventListener('touchmove', (e) => {
-                    e.stopPropagation();
-                }, { passive: true });
             }
         }
-        document.body.style.overflow = 'hidden';
-        document.querySelector('.fullscreen-btn').innerHTML = '✕ Keluar';
-        // Add scroll guard overlay on iframe
+        // Scroll guard on iframe
         let guard = document.getElementById('scrollGuard');
         if (!guard) {
             guard = document.createElement('div');
@@ -725,19 +718,47 @@ function toggleFullscreenPlayer(id, type, title) {
             if (ic) { ic.style.position = 'relative'; ic.appendChild(guard); }
         }
         guard.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+        document.querySelector('.fullscreen-btn').innerHTML = '✕ Exit';
+
+        // Request fullscreen on container (NOT iframe)
+        try {
+            const el = pc;
+            if (el.requestFullscreen) el.requestFullscreen();
+            else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+        } catch(e) {}
     }
 }
-// Escape key exits custom fullscreen
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
+
+// Fullscreenchange — clean up if user presses Escape
+document.addEventListener('fullscreenchange', () => {
+    if (!document.fullscreenElement) {
         const pc = $('.player-content');
         if (pc && pc.classList.contains('is-fullscreen')) {
-            toggleFullscreenPlayer();
+            pc.classList.remove('is-fullscreen');
+            const panel = $('#playerInfoPanel');
+            if (panel) panel.style.display = 'none';
+            const guard = document.getElementById('scrollGuard');
+            if (guard) guard.style.display = 'none';
+            const fb = document.querySelector('.fullscreen-btn');
+            if (fb) fb.innerHTML = '⛶ Expand';
         }
     }
 });
-
-// ===== INIT =====
+document.addEventListener('webkitfullscreenchange', () => {
+    if (!document.webkitFullscreenElement) {
+        const pc = $('.player-content');
+        if (pc && pc.classList.contains('is-fullscreen')) {
+            pc.classList.remove('is-fullscreen');
+            const panel = $('#playerInfoPanel');
+            if (panel) panel.style.display = 'none';
+            const guard = document.getElementById('scrollGuard');
+            if (guard) guard.style.display = 'none';
+            const fb = document.querySelector('.fullscreen-btn');
+            if (fb) fb.innerHTML = '⛶ Expand';
+        }
+    }
+});
 document.addEventListener('DOMContentLoaded', () => {
     initGlobalEvents();
 
