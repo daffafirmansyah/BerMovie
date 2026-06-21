@@ -25,7 +25,7 @@ const TV_GENRES = [
 ];
 
 // ===== STATE =====
-let currentServer = 'vidsrc';
+let currentServer = '2embed';
 let currentPage = 1;
 let currentMediaType = 'movie';
 let currentGenreId = null;
