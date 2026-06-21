@@ -924,9 +924,18 @@ select { font-family: inherit; }
 .player-info-panel { display: none; }
 
 /* ===== FULLSCREEN OVERLAY ===== */
-.player-content.is-fullscreen {
-    width: 100vw;
+/* CSS-only fullscreen — NO browser Fullscreen API, so scroll→volume never triggers */
+.player-modal.is-fullscreen {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 99999 !important;
+    padding: 0 !important;
+    background: #000 !important;
+    border-radius: 0 !important;
+}
+.player-modal.is-fullscreen .player-content {
     height: 100vh;
+    width: 100vw;
     max-width: 100%;
     max-height: 100vh;
     padding: 12px 16px;
@@ -934,30 +943,31 @@ select { font-family: inherit; }
     background: #000;
     display: flex;
     flex-direction: column;
+    border-radius: 0;
 }
-.player-content.is-fullscreen .player-header {
+.player-modal.is-fullscreen .player-content .player-header {
     flex-shrink: 0;
     padding: 4px 8px;
 }
-.player-content.is-fullscreen .player-header h3 {
+.player-modal.is-fullscreen .player-content .player-header h3 {
     font-size: 0.9rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 50%;
 }
-.player-content.is-fullscreen iframe {
+.player-modal.is-fullscreen .player-content iframe {
     width: 100%;
     height: 100%;
     border: none;
 }
-.player-content.is-fullscreen .iframe-container {
+.player-modal.is-fullscreen .player-content .iframe-container {
     flex: 1 1 auto;
     min-height: 0;
     aspect-ratio: unset;
     border-radius: 8px;
 }
-.player-content.is-fullscreen .player-info-panel {
+.player-modal.is-fullscreen .player-content .player-info-panel {
     display: flex !important;
     flex-direction: column;
     max-height: 35vh;
@@ -969,19 +979,19 @@ select { font-family: inherit; }
     overflow: hidden;
     touch-action: pan-y;
 }
-.player-content.is-fullscreen .player-info-panel .panel-header {
+.player-modal.is-fullscreen .player-content .player-info-panel .panel-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 8px;
     flex-shrink: 0;
 }
-.player-content.is-fullscreen .player-info-panel .panel-header h4 {
+.player-modal.is-fullscreen .player-content .player-info-panel .panel-header h4 {
     font-size: 0.85rem;
     font-weight: 600;
     color: var(--text1);
 }
-.player-content.is-fullscreen .player-info-panel .panel-header .panel-toggle {
+.player-modal.is-fullscreen .player-content .player-info-panel .panel-header .panel-toggle {
     font-size: 0.75rem;
     padding: 3px 10px;
     border-radius: 12px;
@@ -990,28 +1000,28 @@ select { font-family: inherit; }
     color: var(--text2);
     cursor: pointer;
 }
-.player-content.is-fullscreen .player-info-panel .panel-scroll {
+.player-modal.is-fullscreen .player-content .player-info-panel .panel-scroll {
     flex: 1;
     overflow-y: auto;
     min-height: 0;
     padding-right: 4px;
     -webkit-overflow-scrolling: touch;
 }
-.player-content.is-fullscreen .player-info-panel .panel-scroll::-webkit-scrollbar {
+.player-modal.is-fullscreen .player-content .player-info-panel .panel-scroll::-webkit-scrollbar {
     width: 3px;
 }
-.player-content.is-fullscreen .player-info-panel .panel-scroll::-webkit-scrollbar-thumb {
+.player-modal.is-fullscreen .player-content .player-info-panel .panel-scroll::-webkit-scrollbar-thumb {
     background: rgba(255,255,255,0.2);
     border-radius: 3px;
 }
-.player-content.is-fullscreen .player-info-panel .panel-scroll p,
-.player-content.is-fullscreen .player-info-panel .panel-scroll .info-text {
+.player-modal.is-fullscreen .player-content .player-info-panel .panel-scroll p,
+.player-modal.is-fullscreen .player-content .player-info-panel .panel-scroll .info-text {
     font-size: 0.82rem;
     line-height: 1.6;
     color: var(--text2);
     margin-bottom: 8px;
 }
-.player-content.is-fullscreen .player-close {
+.player-modal.is-fullscreen .player-content .player-close {
     position: fixed;
     top: 12px;
     right: 12px;
@@ -1020,19 +1030,19 @@ select { font-family: inherit; }
     font-size: 1.2rem;
     z-index: 10000;
 }
-.player-content.is-fullscreen .player-servers {
+.player-modal.is-fullscreen .player-content .player-servers {
     display: none;
 }
 @media (max-width: 768px) {
-    .player-content.is-fullscreen { padding: 8px; gap: 6px; }
-    .player-content.is-fullscreen .player-info-panel { max-height: 30vh; padding: 10px 12px; }
-    .player-content.is-fullscreen .player-info-panel .panel-scroll p { font-size: 0.78rem; }
+    .player-modal.is-fullscreen .player-content { padding: 8px; gap: 6px; }
+    .player-modal.is-fullscreen .player-content .player-info-panel { max-height: 30vh; padding: 10px 12px; }
+    .player-modal.is-fullscreen .player-content .player-info-panel .panel-scroll p { font-size: 0.78rem; }
 }
 @media (min-width: 1024px) {
-    .player-content.is-fullscreen { flex-direction: row; flex-wrap: wrap; }
-    .player-content.is-fullscreen .player-header { width: 100%; }
-    .player-content.is-fullscreen .iframe-container { flex: 0 0 70%; height: calc(100vh - 60px); }
-    .player-content.is-fullscreen .player-info-panel { flex: 0 0 calc(30% - 12px); max-height: calc(100vh - 60px); margin-left: auto; }
+    .player-modal.is-fullscreen .player-content { flex-direction: row; flex-wrap: wrap; }
+    .player-modal.is-fullscreen .player-content .player-header { width: 100%; }
+    .player-modal.is-fullscreen .player-content .iframe-container { flex: 0 0 70%; height: calc(100vh - 60px); }
+    .player-modal.is-fullscreen .player-content .player-info-panel { flex: 0 0 calc(30% - 12px); max-height: calc(100vh - 60px); margin-left: auto; }
 }
 /* ===== FULLSCREEN BTN ===== */
 .fullscreen-btn {

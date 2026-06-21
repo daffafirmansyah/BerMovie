@@ -255,8 +255,10 @@ function closeAllModals() {
     document.body.style.overflow = '';
     // Exit fullscreen
     const pc = $('.player-content');
+    const modal = $('#playerModal');
     if (pc && pc.classList.contains('is-fullscreen')) {
         pc.classList.remove('is-fullscreen');
+        if (modal) modal.classList.remove('is-fullscreen');
         const panel = $('#playerInfoPanel');
         if (panel) panel.style.display = 'none';
     }
@@ -668,34 +670,30 @@ async function loadDetailPage(id, type) {
     });
 }
 
-// ===== FULLSCREEN PLAYER =====
+// ===== FULLSCREEN PLAYER (CSS-only, no Fullscreen API) =====
 function toggleFullscreenPlayer(id, type, title) {
     const pc = $('.player-content');
-    if (!pc) return;
     const modal = $('#playerModal');
-    if (!modal) return;
+    if (!pc || !modal) return;
     const isActive = pc.classList.contains('is-fullscreen');
 
     if (isActive) {
-        // EXIT smart fullscreen
         pc.classList.remove('is-fullscreen');
+        modal.classList.remove('is-fullscreen');
         const panel = $('#playerInfoPanel');
         if (panel) panel.style.display = 'none';
-        const guard = document.getElementById('scrollGuard');
-        if (guard) guard.style.display = 'none';
-        document.querySelector('.fullscreen-btn').innerHTML = '⛶ Expand';
-        if (document.fullscreenElement) document.exitFullscreen();
+        document.querySelector('.fullscreen-btn').innerHTML = '⛶ Fullscreen';
+        document.body.style.overflow = 'hidden'; // restore modal lock
     } else {
-        // ENTER smart fullscreen — Fullscreen API on player-content DIV
         pc.classList.add('is-fullscreen');
-        // Show info panel
+        modal.classList.add('is-fullscreen');
         const panel = $('#playerInfoPanel');
         if (panel) {
             panel.style.display = 'flex';
             const scrollEl = panel.querySelector('.panel-scroll');
-            if (scrollEl && !scrollEl._hasGuard) {
-                scrollEl._hasGuard = true;
-                scrollEl.addEventListener('wheel', (e) => {
+            if (scrollEl && !scrollEl._guard) {
+                scrollEl._guard = true;
+                const handler = (e) => {
                     const t = scrollEl;
                     const atTop = t.scrollTop <= 0;
                     const atBottom = t.scrollTop + t.clientHeight >= t.scrollHeight;
@@ -703,59 +701,28 @@ function toggleFullscreenPlayer(id, type, title) {
                         e.stopPropagation();
                         e.preventDefault();
                     }
-                }, { passive: false });
+                };
+                scrollEl.addEventListener('wheel', handler, { passive: false });
+                scrollEl.addEventListener('touchmove', handler, { passive: false });
             }
         }
-        // Scroll guard on iframe
-        let guard = document.getElementById('scrollGuard');
-        if (!guard) {
-            guard = document.createElement('div');
-            guard.id = 'scrollGuard';
-            guard.style.cssText = 'position:absolute;inset:0;z-index:5;background:transparent;';
-            guard.addEventListener('wheel', (e) => { e.preventDefault(); e.stopPropagation(); }, { passive: false });
-            guard.addEventListener('touchmove', (e) => { e.preventDefault(); e.stopPropagation(); }, { passive: false });
-            const ic = $('.iframe-container');
-            if (ic) { ic.style.position = 'relative'; ic.appendChild(guard); }
-        }
-        guard.style.display = 'block';
-        document.body.style.overflow = 'hidden';
         document.querySelector('.fullscreen-btn').innerHTML = '✕ Exit';
-
-        // Request fullscreen on container (NOT iframe)
-        try {
-            const el = pc;
-            if (el.requestFullscreen) el.requestFullscreen();
-            else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
-        } catch(e) {}
+        document.body.style.overflow = 'hidden';
     }
 }
 
-// Fullscreenchange — clean up if user presses Escape
-document.addEventListener('fullscreenchange', () => {
-    if (!document.fullscreenElement) {
+// Escape exits CSS fullscreen
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
         const pc = $('.player-content');
         if (pc && pc.classList.contains('is-fullscreen')) {
             pc.classList.remove('is-fullscreen');
+            const modal = $('#playerModal');
+            if (modal) modal.classList.remove('is-fullscreen');
             const panel = $('#playerInfoPanel');
             if (panel) panel.style.display = 'none';
-            const guard = document.getElementById('scrollGuard');
-            if (guard) guard.style.display = 'none';
-            const fb = document.querySelector('.fullscreen-btn');
-            if (fb) fb.innerHTML = '⛶ Expand';
-        }
-    }
-});
-document.addEventListener('webkitfullscreenchange', () => {
-    if (!document.webkitFullscreenElement) {
-        const pc = $('.player-content');
-        if (pc && pc.classList.contains('is-fullscreen')) {
-            pc.classList.remove('is-fullscreen');
-            const panel = $('#playerInfoPanel');
-            if (panel) panel.style.display = 'none';
-            const guard = document.getElementById('scrollGuard');
-            if (guard) guard.style.display = 'none';
-            const fb = document.querySelector('.fullscreen-btn');
-            if (fb) fb.innerHTML = '⛶ Expand';
+            document.querySelector('.fullscreen-btn').innerHTML = '⛶ Fullscreen';
+            document.body.style.overflow = 'hidden';
         }
     }
 });
