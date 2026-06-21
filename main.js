@@ -46,7 +46,7 @@ const truncate = (s, n) => s && s.length > n ? s.slice(0, n) + '...' : s;
 async function tmdb(path, params = {}) {
     const url = new URL(`${TMDB}${path}`);
     url.searchParams.set('api_key', TMDB_KEY);
-    url.searchParams.set('language', 'id-ID');
+    url.searchParams.set('language', 'en-US');
     Object.entries(params).forEach(([k, v]) => { if(v) url.searchParams.set(k, v); });
     try {
         const res = await fetch(url);
@@ -107,7 +107,7 @@ async function openDetail(id, type = 'movie') {
         <span>${type === 'movie' ? '🎬 Film' : '📺 Series'}</span>
         ${genres ? `<span>${genres}</span>` : ''}
     `;
-    $('#modalOverview').textContent = detail.overview || 'Tidak ada deskripsi.';
+    $('#modalOverview').textContent = detail.overview || 'No description available.';
 
     const castEl = $('#modalCast');
     castEl.innerHTML = '';
@@ -590,7 +590,7 @@ async function loadDetailPage(id, type) {
         <span>${type === 'movie' ? '🎬 Film' : '📺 Series'}</span>
         ${genres ? `<span>${genres}</span>` : ''}
     `;
-    document.getElementById('detailOverview').textContent = detail.overview || 'Tidak ada deskripsi.';
+    document.getElementById('detailOverview').textContent = detail.overview || 'No description available.';
 
     const castEl = document.getElementById('detailCast');
     castEl.innerHTML = '';
