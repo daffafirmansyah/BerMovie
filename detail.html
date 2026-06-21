@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail - NontonFilm</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.v2.css">
+    <style>
+        .detail-page { padding-top: var(--nav-height); }
+        .detail-hero {
+            width: 100%; height: 50vh; min-height: 350px;
+            background-size: cover; background-position: center 20%;
+            position: relative;
+        }
+        .detail-hero::after {
+            content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+            height: 150px;
+            background: linear-gradient(to top, var(--bg) 0%, transparent 100%);
+        }
+        .detail-body {
+            max-width: 1000px; margin: -60px auto 0;
+            padding: 0 24px 60px; position: relative; z-index: 2;
+        }
+        .detail-body h1 {
+            font-size: clamp(1.5rem,3vw,2.5rem); font-weight: 800;
+            margin-bottom: 12px;
+        }
+        .detail-meta {
+            display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;
+        }
+        .detail-meta span {
+            padding: 4px 12px; background: rgba(255,255,255,0.06);
+            border-radius: 20px; font-size: 0.82rem; color: var(--text2);
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        .detail-overview {
+            color: var(--text2); line-height: 1.7; margin-bottom: 24px;
+            font-size: 0.95rem; max-width: 800px;
+        }
+        .detail-actions { display: flex; gap: 12px; margin-bottom: 32px; }
+        .detail-cast {
+            display: flex; gap: 16px; overflow-x: auto; margin-bottom: 32px;
+            padding-bottom: 8px;
+        }
+        .detail-cast::-webkit-scrollbar { height: 2px; }
+        .detail-cast-item { flex: 0 0 70px; text-align: center; }
+        .detail-cast-item img {
+            width: 56px; height: 56px; border-radius: 50%; object-fit: cover;
+            margin-bottom: 6px; background: #1a1a2e;
+            border: 2px solid rgba(255,255,255,0.06);
+        }
+        .detail-cast-item p {
+            font-size: 0.7rem; color: var(--text3);
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .detail-loading {
+            padding-top: calc(var(--nav-height) + 80px);
+            text-align: center; color: var(--text3);
+        }
+        .back-btn {
+            position: fixed; top: 80px; left: 20px; z-index: 50;
+            width: 44px; height: 44px; border-radius: 50%;
+            background: rgba(0,0,0,0.6); color: white; font-size: 1.3rem;
+            display: flex; align-items: center; justify-content: center;
+            backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1);
+            cursor: pointer; transition: all 0.2s;
+        }
+        .back-btn:hover { background: var(--accent); }
+        @media (max-width: 768px) {
+            .detail-hero { height: 35vh; min-height: 250px; }
+            .detail-body { padding: 0 12px 40px; margin-top: -40px; }
+            .back-btn { top: 74px; left: 12px; width: 36px; height: 36px; font-size: 1rem; }
+        }
+        .seasons-list {
+            display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;
+        }
+        .season-card {
+            display: flex; align-items: center; gap: 10px; padding: 10px 14px;
+            background: rgba(255,255,255,0.04); border-radius: 10px;
+            cursor: pointer; transition: all 0.2s;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        .season-card:hover { border-color: var(--accent); background: rgba(255,255,255,0.08); }
+        .season-card img { width: 36px; height: 54px; border-radius: 4px; object-fit: cover; }
+        .season-card .info { font-size: 0.82rem; }
+        .season-card .info strong { display: block; }
+        .season-card .info small { color: var(--text3); }
+        .section-title-sm { font-size: 1.1rem; font-weight: 700; margin-bottom: 14px; margin-top: 24px; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="./" class="logo">🎬 NontonFilm</a>
+            <div class="nav-search">
+                <input type="text" id="searchInput" placeholder="Cari film atau series..." autocomplete="off">
+                <button id="searchBtn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></button>
+            </div>
+            <div class="nav-links">
+                <a href="./">Home</a>
+                <a href="movies.html">Film</a>
+                <a href="tv.html">Series</a>
+                <a href="genre.html">Genre</a>
+            </div>
+        </div>
+    </nav>
+
+    <button class="back-btn" onclick="history.back()">←</button>
+
+    <div class="detail-loading" id="detailLoading">Memuat...</div>
+
+    <div class="detail-page hidden" id="detailPage">
+        <div class="detail-hero" id="detailHero"></div>
+        <div class="detail-body">
+            <h1 id="detailTitle"></h1>
+            <div class="detail-meta" id="detailMeta"></div>
+            <p class="detail-overview" id="detailOverview"></p>
+            <div class="detail-actions">
+                <button class="btn-watch" id="detailWatchBtn">▶ Tonton</button>
+                <button class="btn-secondary" id="detailTrailerBtn">🎥 Trailer</button>
+            </div>
+            <h3 class="section-title-sm">Pemain</h3>
+            <div class="detail-cast" id="detailCast"></div>
+            <div class="seasons-section hidden" id="detailSeasons">
+                <h3 class="section-title-sm">Seasons</h3>
+                <div class="seasons-list" id="detailSeasonsList"></div>
+            </div>
+            <h3 class="section-title-sm">Rekomendasi</h3>
+            <div class="carousel" id="detailSimilar"></div>
+        </div>
+    </div>
+
+    <!-- PLAYER MODAL -->
+    <div class="player-modal hidden" id="playerModal">
+        <div class="player-backdrop"></div>
+        <div class="player-content">
+            <button class="player-close">&times;</button>
+            <div class="player-header">
+                <h3 id="playerTitle"></h3>
+                <div class="player-servers">
+                    <span>Server:</span>
+                    <button class="server-btn active" data-server="vidsrc">VidSrc</button>
+                    <button class="server-btn" data-server="2embed">2Embed</button>
+                </div>
+            </div>
+            <div class="episode-selector hidden" id="episodeSelector">
+                <select id="seasonSelect"></select>
+                <div class="episodes-grid" id="episodesGrid"></div>
+            </div>
+            <div class="iframe-container">
+                <iframe id="playerFrame" src="" frameborder="0" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+    <script>
+        // Parse URL params
+        const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get('id');
+        const type = urlParams.get('type') || 'movie';
+        if (id) loadDetailPage(parseInt(id), type);
+        else document.getElementById('detailLoading').textContent = 'ID tidak ditemukan';
+    </script>
+</body>
+</html>
