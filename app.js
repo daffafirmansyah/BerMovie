@@ -1,5 +1,5 @@
 // ===== CONFIG =====
-const TMDB_KEY = '21e39f40a40b4e6dc5fb4f6a1878f670';
+const TMDB_KEY = '245f8c4922de78b5017c149fbfa89ab5';
 const TMDB = 'https://api.themoviedb.org/3';
 const IMG = 'https://image.tmdb.org/t/p';
 const IMG_POSTER = `${IMG}/w500`;
