@@ -487,6 +487,26 @@ input { font-family: inherit; outline: none; }
 .ep-btn:hover { background: var(--bg-hover); color: var(--text); }
 .ep-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
 
+/* ===== DETAIL MODAL (on home page) ===== */
+.modal {
+    position: fixed; inset: 0; z-index: 200;
+    background: rgba(0,0,0,0.9);
+    display: flex; align-items: center; justify-content: center;
+    padding: 16px;
+}
+.modal.hidden { display: none; }
+.modal-backdrop { position: fixed; inset: 0; }
+.modal-close {
+    position: absolute; top: -14px; right: -14px; z-index: 10;
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--accent); color: #fff;
+    font-size: 1.4rem; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 16px rgba(229,9,20,0.4);
+    transition: var(--transition);
+    cursor: pointer; border: none;
+}
+.modal-close:hover { transform: scale(1.1); }
+.seasons-section.hidden { display: none; }
 /* ===== OLD MODAL (detail modal on list pages) ===== */
 .modal-overlay {
     position: fixed; inset: 0; z-index: 200;
