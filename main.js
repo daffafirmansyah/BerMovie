@@ -458,14 +458,13 @@ function addCarouselArrows(carousel) {
         isDown = false;
         carousel.style.cursor = '';
         carousel.style.userSelect = '';
-        // If dragged, prevent card clicks on this tick
         if (dragged) {
-            const cards = carousel.querySelectorAll('.card');
-            cards.forEach(c => { c.style.pointerEvents = 'none'; });
-            setTimeout(() => cards.forEach(c => { c.style.pointerEvents = ''; }), 50);
+            document.body.style.pointerEvents = 'none';
+            setTimeout(() => document.body.style.pointerEvents = '', 10);
         }
     });
     carousel.addEventListener('mouseleave', () => {
+        if (!isDown) return;
         isDown = false;
         carousel.style.cursor = '';
         carousel.style.userSelect = '';
@@ -487,9 +486,8 @@ function addCarouselArrows(carousel) {
     carousel.addEventListener('touchend', () => {
         touchId = null;
         if (dragged) {
-            const cards = carousel.querySelectorAll('.card');
-            cards.forEach(c => { c.style.pointerEvents = 'none'; });
-            setTimeout(() => cards.forEach(c => { c.style.pointerEvents = ''; }), 50);
+            document.body.style.pointerEvents = 'none';
+            setTimeout(() => document.body.style.pointerEvents = '', 10);
         }
     }, { passive: true });
     
