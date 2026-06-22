@@ -410,6 +410,31 @@ async function loadHomeCarousel(path, containerId, type) {
 function addCarouselArrows(carousel) {
     if (carousel.dataset.arrows) return;
     carousel.dataset.arrows = '1';
+    
+    // Mouse drag scroll
+    let isDown = false, startX = 0, scrollLeft = 0;
+    carousel.addEventListener('mousedown', (e) => {
+        isDown = true; startX = e.pageX - carousel.offsetLeft; scrollLeft = carousel.scrollLeft;
+        carousel.style.cursor = 'grabbing';
+        carousel.style.userSelect = 'none';
+    });
+    carousel.addEventListener('mouseleave', () => {
+        if (!isDown) return; isDown = false;
+        carousel.style.cursor = '';
+        carousel.style.userSelect = '';
+    });
+    carousel.addEventListener('mouseup', () => {
+        isDown = false;
+        carousel.style.cursor = '';
+        carousel.style.userSelect = '';
+    });
+    carousel.addEventListener('mousemove', (e) => {
+        if (!isDown) return; e.preventDefault();
+        const x = e.pageX - carousel.offsetLeft;
+        const walk = (x - startX) * 1.5;
+        carousel.scrollLeft = scrollLeft - walk;
+    });
+    
     const wrap = carousel.parentElement;
     if (!wrap || wrap.classList.contains('carousel-wrap')) return;
     const section = wrap.closest('.section');
