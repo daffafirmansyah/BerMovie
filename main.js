@@ -663,7 +663,6 @@ function initGlobalEvents() {
             mobileMenu.classList.toggle('open', open);
         }
         menuBtn.onclick = (e) => { e.stopPropagation(); toggleMenu(); };
-        mobileMenu.onclick = (e) => { if (e.target === mobileMenu) toggleMenu(false); };
         mobileMenu.querySelectorAll('a').forEach(a => { a.onclick = () => toggleMenu(false); });
     }
 
