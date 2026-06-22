@@ -1085,6 +1085,14 @@ function initGlobalEvents() {
     initNavDropdowns();
     initScrollEvents();
     initKeyboard();
+    // Set active nav link based on current page
+    const curPage = window.location.pathname.split('/').pop() || 'index.html';
+    document.querySelectorAll('.nav-links a[href], .mobile-menu a[href]').forEach(a => {
+        const href = a.getAttribute('href') || '';
+        if (href === './' && (curPage === 'index.html' || curPage === '')) a.classList.add('active');
+        else if (href && href !== './' && href !== '#' && href === curPage) a.classList.add('active');
+        else if (href && href.startsWith('./?')) a.classList.remove('active');
+    });
     // Search
     const searchInput = el('#searchInput');
     const searchBtn = el('#searchBtn');
