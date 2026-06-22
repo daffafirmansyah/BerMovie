@@ -1032,8 +1032,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (path.includes('movies.html')) {
+        if (window._moviesInit) return; window._moviesInit = 1;
         initMoviesPage();
     } else if (path.includes('tv.html')) {
+        if (window._tvInit) return; window._tvInit = 1;
         initTvPage();
     } else if (path.includes('genre.html')) {
         initGenrePage();
@@ -1046,15 +1048,15 @@ document.addEventListener('DOMContentLoaded', () => {
 // Direct init fallback (if DOMContentLoaded already fired)
 const p = window.location.pathname;
 if (document.readyState === 'complete' || document.readyState === 'interactive') {
-    if (p.includes('movies.html')) initMoviesPage();
-    else if (p.includes('tv.html')) initTvPage();
-    else if (p.includes('genre.html')) initGenrePage();
-    else if (!p.includes('detail.html')) initHomePage();
+    if (p.includes('movies.html') && !window._moviesInit) { window._moviesInit = 1; initMoviesPage(); }
+    else if (p.includes('tv.html') && !window._tvInit) { window._tvInit = 1; initTvPage(); }
+    else if (p.includes('genre.html') && !window._genreInit) { window._genreInit = 1; initGenrePage(); }
+    else if (!p.includes('detail.html') && !window._homeInit) { window._homeInit = 1; initHomePage(); }
 }
 // Ultimate fallback
 setTimeout(() => {
-    if (p.includes('movies.html') && document.getElementById('movieGrid')?.children.length === 0) initMoviesPage();
-    else if (p.includes('tv.html') && document.getElementById('tvGrid')?.children.length === 0) initTvPage();
-    else if (p.includes('genre.html') && document.getElementById('genreGrid')?.children.length === 0) initGenrePage();
-    else if (!p.includes('detail.html') && document.getElementById('trendingCarousel')?.children.length === 0) initHomePage();
+    if (p.includes('movies.html') && !window._moviesInit) { window._moviesInit = 1; initMoviesPage(); }
+    else if (p.includes('tv.html') && !window._tvInit) { window._tvInit = 1; initTvPage(); }
+    else if (p.includes('genre.html') && !window._genreInit) { window._genreInit = 1; initGenrePage(); }
+    else if (!p.includes('detail.html') && !window._homeInit && document.getElementById('hero')?.children.length === 0) { window._homeInit = 1; initHomePage(); }
 }, 100);
