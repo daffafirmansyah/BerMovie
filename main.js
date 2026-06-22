@@ -517,11 +517,10 @@ function initGenrePage() {
     function renderGenreCards(type) {
         grid.innerHTML = '';
         const genres = type === 'movie' ? MOVIE_GENRES : TV_GENRES;
-        const colors = ['#6366f1','#8b5cf6','#a855f7','#d946ef','#ec4899','#f43f5e','#f97316','#eab308','#22c55e','#14b8a6','#06b6d4','#3b82f6','#6366f1','#8b5cf6','#a855f7'];
         genres.forEach((g, i) => {
             const card = document.createElement('div');
             card.className = 'genre-card';
-            card.style.background = colors[i % colors.length];
+            card.style.background = '';
             card.innerHTML = `<span class="genre-name">${g.name}</span>`;
             card.onclick = () => {
                 activeGenre = g;
