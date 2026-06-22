@@ -754,7 +754,7 @@ async function loadDetailPage(id, type) {
     const runtime = detail.runtime || (detail.episode_run_time?.[0]) || 0;
     const genres = detail.genres?.map(g => g.name).join(', ') || '';
 
-    document.title = `${title} - NontonFilm`;
+    document.title = `${title} - Bermovie`;
 
     document.getElementById('detailHero').style.backgroundImage = `url(${backdropUrl(detail.backdrop_path)})`;
     document.getElementById('detailTitle').textContent = title;
