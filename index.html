@@ -45,10 +45,17 @@
         </div>
     </nav>
 
-    <!-- HERO -->
+    <!-- HERO CAROUSEL -->
     <section class="hero" id="hero">
-        <div class="hero-bg" id="heroBg"></div>
-        <div class="hero-content">
+        <div class="hero-slides" id="heroSlides">
+            <div class="hero-slide active" id="heroSlide0"></div>
+            <div class="hero-slide" id="heroSlide1"></div>
+            <div class="hero-slide" id="heroSlide2"></div>
+            <div class="hero-slide" id="heroSlide3"></div>
+            <div class="hero-slide" id="heroSlide4"></div>
+        </div>
+        <div class="hero-content" id="heroContent">
+            <div class="hero-badge" id="heroBadge">Trending</div>
             <h1 class="hero-title" id="heroTitle">Loading...</h1>
             <p class="hero-desc" id="heroOverview"></p>
             <div class="hero-meta" id="heroMeta"></div>
@@ -56,6 +63,9 @@
                 <button class="btn-watch" id="heroBtn">Tonton Sekarang</button>
             </div>
         </div>
+        <div class="hero-dots" id="heroDots"></div>
+        <button class="hero-arrow hero-arrow-left" id="heroPrev">‹</button>
+        <button class="hero-arrow hero-arrow-right" id="heroNext">›</button>
     </section>
 
     <!-- MAIN CONTENT -->

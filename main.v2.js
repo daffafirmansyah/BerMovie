@@ -321,20 +321,65 @@ function renderPagination(containerId, total, current, callback) {
     }
 }
 
-// HOME PAGE
-async function loadHero() {
-    const data = await tmdb('/trending/all/day');
-    if (!data?.results?.length) return;
-    const items = data.results.filter(i=>i.backdrop_path).slice(0,10);
-    const item = items[Math.floor(Math.random()*items.length)];
+// HERO CAROUSEL
+let heroTimer = null;
+let heroIdx = 0;
+let heroItems = [];
+
+function renderHeroSlide(idx) {
+    const item = heroItems[idx];
+    if (!item) return;
     const type = item.media_type||'movie';
-    el('#heroBg').style.backgroundImage = `url(${backdropUrl(item.backdrop_path)})`;
+    // Set all slides
+    for (let i = 0; i < 5; i++) {
+        const slide = el('#heroSlide' + i);
+        if (!slide) continue;
+        slide.classList.toggle('active', i === idx);
+        slide.style.backgroundImage = i === idx ? `url(${backdropUrl(item.backdrop_path)})` : '';
+    }
     el('#heroTitle').textContent = displayTitle(item);
     el('#heroOverview').textContent = truncate(item.overview, 200);
     el('#heroMeta').innerHTML = `<span class="rating-badge">★ ${rating(item.vote_average)}</span><span>${year(item.release_date||item.first_air_date)}</span><span>${type==='movie'?'Film':'Series'}</span>`;
-    el('#heroBtn').onclick = () => {
-        window.location.href = `detail.html?id=${item.id}&type=${type}`;
-    };
+    el('#heroBtn').onclick = () => { window.location.href = `detail.html?id=${item.id}&type=${type}`; };
+    // Update dots
+    document.querySelectorAll('.hero-dot').forEach((d, i) => d.classList.toggle('active', i === idx));
+}
+
+function goHero(i) {
+    heroIdx = (i + heroItems.length) % heroItems.length;
+    renderHeroSlide(heroIdx);
+    resetHeroTimer();
+}
+
+function resetHeroTimer() {
+    clearInterval(heroTimer);
+    heroTimer = setInterval(() => goHero(heroIdx + 1), 5000);
+}
+
+async function loadHero() {
+    const data = await tmdb('/trending/all/day');
+    if (!data?.results?.length) return;
+    heroItems = data.results.filter(i=>i.backdrop_path).slice(0,5);
+    // Create dots
+    const dots = el('#heroDots');
+    if (dots) {
+        dots.innerHTML = '';
+        heroItems.forEach((_, i) => {
+            const dot = document.createElement('button');
+            dot.className = 'hero-dot' + (i === 0 ? ' active' : '');
+            dot.onclick = () => goHero(i);
+            dots.appendChild(dot);
+        });
+    }
+    // Arrow buttons
+    const prev = el('#heroPrev');
+    const next = el('#heroNext');
+    if (prev) prev.onclick = () => goHero(heroIdx - 1);
+    if (next) next.onclick = () => goHero(heroIdx + 1);
+    // Render first
+    heroIdx = 0;
+    renderHeroSlide(0);
+    resetHeroTimer();
 }
 
 async function loadHomeCarousel(path, containerId, type) {
@@ -796,3 +841,10 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
     else if (p.includes('genre.html')) initGenrePage();
     else if (!p.includes('detail.html')) initHomePage();
 }
+// Ultimate fallback
+setTimeout(() => {
+    if (p.includes('movies.html') && document.getElementById('movieGrid')?.children.length === 0) initMoviesPage();
+    else if (p.includes('tv.html') && document.getElementById('tvGrid')?.children.length === 0) initTvPage();
+    else if (p.includes('genre.html') && document.getElementById('genreGrid')?.children.length === 0) initGenrePage();
+    else if (!p.includes('detail.html') && document.getElementById('trendingCarousel')?.children.length === 0) initHomePage();
+}, 100);
