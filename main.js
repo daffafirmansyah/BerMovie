@@ -440,32 +440,16 @@ function addCarouselArrows(carousel) {
     if (carousel.dataset.arrows) return;
     carousel.dataset.arrows = '1';
     
-    // Mouse drag scroll — native scroll with click suppression
-    let isDown = false, startX = 0, scrollLeft = 0, dragged = false;
-    carousel.addEventListener('mousedown', (e) => {
-        isDown = true; dragged = false; startX = e.pageX; scrollLeft = carousel.scrollLeft;
-    });
-    carousel.addEventListener('mousemove', (e) => {
-        if (!isDown) return;
-        const dx = e.pageX - startX;
-        if (Math.abs(dx) > 5) { dragged = true; carousel.scrollLeft = scrollLeft - dx; }
-    });
-    carousel.addEventListener('mouseup', (e) => {
-        isDown = false;
-        if (dragged) { e.stopPropagation(); e.preventDefault(); }
-    });
-    carousel.addEventListener('mouseleave', () => { isDown = false; });
-    // Touch drag
-    carousel.addEventListener('touchstart', (e) => {
-        startX = e.touches[0].clientX; scrollLeft = carousel.scrollLeft; dragged = false;
+    // Scroll suppression — prevent card click when carousel was just scrolled
+    let scrolled = false;
+    carousel.addEventListener('scroll', () => {
+        scrolled = true;
+        clearTimeout(carousel._scrollTimer);
+        carousel._scrollTimer = setTimeout(() => scrolled = false, 300);
     }, { passive: true });
-    carousel.addEventListener('touchmove', (e) => {
-        const dx = e.touches[0].clientX - startX;
-        if (Math.abs(dx) > 5) { dragged = true; carousel.scrollLeft = scrollLeft - dx; }
-    }, { passive: true });
-    carousel.addEventListener('touchend', (e) => {
-        if (dragged) { e.preventDefault(); e.stopPropagation(); }
-    }, { passive: false });
+    carousel.addEventListener('click', (e) => {
+        if (scrolled) { e.stopPropagation(); e.preventDefault(); }
+    }, true);
     
     const wrap = carousel.parentElement;
     if (!wrap || wrap.classList.contains('carousel-wrap')) return;
