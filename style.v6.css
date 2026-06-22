@@ -135,6 +135,7 @@ input{font-family:inherit;outline:none}
 /* === DETAIL === */
 .detail-page{padding-top:var(--nav-height)}
 .detail-hero{width:100%;height:55vh;min-height:340px;background-size:cover;background-position:center 20%;position:relative}
+.detail-hero.trailer-active::after,.detail-hero.trailer-active::before{display:none}
 .detail-hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:200px;background:linear-gradient(to top,var(--bg) 0%,transparent 100%)}
 .detail-hero::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(10,10,15,.5) 0,transparent 50%)}
 .detail-body{max-width:var(--max-w);margin:-80px auto 0;padding:0 24px 60px;position:relative;z-index:2}
@@ -161,8 +162,9 @@ input{font-family:inherit;outline:none}
 /* === MODAL === */
 .modal{position:fixed;inset:0;z-index:200}
 .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(6px)}
-.modal-hero{width:100%;height:300px;background-size:cover;background-position:center 20%;position:relative;flex-shrink:0}
-@media(max-width:768px){.modal-hero{height:200px}}
+.modal-hero{width:100%;height:300px;background-size:cover;background-position:center 20%;position:relative;flex-shrink:0;transition:height .3s ease}
+.modal-hero.trailer-active{height:70vh;max-height:600px}
+@media(max-width:768px){.modal-hero{height:200px}.modal-hero.trailer-active{height:55vh}}
 .modal-content{position:fixed;bottom:0;left:0;right:0;max-height:88vh;overflow-y:auto;background:var(--bg2);border-radius:var(--radius-xl) var(--radius-xl) 0 0;z-index:201;animation:slideUp .35s cubic-bezier(.4,0,.2,1);box-shadow:0 -12px 60px rgba(0,0,0,.5)}
 @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
 .modal-body h2{font-family:'Righteous',sans-serif;font-size:1.3rem;font-weight:400;margin-bottom:10px;letter-spacing:.5px}
@@ -189,6 +191,7 @@ input{font-family:inherit;outline:none}
 /* === RESPONSIVE === */
 @media(max-width:768px){
 .detail-hero{height:38vh;min-height:260px}
+.detail-hero.trailer-active{height:60vh;min-height:300px}
 .detail-body{margin:-50px auto 0;padding:0 16px 40px}
 }
 /* NAV DROPDOWN */
