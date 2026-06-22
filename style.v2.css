@@ -136,21 +136,27 @@ input { font-family: inherit; outline: none; }
 .mobile-menu.open { transform: translateX(0); }
 .mobile-menu a {
     padding: 16px 20px; border-radius: var(--radius);
-    font-size: 1rem; font-weight: 500;
-    color: var(--text2); transition: var(--transition);
-    border: 1px solid var(--border);
+    font-size: 1rem; font-weight: 600;
+    color: #e8e8ef; transition: var(--transition);
+    background: #1a1a26;
     touch-action: manipulation;
 }
-.mobile-menu a:hover { background: var(--bg-hover); color: var(--text); }
-.mobile-menu a.active { color: #fff; background: var(--accent); border-color: var(--accent); }
+.mobile-menu a:active { background: #2a2a3a; }
+.mobile-menu a.active { color: #fff; background: var(--accent); }
 .mobile-search {
     display: flex; gap: 8px; margin-bottom: 12px;
 }
 .mobile-search input {
     flex: 1; height: 44px; padding: 0 16px;
-    background: var(--bg-elevated); border: 1px solid var(--border);
+    background: #1a1a26; border: 1px solid rgba(255,255,255,0.08);
     border-radius: var(--radius); color: var(--text);
     font-size: 0.9rem;
+}
+.mobile-search button {
+    padding: 10px 16px; border-radius: 12px;
+    background: var(--accent); color: #fff;
+    font-weight: 600; font-size: 0.85rem; border: none;
+    white-space: nowrap; touch-action: manipulation;
 }
 
 /* HERO */
