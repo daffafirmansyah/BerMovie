@@ -138,8 +138,8 @@ input{font-family:inherit;outline:none}
 .card-heart{position:absolute;bottom:8px;right:8px;width:30px;height:30px;border-radius:50%;background:rgba(0,0,0,.6);color:#fff;font-size:.85rem;display:flex;align-items:center;justify-content:center;z-index:3;cursor:pointer;transition:all .3s ease;touch-action:manipulation;border:1px solid rgba(255,255,255,.08)}
 .card-heart:hover{transform:scale(1.15)}
 .card-heart.active{background:rgba(239,68,68,.8);border-color:rgba(239,68,68,.3);box-shadow:0 0 16px rgba(239,68,68,.3)}
-.card-heart.active::after{content:'\\2764'}
-.card-heart::after{content:'\\2661'}
+.card-heart.active::after{content:'♥'}
+.card-heart::after{content:'♡'}
 
 /* TOAST */
 .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);padding:12px 24px;border-radius:12px;background:rgba(17,17,24,.95);color:#fff;font-size:.85rem;font-weight:500;z-index:999;opacity:0;visibility:hidden;transition:all .35s cubic-bezier(.4,0,.2,1);box-shadow:0 8px 32px rgba(0,0,0,.5);border:1px solid var(--border);pointer-events:none;white-space:nowrap}
