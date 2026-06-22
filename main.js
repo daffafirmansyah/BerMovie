@@ -649,7 +649,11 @@ function initGlobalEvents() {
     const menuBtn = el('#mobileMenuBtn');
     const mobileMenu = el('#mobileMenu');
     if (menuBtn && mobileMenu) {
-        menuBtn.onclick = () => mobileMenu.classList.toggle('open');
+        menuBtn.onclick = (e) => { e.stopPropagation(); mobileMenu.classList.toggle('open'); };
+        // Close on backdrop click
+        mobileMenu.onclick = (e) => { if (e.target === mobileMenu) mobileMenu.classList.remove('open'); };
+        // Close on nav link click
+        mobileMenu.querySelectorAll('a').forEach(a => { a.onclick = () => mobileMenu.classList.remove('open'); });
     }
 
     // Mobile search
