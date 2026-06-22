@@ -93,8 +93,11 @@ async function tmdb(path, params = {}) {
     url.searchParams.set('api_key', TMDB_KEY);
     url.searchParams.set('language', 'en-US');
     Object.entries(params).forEach(([k, v]) => { if(v) url.searchParams.set(k, v); });
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 8000);
     try {
-        const res = await fetch(url);
+        const res = await fetch(url, { signal: controller.signal });
+        clearTimeout(timer);
         if (!res.ok) throw new Error(res.status);
         return await res.json();
     } catch (e) { console.error('TMDB error:', e); return null; }
@@ -415,10 +418,10 @@ function initMoviesPage() {
         sortSel.onchange = () => { currentSort = sortSel.value; currentPage=1; loadMovies(); updateURL(); };
     }
     if (countrySel) {
+        if (urlCountry) { countrySel.value = urlCountry; currentCountry = urlCountry; }
         countrySel.onchange = () => { currentCountry = countrySel.value; currentPage=1; loadMovies(); updateURL(); };
-        loadCountries(countrySel).then(() => {
-            if (urlCountry) { countrySel.value = urlCountry; currentCountry = urlCountry; }
-        }).finally(() => loadMovies());
+        loadCountries(countrySel);
+        loadMovies();
     } else {
         loadMovies();
     }
@@ -494,10 +497,10 @@ function initTvPage() {
         networkSel.onchange = () => { currentNetwork = networkSel.value; currentPage=1; loadTvShows(); updateURL(); };
     }
     if (countrySel) {
+        if (urlCountry) { countrySel.value = urlCountry; currentCountry = urlCountry; }
         countrySel.onchange = () => { currentCountry = countrySel.value; currentPage=1; loadTvShows(); updateURL(); };
-        loadCountries(countrySel).then(() => {
-            if (urlCountry) { countrySel.value = urlCountry; currentCountry = urlCountry; }
-        }).finally(() => loadTvShows());
+        loadCountries(countrySel);
+        loadTvShows();
     } else {
         loadTvShows();
     }
