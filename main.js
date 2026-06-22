@@ -180,12 +180,10 @@ async function openDetail(id, type = 'movie') {
     if (trailerBtn) trailerBtn.onclick = () => {
         const tr = vids?.results?.find(v => v.type==='Trailer'&&v.site==='YouTube');
         if(tr) {
-            el('#playerModal').classList.remove('hidden');
-            el('#playerTitle').textContent = title;
-            el('#episodeSelector')?.classList.add('hidden');
-            el('#playerFrame').src = `https://www.youtube.com/embed/${tr.key}?autoplay=1&rel=0`;
-            el('#playerFrame').allow = 'autoplay; fullscreen';
-            document.body.style.overflow = 'hidden';
+            const hero = el('#modalHero');
+            hero.innerHTML = `<iframe src="https://www.youtube.com/embed/${tr.key}?autoplay=1&rel=0" allow="autoplay; fullscreen" style="position:absolute;inset:0;width:100%;height:100%;border:none"></iframe>`;
+            trailerBtn.textContent = '◉ Tutup Trailer';
+            trailerBtn.onclick = closeAllModals;
         } else alert('Trailer tidak tersedia');
     };
 
@@ -796,12 +794,10 @@ async function loadDetailPage(id, type) {
     document.getElementById('detailTrailerBtn').onclick = () => {
         const tr = videosData?.results?.find(v => v.type==='Trailer'&&v.site=='YouTube');
         if(tr) {
-            document.getElementById('playerModal').classList.remove('hidden');
-            document.getElementById('playerTitle').textContent = title;
-            document.getElementById('episodeSelector')?.classList.add('hidden');
-            document.getElementById('playerFrame').src = `https://www.youtube.com/embed/${tr.key}?autoplay=1&rel=0`;
-            document.getElementById('playerFrame').allow = 'autoplay; fullscreen';
-            document.body.style.overflow = 'hidden';
+            const hero = document.getElementById('detailHero');
+            hero.innerHTML = `<iframe src="https://www.youtube.com/embed/${tr.key}?autoplay=1&rel=0" allow="autoplay; fullscreen" style="position:absolute;inset:0;width:100%;height:100%;border:none"></iframe>`;
+            document.getElementById('detailTrailerBtn').textContent = '◉ Tutup Trailer';
+            document.getElementById('detailTrailerBtn').onclick = () => location.reload();
         } else alert('Trailer tidak tersedia');
     };
 
