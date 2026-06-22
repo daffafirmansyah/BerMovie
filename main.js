@@ -843,6 +843,10 @@ async function doSearch(query, page=1) {
     }
     section.classList.remove('hidden');
     el('#searchTitle').textContent = `Hasil: "${query}" (${data.total_results})`;
+    // Update URL so search persists on refresh
+    const url = new URL(window.location);
+    url.searchParams.set('q', query);
+    window.history.replaceState(null, '', url);
     const grid = el('#searchGrid');
     grid.innerHTML = '';
     data.results.filter(i=>['movie','tv'].includes(i.media_type)).forEach(i => grid.appendChild(createCard(i, i.media_type)));
@@ -858,6 +862,10 @@ function hideSearch() {
         if (s) s.classList.remove('hidden');
     });
     el('#searchResults')?.classList.add('hidden');
+    // Clear search param from URL
+    const url = new URL(window.location);
+    url.searchParams.delete('q');
+    window.history.replaceState(null, '', url);
 }
 
 // NAV DROPDOWNS
