@@ -788,6 +788,9 @@ function initGenrePage() {
             card.innerHTML = `<span class="genre-name">${g.name}</span>`;
             card.onclick = () => {
                 activeGenre = g;
+                currentGenreId = g.id;
+                currentGenreName = g.name;
+                updateURL();
                 loadGenreResults(type, g.id, g.name, 1);
                 all('.genre-card').forEach(c=>c.classList.remove('active'));
                 card.classList.add('active');
@@ -802,6 +805,10 @@ function initGenrePage() {
             all('.genre-type-btn').forEach(b=>b.classList.remove('active'));
             btn.classList.add('active');
             el('#genreResults')?.classList.add('hidden');
+            el('#genreGrid')?.classList.remove('hidden');
+            currentGenreId = null;
+            currentGenreName = '';
+            updateURL();
             renderGenreCards(activeType);
         };
     });
@@ -828,6 +835,34 @@ function initGenrePage() {
     }
 
     renderGenreCards('movie');
+
+    // Auto-load genre from URL params
+    const urlP = getURLParams();
+    if (urlP.genre) {
+        let g = MOVIE_GENRES.find(x => x.id == urlP.genre);
+        let mediaType = 'movie';
+        if (!g) {
+            g = TV_GENRES.find(x => x.id == urlP.genre);
+            if (g) mediaType = 'tv';
+        }
+        if (g) {
+            activeGenre = g;
+            activeType = mediaType;
+            currentGenreId = g.id;
+            currentGenreName = g.name;
+            currentSort = urlP.sort;
+            currentYear = urlP.year;
+            const yearSel = el('#yearFilter');
+            if (yearSel && urlP.year) yearSel.value = urlP.year;
+            const sortSel = el('#sortFilter');
+            if (sortSel && urlP.sort) sortSel.value = urlP.sort;
+            // Set active toggle
+            all('.genre-type-btn').forEach(b => b.classList.remove('active'));
+            const activeBtn = el(`.genre-type-btn[data-type="${mediaType}"]`);
+            if (activeBtn) activeBtn.classList.add('active');
+            loadGenreResults(mediaType, g.id, g.name, urlP.page);
+        }
+    }
 }
 
 async function loadGenreResults(type, genreId, genreName, page=1) {
@@ -841,6 +876,8 @@ async function loadGenreResults(type, genreId, genreName, page=1) {
     grid.innerHTML = '';
     el('#genreResultsTitle').textContent = genreName;
     el('#genreGrid')?.classList.add('hidden');
+    currentGenreId = genreId;
+    currentGenreName = genreName;
 
     // Back to genre grid on back button click or tapping empty header
     const backBtn = el('#backToGenresBtn');
@@ -849,6 +886,9 @@ async function loadGenreResults(type, genreId, genreName, page=1) {
             section.classList.add('hidden');
             el('#genreGrid')?.classList.remove('hidden');
             el('#genreGrid')?.scrollIntoView({behavior:'smooth', block:'start'});
+            currentGenreId = null;
+            currentGenreName = '';
+            updateURL();
         };
     }
 
