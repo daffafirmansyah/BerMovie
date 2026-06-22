@@ -17,8 +17,8 @@ input { font-family: inherit; outline: none; }
     --bg-card: #12121a;
     --bg-elevated: #1a1a26;
     --bg-hover: #22222f;
-    --accent: #e50914;
-    --accent-hover: #f40612;
+    --accent: #6366f1;
+    --accent-hover: #818cf8;
     --text: #e8e8ef;
     --text2: #9e9eb0;
     --text3: #6b6b80;
@@ -71,7 +71,7 @@ input { font-family: inherit; outline: none; }
 }
 .logo {
     font-size: 1.2rem; font-weight: 800;
-    background: linear-gradient(135deg, #e50914, #ff6b6b);
+    background: linear-gradient(135deg, #6366f1, #a855f7);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     background-clip: text;
     white-space: nowrap; flex-shrink: 0;
@@ -233,9 +233,9 @@ input { font-family: inherit; outline: none; }
     font-size: 0.82rem; font-weight: 600;
     color: var(--accent); padding: 6px 14px;
     border-radius: 16px; transition: var(--transition);
-    border: 1px solid rgba(229,9,20,0.2);
+    border: 1px solid rgba(99,102,241,0.2);
 }
-.section-link:hover { background: rgba(229,9,20,0.1); border-color: var(--accent); }
+.section-link:hover { background: rgba(99,102,241,0.1); border-color: var(--accent); }
 
 /* PAGE CONTENT (movies/tv/genre) */
 .page-content { padding-top: calc(var(--nav-height) + 16px); }
@@ -269,7 +269,7 @@ input { font-family: inherit; outline: none; }
 .card-badge {
     position: absolute; top: 8px; right: 8px;
     padding: 3px 8px; border-radius: 6px;
-    background: rgba(229,9,20,0.9);
+    background: rgba(99,102,241,0.9);
     color: #fff; font-size: 0.65rem; font-weight: 700;
     backdrop-filter: blur(4px);
 }
@@ -319,7 +319,7 @@ input { font-family: inherit; outline: none; }
     transition: var(--transition); cursor: pointer; text-align: center;
 }
 .genre-card:hover { background: var(--bg-hover); border-color: rgba(255,255,255,0.12); transform: translateY(-2px); }
-.genre-icon { font-size: 1.8rem; }
+
 .genre-card span { font-size: 0.85rem; font-weight: 600; }
 
 /* FILTERS */
@@ -579,7 +579,7 @@ input { font-family: inherit; outline: none; }
     .grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 8px; }
     .genre-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; }
     .genre-card { padding: 20px 12px; }
-    .genre-icon { font-size: 1.5rem; }
+    
     .filters select { min-width: 100px; font-size: 0.78rem; padding: 8px 30px 8px 10px; }
 }
 
