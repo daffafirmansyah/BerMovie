@@ -1056,11 +1056,18 @@ function initScrollEvents() {
     const btn = el('#backTop');
     const prog = el('#scrollProgress');
     if (!btn && !prog) return;
+    let ticking = false;
     window.addEventListener('scroll', () => {
-        const scroll = window.scrollY;
-        const max = document.documentElement.scrollHeight - window.innerHeight;
-        if (prog) prog.style.width = `${(scroll / max) * 100}%`;
-        if (btn) btn.classList.toggle('show', scroll > 300);
+        if (!ticking) {
+            requestAnimationFrame(() => {
+                const scroll = window.scrollY;
+                const max = document.documentElement.scrollHeight - window.innerHeight;
+                if (prog) prog.style.width = `${(scroll / max) * 100}%`;
+                if (btn) btn.classList.toggle('show', scroll > 300);
+                ticking = false;
+            });
+            ticking = true;
+        }
     }, { passive: true });
     btn?.addEventListener('click', () => window.scrollTo({top:0,behavior:'smooth'}));
 }
