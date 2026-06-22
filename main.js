@@ -137,6 +137,26 @@ function createCard(item, type) {
     return div;
 }
 
+// Fill empty grid spaces
+function fillGrid(grid) {
+    const card = grid.children[0];
+    if (!card) return;
+    void grid.offsetHeight;
+    const w = card.offsetWidth;
+    if (!w) return;
+    const gap = 16;
+    const containerW = grid.clientWidth;
+    const cols = Math.floor((containerW + gap) / (w + gap));
+    const remaining = cols - (grid.children.length % cols || cols);
+    if (remaining < cols) {
+        for (let i = 0; i < remaining; i++) {
+            const filler = document.createElement('div');
+            filler.style.cssText = `flex:0 0 ${w}px;height:0;margin:0;padding:0;pointer-events:none`;
+            grid.appendChild(filler);
+        }
+    }
+}
+
 // DETAIL MODAL
 async function openDetail(id, type = 'movie') {
     const modal = el('#detailModal');
@@ -547,6 +567,7 @@ async function loadMovies(page = 1) {
     if (!data?.results) return;
 
     data.results.forEach(i => grid.appendChild(createCard(i, 'movie')));
+    fillGrid(grid);
     renderPagination('moviePagination', Math.min(data.total_pages, 500), page, p => {
         currentPage = p;
         loadMovies(p);
@@ -618,6 +639,7 @@ async function loadTvShows(page = 1) {
     if (!data?.results) return;
 
     data.results.forEach(i => grid.appendChild(createCard(i, 'tv')));
+    fillGrid(grid);
     renderPagination('tvPagination', Math.min(data.total_pages, 500), page, p => {
         currentPage = p;
         loadTvShows(p);
@@ -775,6 +797,7 @@ async function loadGenreResults(type, genreId, genreName, page=1) {
     if (!data?.results) return;
 
     data.results.forEach(i => grid.appendChild(createCard(i, type)));
+        fillGrid(grid);
     renderPagination('resultsPagination', Math.min(data.total_pages, 500), page, p => {
         loadGenreResults(type, genreId, genreName, p);
         window.scrollTo({top: section.offsetTop - 80, behavior: 'smooth'});
