@@ -1,10 +1,10 @@
 <div align="center">
 
-# 🎬 NontonFilm
+# 🎬 Bermovie
 
 **Streaming Film & Series Sub Indo — Gratis, Tanpa Daftar**
 
-[![Live](https://img.shields.io/badge/🔗_LIVE-daffafirmansyah.github.io/nonton--film-e50914?style=for-the-badge&logo=googlechrome&logoColor=white)](https://daffafirmansyah.github.io/nonton-film)
+[![Live](https://img.shields.io/badge/🔗_LIVE-daffafirmansyah.github.io/nonton--film-e50914?style=for-the-badge&logo=googlechrome&logoColor=white)](https://daffafirmansyah.github.io/bermovie)
 
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat&logo=css3&logoColor=white)
@@ -12,7 +12,7 @@
 
 ---
 
-<img src="https://via.placeholder.com/800x400/0a0a0f/e50914?text=NontonFilm+Preview" alt="Preview" width="100%"/>
+<img src="https://via.placeholder.com/800x400/0a0a0f/e50914?text=Bermovie+Preview" alt="Preview" width="100%"/>
 
 </div>
 
@@ -39,7 +39,7 @@
 ## 📂 Struktur
 
 ```
-nonton-film/
+bermovie/
 ├── index.html      # Halaman utama
 ├── style.css       # Styling (dark theme, responsive)
 ├── app.js          # Logika aplikasi & API calls
