@@ -26,8 +26,18 @@
                 <a href="./" class="active" data-nav="home">Home</a>
                 <a href="movies.html" data-nav="movies">Film</a>
                 <a href="tv.html" data-nav="tv">Series</a>
-                <a href="genre.html" data-nav="genre">Genre</a>
-                <a href="leaderboard.html" data-nav="leaderboard">Peringkat</a>
+                <div class="nav-dropdown">
+                    <a href="genre.html" data-nav="genre">Genre ▾</a>
+                    <div class="dropdown-menu" id="genreDropdown"></div>
+                </div>
+                <div class="nav-dropdown">
+                    <a href="#">Country ▾</a>
+                    <div class="dropdown-menu" id="countryDropdown"></div>
+                </div>
+                <div class="nav-dropdown">
+                    <a href="#">Tahun ▾</a>
+                    <div class="dropdown-menu" id="yearDropdown"></div>
+                </div>
             </div>
             <button class="mobile-menu-btn" id="mobileMenuBtn" style="cursor:pointer;z-index:101;position:relative"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="pointer-events:none"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
         </div>
@@ -75,7 +85,12 @@
             <div class="section-header">
                 <h2 class="section-title">Trending Hari Ini</h2>
             </div>
-            <div class="carousel" id="trendingCarousel"></div>
+            <div class="trending-filters">
+                <button class="trending-filter active" data-filter="all">All</button>
+                <button class="trending-filter" data-filter="movie">Movies</button>
+                <button class="trending-filter" data-filter="tv">TV Series</button>
+            </div>
+            <div class="trending-list" id="trendingList"></div>
         </section>
 
         <!-- POPULAR MOVIES -->
