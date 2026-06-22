@@ -201,7 +201,7 @@ async function openDetail(id, type = 'movie') {
         const tr = vids?.results?.find(v => v.type==='Trailer'&&v.site==='YouTube');
         if(tr) {
             const hero = el('#modalHero');
-            hero.innerHTML = `<iframe src="https://www.youtube.com/embed/${tr.key}?autoplay=1&rel=0" allow="autoplay; fullscreen" style="position:absolute;inset:0;width:100%;height:100%;border:none"></iframe>`;
+            hero.innerHTML = `<iframe src="https://www.youtube.com/embed/${tr.key}?autoplay=1&rel=0" allow="autoplay; fullscreen" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:none"></iframe>`;
             trailerBtn.textContent = '◉ Tutup Trailer';
             trailerBtn.onclick = closeAllModals;
         } else alert('Trailer tidak tersedia');
@@ -988,7 +988,7 @@ async function loadDetailPage(id, type) {
         const tr = videosData?.results?.find(v => v.type==='Trailer'&&v.site=='YouTube');
         if(tr) {
             const hero = document.getElementById('detailHero');
-            hero.innerHTML = `<iframe src="https://www.youtube.com/embed/${tr.key}?autoplay=1&rel=0" allow="autoplay; fullscreen" style="position:absolute;inset:0;width:100%;height:100%;border:none"></iframe>`;
+            hero.innerHTML = `<iframe src="https://www.youtube.com/embed/${tr.key}?autoplay=1&rel=0" allow="autoplay; fullscreen" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:none"></iframe>`;
             document.getElementById('detailTrailerBtn').textContent = '◉ Tutup Trailer';
             document.getElementById('detailTrailerBtn').onclick = () => location.reload();
         } else alert('Trailer tidak tersedia');
