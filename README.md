@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🎬 Bermovie
+# 🎬 BerMovie
 
 **Streaming Film & Series Sub Indo — Gratis, Tanpa Daftar**
 
@@ -12,7 +12,7 @@
 
 ---
 
-<img src="https://via.placeholder.com/800x400/0a0a0f/e50914?text=Bermovie+Preview" alt="Preview" width="100%"/>
+<img src="https://via.placeholder.com/800x400/0a0a0f/e50914?text=BerMovie+Preview" alt="Preview" width="100%"/>
 
 </div>
 
