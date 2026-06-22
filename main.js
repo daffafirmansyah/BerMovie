@@ -418,8 +418,7 @@ function initMoviesPage() {
         countrySel.onchange = () => { currentCountry = countrySel.value; currentPage=1; loadMovies(); updateURL(); };
         loadCountries(countrySel).then(() => {
             if (urlCountry) { countrySel.value = urlCountry; currentCountry = urlCountry; }
-            loadMovies();
-        });
+        }).finally(() => loadMovies());
     } else {
         loadMovies();
     }
@@ -498,8 +497,7 @@ function initTvPage() {
         countrySel.onchange = () => { currentCountry = countrySel.value; currentPage=1; loadTvShows(); updateURL(); };
         loadCountries(countrySel).then(() => {
             if (urlCountry) { countrySel.value = urlCountry; currentCountry = urlCountry; }
-            loadTvShows();
-        });
+        }).finally(() => loadTvShows());
     } else {
         loadTvShows();
     }
