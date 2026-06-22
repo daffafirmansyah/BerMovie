@@ -220,19 +220,12 @@ input{font-family:inherit;outline:none}
 @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
 .skeleton{background:linear-gradient(90deg,var(--bg2) 25%,var(--bg3) 50%,var(--bg2) 75%);background-size:200% 100%;animation:shimmer 1.5s ease-in-out infinite;border-radius:var(--radius-lg)}
 
-/* STAGGER FADE-IN */
-@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+/* STAGGER FADE-IN - disabled for smoother feel */
+/*
 .grid .card,.trending-card{animation:fadeUp .4s ease both}
 .grid .card:nth-child(1),.trending-card:nth-child(1){animation-delay:0s}
-.grid .card:nth-child(2),.trending-card:nth-child(2){animation-delay:.03s}
-.grid .card:nth-child(3),.trending-card:nth-child(3){animation-delay:.06s}
-.grid .card:nth-child(4),.trending-card:nth-child(4){animation-delay:.09s}
-.grid .card:nth-child(5),.trending-card:nth-child(5){animation-delay:.12s}
-.grid .card:nth-child(6),.trending-card:nth-child(6){animation-delay:.15s}
-.grid .card:nth-child(7),.trending-card:nth-child(7){animation-delay:.18s}
-.grid .card:nth-child(8),.trending-card:nth-child(8){animation-delay:.21s}
-.grid .card:nth-child(9),.trending-card:nth-child(9){animation-delay:.24s}
-.grid .card:nth-child(10),.trending-card:nth-child(10){animation-delay:.27s}
+...etc
+*/
 
 /* HERO GLOW PULSE */
 @keyframes pulseGlow{0%,100%{box-shadow:0 0 20px rgba(249,115,22,.4)}50%{box-shadow:0 0 40px rgba(249,115,22,.6)}}
