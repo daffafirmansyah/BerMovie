@@ -345,7 +345,14 @@ function renderHeroSlide(idx) {
     }
     el('#heroTitle').textContent = displayTitle(item);
     el('#heroOverview').textContent = truncate(item.overview, 200);
-    el('#heroMeta').innerHTML = `<span class="rating-badge">★ ${rating(item.vote_average)}</span><span>${year(item.release_date||item.first_air_date)}</span><span>${type==='movie'?'Film':'Series'}</span>`;
+        // Hero genre tags
+    const gnames = item.genre_ids?.slice(0,3).map(id => {
+        const list = type==='movie' ? MOVIE_GENRES : TV_GENRES;
+        const g = list.find(g=>g.id===id);
+        return g ? g.name : null;
+    }).filter(Boolean) || [];
+    let genreHtml = gnames.length ? `<div class="hero-genres">${gnames.map(n => `<span class="hero-genre">${n}</span>`).join('')}</div>` : '';
+    el('#heroMeta').innerHTML = genreHtml + `<span class="rating-badge">★ ${rating(item.vote_average)}</span><span>${year(item.release_date||item.first_air_date)}</span><span>${type==='movie'?'Film':'Series'}</span>`;
     el('#heroBtn').onclick = () => { window.location.href = `detail.html?id=${item.id}&type=${type}`; };
     // Update dots
     document.querySelectorAll('.hero-dot').forEach((d, i) => d.classList.toggle('active', i === idx));
@@ -436,6 +443,37 @@ async function loadHomeCarousel(path, containerId, type) {
     addCarouselArrows(c);
 }
 
+// TRENDING WITH RANK
+let trendingFilter = 'all';
+async function loadTrending(filter) {
+    trendingFilter = filter || 'all';
+    const list = el('#trendingList');
+    if (!list) return;
+    const data = await tmdb('/trending/all/day');
+    if (!data?.results) return;
+    let items = data.results.filter(i=>i.poster_path);
+    if (filter === 'movie') items = items.filter(i=>i.media_type==='movie');
+    else if (filter === 'tv') items = items.filter(i=>i.media_type==='tv');
+    items = items.slice(0,10);
+    list.innerHTML = '';
+    items.forEach((item, i) => {
+        const t = displayTitle(item);
+        const d = item.release_date||item.first_air_date||'';
+        const y = d ? d.substring(0,4) : '';
+        const rate = rating(item.vote_average);
+        const mt = item.media_type||'movie';
+        const card = document.createElement('div');
+        card.className = 'trending-card';
+        card.innerHTML = '<span class="trending-rank">'+(i+1)+'</span><img src="'+posterUrl(item.poster_path)+'" alt="'+t+'" loading="lazy"><div class="trending-info"><div class="title">'+t+'</div><div class="meta">'+y+' ~ '+rate+'</div></div>';
+        card.onclick = () => { window.location.href = 'detail.html?id='+item.id+'&type='+mt; };
+        list.appendChild(card);
+    });
+    // Update filter buttons
+    document.querySelectorAll('.trending-filter').forEach(b => {
+        b.classList.toggle('active', b.dataset.filter === (filter||'all'));
+    });
+}
+
 function addCarouselArrows(carousel) {
     if (carousel.dataset.arrows) return;
     carousel.dataset.arrows = '1';
@@ -478,7 +516,7 @@ function addCarouselArrows(carousel) {
 
 function initHomePage() {
     loadHero();
-    loadHomeCarousel('/trending/all/day', 'trendingCarousel');
+    loadTrending('all');
     loadHomeCarousel('/movie/popular', 'moviesCarousel', 'movie');
     loadHomeCarousel('/tv/popular', 'tvCarousel', 'tv');
     loadHomeCarousel('/movie/top_rated', 'topRatedCarousel', 'movie');
@@ -775,6 +813,35 @@ function hideSearch() {
         if (el) el.classList.remove('hidden');
     });
     el('#searchResults')?.classList.add('hidden');
+}
+
+// NAV DROPDOWNS
+function initNavDropdowns() {
+    const genreDD = el('#genreDropdown');
+    const countryDD = el('#countryDropdown');
+    const yearDD = el('#yearDropdown');
+    if (genreDD) {
+        let html = '<a href="genre.html">Semua Genre</a>';
+        MOVIE_GENRES.forEach(g => { html += '<a href="genre.html?id='+g.id+'">'+g.name+'</a>'; });
+        genreDD.innerHTML = html;
+    }
+    if (countryDD) {
+        const countries = ['ID','US','GB','JP','KR','IN','FR','DE','CN','HK','MY','SG','TH','PH','AU','CA','MX','BR','RU','ES','IT','NL','SE','NO','DK','FI','TR','AE','SA'];
+        const names = {'ID':'Indonesia','US':'Amerika Serikat','GB':'Inggris','JP':'Jepang','KR':'Korea','IN':'India','FR':'Perancis','DE':'Jerman','CN':'China','HK':'Hong Kong','MY':'Malaysia','SG':'Singapura','TH':'Thailand','PH':'Filipina','AU':'Australia','CA':'Kanada','MX':'Meksiko','BR':'Brazil','RU':'Rusia','ES':'Spanyol','IT':'Italia','NL':'Belanda','SE':'Swedia','NO':'Norwegia','DK':'Denmark','FI':'Finlandia','TR':'Turki','AE':'UEA','SA':'Arab Saudi'};
+        let h = '<a href="movies.html">Semua Negara</a>';
+        countries.forEach(c => { h += '<a href="movies.html?country='+c+'">'+(names[c]||c)+'</a>'; });
+        countryDD.innerHTML = h;
+    }
+    if (yearDD) {
+        const now = new Date().getFullYear();
+        let h = '<a href="movies.html">Semua Tahun</a>';
+        for (let y = now; y >= 1950; y--) h += '<a href="movies.html?year='+y+'">'+y+'</a>';
+        yearDD.innerHTML = h;
+    }
+    // Trending filter clicks
+    document.querySelectorAll('.trending-filter').forEach(btn => {
+        btn.onclick = () => loadTrending(btn.dataset.filter);
+    });
 }
 
 // GLOBAL EVENTS
