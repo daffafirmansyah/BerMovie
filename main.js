@@ -517,12 +517,12 @@ function initGenrePage() {
     function renderGenreCards(type) {
         grid.innerHTML = '';
         const genres = type === 'movie' ? MOVIE_GENRES : TV_GENRES;
-        const colors = ['#e50914','#0077b6','#2d6a4f','#7b2cbf','#e07c24','#d62828','#023e8a','#588157','#9d4edd','#f77f00','#264653','#8338ec','#fb5607','#3a86ff','#ff006e'];
+        const colors = ['#6366f1','#8b5cf6','#a855f7','#d946ef','#ec4899','#f43f5e','#f97316','#eab308','#22c55e','#14b8a6','#06b6d4','#3b82f6','#6366f1','#8b5cf6','#a855f7'];
         genres.forEach((g, i) => {
             const card = document.createElement('div');
             card.className = 'genre-card';
             card.style.background = colors[i % colors.length];
-            card.innerHTML = `<span class="genre-icon">${getGenreIcon(g.name)}</span><span class="genre-name">${g.name}</span>`;
+            card.innerHTML = `<span class="genre-name">${g.name}</span>`;
             card.onclick = () => {
                 activeGenre = g;
                 loadGenreResults(type, g.id, g.name, 1);
@@ -603,10 +603,7 @@ async function loadGenreResults(type, genreId, genreName, page=1) {
     });
 }
 
-function getGenreIcon(name) {
-    const i = {'Action':'A','Adventure':'Ad','Animation':'An','Comedy':'C','Crime':'Cr','Documentary':'D','Drama':'Dr','Family':'F','Fantasy':'Fa','History':'H','Horror':'Ho','Music':'M','Mystery':'My','Romance':'R','Sci-Fi':'S','TV Movie':'TV','Thriller':'T','War':'W','Western':'We'};
-    return i[name] || name[0];
-}
+
 
 // SEARCH
 async function doSearch(query, page=1) {
