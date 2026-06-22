@@ -377,6 +377,16 @@ async function loadHero() {
     const next = el('#heroNext');
     if (prev) prev.onclick = () => goHero(heroIdx - 1);
     if (next) next.onclick = () => goHero(heroIdx + 1);
+    // Touch swipe
+    const hero = el('#hero');
+    let touchX = 0;
+    if (hero) {
+        hero.addEventListener('touchstart', (e) => { touchX = e.touches[0].clientX; }, { passive: true });
+        hero.addEventListener('touchend', (e) => {
+            const dx = e.changedTouches[0].clientX - touchX;
+            if (Math.abs(dx) > 50) goHero(heroIdx + (dx < 0 ? 1 : -1));
+        }, { passive: true });
+    }
     // Render first
     heroIdx = 0;
     renderHeroSlide(0);
