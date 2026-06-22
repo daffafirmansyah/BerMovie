@@ -833,8 +833,8 @@ async function doSearch(query, page=1) {
         const sec = el(`#${id}`);
         if (sec) sec.classList.add('hidden');
     });
-    // On movies/tv pages: hide filters and grid
-    document.querySelectorAll('.page-content, .filters, #movieGrid, #tvGrid, #moviePagination, #tvPagination, .page-title').forEach(s => {
+    // On movies/tv pages: hide filters and grid (not page-content — search results inside it)
+    document.querySelectorAll('#movieGrid, #tvGrid, #moviePagination, #tvPagination, .filters, .page-title').forEach(s => {
         if (s) s.classList.add('hidden');
     });
 
@@ -856,7 +856,7 @@ function hideSearch() {
         const sec = el(`#${id}`);
         if (sec) sec.classList.remove('hidden');
     });
-    document.querySelectorAll('.page-content, .filters, #movieGrid, #tvGrid, #moviePagination, #tvPagination, .page-title').forEach(s => {
+    document.querySelectorAll('#movieGrid, #tvGrid, #moviePagination, #tvPagination, .filters, .page-title').forEach(s => {
         if (s) s.classList.remove('hidden');
     });
     el('#searchResults')?.classList.add('hidden');
