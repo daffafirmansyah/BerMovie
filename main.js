@@ -289,9 +289,9 @@ function closeAllModals() {
 
 // PAGINATION
 function renderPagination(containerId, total, current, callback) {
-    const el = el(`#${containerId}`);
-    if (!el) return;
-    el.innerHTML = '';
+    const container = el(`#${containerId}`);
+    if (!container) return;
+    container.innerHTML = '';
     const maxShow = 5;
     let start = Math.max(1, current - Math.floor(maxShow/2));
     let end = Math.min(total, start + maxShow - 1);
@@ -301,20 +301,20 @@ function renderPagination(containerId, total, current, callback) {
         const prev = document.createElement('button');
         prev.textContent = '←';
         prev.onclick = () => callback(current - 1);
-        el.appendChild(prev);
+        container.appendChild(prev);
     }
     for (let i = start; i <= end; i++) {
         const btn = document.createElement('button');
         btn.textContent = i;
         if (i === current) btn.classList.add('active');
         btn.onclick = () => callback(i);
-        el.appendChild(btn);
+        container.appendChild(btn);
     }
     if (current < total) {
         const next = document.createElement('button');
         next.textContent = '→';
         next.onclick = () => callback(current + 1);
-        el.appendChild(next);
+        container.appendChild(next);
     }
 }
 
