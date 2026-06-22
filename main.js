@@ -411,29 +411,58 @@ function addCarouselArrows(carousel) {
     if (carousel.dataset.arrows) return;
     carousel.dataset.arrows = '1';
     
-    // Mouse drag scroll
-    let isDown = false, startX = 0, scrollLeft = 0;
+    // Mouse drag scroll — prevent card click when dragging
+    let isDown = false, startX = 0, scrollLeft = 0, dragged = false;
     carousel.addEventListener('mousedown', (e) => {
-        isDown = true; startX = e.pageX - carousel.offsetLeft; scrollLeft = carousel.scrollLeft;
+        isDown = true; dragged = false; startX = e.pageX - carousel.offsetLeft; scrollLeft = carousel.scrollLeft;
         carousel.style.cursor = 'grabbing';
         carousel.style.userSelect = 'none';
-    });
-    carousel.addEventListener('mouseleave', () => {
-        if (!isDown) return; isDown = false;
-        carousel.style.cursor = '';
-        carousel.style.userSelect = '';
-    });
-    carousel.addEventListener('mouseup', () => {
-        isDown = false;
-        carousel.style.cursor = '';
-        carousel.style.userSelect = '';
     });
     carousel.addEventListener('mousemove', (e) => {
         if (!isDown) return; e.preventDefault();
         const x = e.pageX - carousel.offsetLeft;
         const walk = (x - startX) * 1.5;
+        if (Math.abs(walk) > 5) dragged = true;
         carousel.scrollLeft = scrollLeft - walk;
     });
+    carousel.addEventListener('mouseup', () => {
+        isDown = false;
+        carousel.style.cursor = '';
+        carousel.style.userSelect = '';
+        // If dragged, prevent card clicks on this tick
+        if (dragged) {
+            const cards = carousel.querySelectorAll('.card');
+            cards.forEach(c => { c.style.pointerEvents = 'none'; });
+            setTimeout(() => cards.forEach(c => { c.style.pointerEvents = ''; }), 50);
+        }
+    });
+    carousel.addEventListener('mouseleave', () => {
+        isDown = false;
+        carousel.style.cursor = '';
+        carousel.style.userSelect = '';
+    });
+    // Also handle touch drag
+    let touchId = null;
+    carousel.addEventListener('touchstart', (e) => {
+        touchId = e.changedTouches[0].identifier;
+        startX = e.changedTouches[0].clientX - carousel.offsetLeft; scrollLeft = carousel.scrollLeft;
+        dragged = false;
+    }, { passive: true });
+    carousel.addEventListener('touchmove', (e) => {
+        const t = Array.from(e.changedTouches).find(tc => tc.identifier === touchId);
+        if (!t) return;
+        const walk = (t.clientX - carousel.offsetLeft - startX) * 1.5;
+        if (Math.abs(walk) > 5) dragged = true;
+        carousel.scrollLeft = scrollLeft - walk;
+    }, { passive: true });
+    carousel.addEventListener('touchend', () => {
+        touchId = null;
+        if (dragged) {
+            const cards = carousel.querySelectorAll('.card');
+            cards.forEach(c => { c.style.pointerEvents = 'none'; });
+            setTimeout(() => cards.forEach(c => { c.style.pointerEvents = ''; }), 50);
+        }
+    }, { passive: true });
     
     const wrap = carousel.parentElement;
     if (!wrap || wrap.classList.contains('carousel-wrap')) return;
