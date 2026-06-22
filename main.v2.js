@@ -144,10 +144,11 @@ async function openDetail(id, type = 'movie') {
     modal.classList.remove('hidden');
     document.body.style.overflow = 'hidden';
 
-    const [detail, credits, similar] = await Promise.all([
+    const [detail, credits, similar, vids] = await Promise.all([
         tmdb(`/${type}/${id}`),
         tmdb(`/${type}/${id}/credits`),
-        tmdb(`/${type}/${id}/similar`)
+        tmdb(`/${type}/${id}/similar`),
+        tmdb(`/${type}/${id}/videos`)
     ]);
     if (!detail) { modal.classList.add('hidden'); return; }
 
@@ -177,7 +178,7 @@ async function openDetail(id, type = 'movie') {
     if (watchBtn) watchBtn.onclick = () => openPlayer(id, type, title);
     const trailerBtn = el('#modalTrailerBtn');
     if (trailerBtn) trailerBtn.onclick = () => {
-        const tr = detail.videos?.results?.find(v => v.type==='Trailer'&&v.site==='YouTube');
+        const tr = vids?.results?.find(v => v.type==='Trailer'&&v.site==='YouTube');
         if(tr) window.open(`https://www.youtube.com/watch?v=${tr.key}`,'_blank');
         else alert('Trailer tidak tersedia');
     };
@@ -735,10 +736,11 @@ async function loadDetailPage(id, type) {
     const page = document.getElementById('detailPage');
     if (!page) return;
 
-    const [detail, credits, similar] = await Promise.all([
+    const [detail, credits, similar, videosData] = await Promise.all([
         tmdb(`/${type}/${id}`),
         tmdb(`/${type}/${id}/credits`),
-        tmdb(`/${type}/${id}/similar`)
+        tmdb(`/${type}/${id}/similar`),
+        tmdb(`/${type}/${id}/videos`)
     ]);
 
     if (!detail) {
@@ -775,7 +777,7 @@ async function loadDetailPage(id, type) {
 
     document.getElementById('detailWatchBtn').onclick = () => openPlayer(id, type, title);
     document.getElementById('detailTrailerBtn').onclick = () => {
-        const tr = detail.videos?.results?.find(v => v.type==='Trailer'&&v.site==='YouTube');
+        const tr = videosData?.results?.find(v => v.type==='Trailer'&&v.site==='YouTube');
         if(tr) window.open(`https://www.youtube.com/watch?v=${tr.key}`,'_blank');
         else alert('Trailer tidak tersedia');
     };
