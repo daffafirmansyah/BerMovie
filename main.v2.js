@@ -125,9 +125,12 @@ function createCard(item, type) {
     const genreName = item.genre_ids?.[0] ? (type==='movie'?MOVIE_GENRES:TV_GENRES).find(g=>g.id===item.genre_ids[0])?.name : null;
     const qualities = ['WEB-DL','BluRay','HDRip','CAM'];
     const quality = qualities[Math.floor(Math.random() * qualities.length)];
+    const yearNum = parseInt(date?.substring(0,4));
+    const isNew = yearNum === new Date().getFullYear();
     div.innerHTML = `
         <img class="card-poster" src="${posterUrl(item.poster_path)}" alt="${title}" loading="lazy" onerror="this.src='${NO_POSTER}'">
         <span class="card-type">${isTv ? 'TV' : 'MOVIE'}</span>
+        ${isNew ? '<span class="card-new">2026</span>' : ''}
         ${item.vote_average >= 8 ? '<span class="card-badge">Top</span>' : ''}
         <span class="card-quality">${quality}</span>
         <div class="card-info">
@@ -942,11 +945,39 @@ function initNavDropdowns() {
     document.querySelectorAll('.trending-filter').forEach(btn => {
         btn.onclick = () => loadTrending(btn.dataset.filter);
     });
+    // Init genre pills
+    initGenrePills();
+}
+
+// GENRE PILLS
+function initGenrePills() {
+    const pills = el('#genrePills');
+    if (!pills) return;
+    const genres = ['Action','Comedy','Drama','Horror','Sci-Fi','Romance','Crime','Thriller','Animation','Documentary'];
+    pills.innerHTML = genres.map(g => `<span class="pill" data-genre="${g}">${g}</span>`).join('');
+    pills.querySelectorAll('.pill').forEach(p => {
+        p.onclick = () => { window.location.href = `movies.html?genre=${MOVIE_GENRES.find(x=>x.name===p.dataset.genre)?.id||''}`; };
+    });
+}
+
+// SCROLL EVENTS (back to top + progress)
+function initScrollEvents() {
+    const btn = el('#backTop');
+    const prog = el('#scrollProgress');
+    if (!btn && !prog) return;
+    window.addEventListener('scroll', () => {
+        const scroll = window.scrollY;
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        if (prog) prog.style.width = `${(scroll / max) * 100}%`;
+        if (btn) btn.classList.toggle('show', scroll > 300);
+    }, { passive: true });
+    btn?.addEventListener('click', () => window.scrollTo({top:0,behavior:'smooth'}));
 }
 
 // GLOBAL EVENTS
 function initGlobalEvents() {
     initNavDropdowns();
+    initScrollEvents();
     // Search
     const searchInput = el('#searchInput');
     const searchBtn = el('#searchBtn');
