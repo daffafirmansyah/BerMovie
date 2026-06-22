@@ -404,6 +404,41 @@ async function loadHomeCarousel(path, containerId, type) {
     if (!c||!data?.results) return;
     c.innerHTML = '';
     data.results.forEach(i => c.appendChild(createCard(i, type)));
+    addCarouselArrows(c);
+}
+
+function addCarouselArrows(carousel) {
+    if (carousel.dataset.arrows) return;
+    carousel.dataset.arrows = '1';
+    const wrap = carousel.parentElement;
+    if (!wrap || wrap.classList.contains('carousel-wrap')) return;
+    const section = wrap.closest('.section');
+    if (!section) return;
+    const header = section.querySelector('.section-header');
+    if (!header) return;
+    const nav = document.createElement('div');
+    nav.className = 'carousel-nav';
+    nav.innerHTML = `<button class="carousel-btn carousel-prev">‹</button><button class="carousel-btn carousel-next">›</button>`;
+    header.appendChild(nav);
+    const prev = nav.querySelector('.carousel-prev');
+    const next = nav.querySelector('.carousel-next');
+    const scroll = (dir) => {
+        const w = carousel.children[0]?.offsetWidth || 200;
+        carousel.scrollBy({ left: dir * (w + 14) * 3, behavior: 'smooth' });
+    };
+    prev.onclick = () => scroll(-1);
+    next.onclick = () => scroll(1);
+    // Hide prev/next at edges
+    carousel.addEventListener('scroll', () => {
+        const atStart = carousel.scrollLeft < 10;
+        const atEnd = carousel.scrollLeft + carousel.clientWidth >= carousel.scrollWidth - 10;
+        prev.style.opacity = atStart ? '0' : '1';
+        prev.style.pointerEvents = atStart ? 'none' : 'auto';
+        next.style.opacity = atEnd ? '0' : '1';
+        next.style.pointerEvents = atEnd ? 'none' : 'auto';
+    });
+    // Initial check
+    setTimeout(() => carousel.dispatchEvent(new Event('scroll')), 100);
 }
 
 function initHomePage() {

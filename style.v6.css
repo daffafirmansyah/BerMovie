@@ -87,6 +87,10 @@ input{font-family:inherit;outline:none}
 .section-title::before{content:'';display:inline-block;width:5px;height:22px;background:linear-gradient(to bottom,var(--accent),var(--accent2));border-radius:3px;flex-shrink:0}
 .see-all{font-size:.8rem;font-weight:500;color:var(--accent);padding:5px 14px;border-radius:999px;border:1px solid rgba(249,115,22,.2);transition:var(--transition);letter-spacing:.3px}
 .see-all:hover{background:rgba(249,115,22,.08);border-color:var(--accent)}
+.carousel-nav{display:flex;gap:6px;margin-left:12px}
+.carousel-btn{width:32px;height:32px;border-radius:50%;background:var(--bg3);border:1px solid var(--border);color:var(--text);font-size:1.2rem;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:var(--transition);touch-action:manipulation}
+.carousel-btn:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+@media(max-width:640px){.carousel-nav{display:none}}
 
 /* === CARDS === */
 .carousel{display:flex;gap:14px;overflow-x:auto;padding:4px 0 16px;scroll-snap-type:x mandatory}
