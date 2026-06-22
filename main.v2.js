@@ -838,18 +838,22 @@ function initNavDropdowns() {
         for (let y = now; y >= 1950; y--) h += '<a href="movies.html?year='+y+'">'+y+'</a>';
         yearDD.innerHTML = h;
     }
-    // Dropdown toggle for touch
-    document.querySelectorAll('.nav-dropdown > a').forEach(a => {
-        a.onclick = (e) => {
-            if (window.innerWidth > 640) return; // Desktop: hover works
+    // Dropdown toggle (click for all sizes)
+    document.querySelectorAll('.nav-dropdown-trigger').forEach(trigger => {
+        trigger.onclick = (e) => {
             e.preventDefault();
-            const dd = a.parentElement.querySelector('.dropdown-menu');
-            if (dd) {
-                const open = dd.style.display === 'block';
-                document.querySelectorAll('.dropdown-menu').forEach(m => m.style.display = '');
-                dd.style.display = open ? '' : 'block';
-            }
+            const dd = trigger.parentElement.querySelector('.dropdown-menu');
+            if (!dd) return;
+            const isOpen = dd.classList.contains('show');
+            document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('show'));
+            if (!isOpen) dd.classList.add('show');
         };
+    });
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.nav-dropdown')) {
+            document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('show'));
+        }
     });
     // Trending filter clicks
     document.querySelectorAll('.trending-filter').forEach(btn => {
