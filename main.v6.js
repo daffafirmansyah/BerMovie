@@ -805,6 +805,7 @@ function initGenrePage() {
             all('.genre-type-btn').forEach(b=>b.classList.remove('active'));
             btn.classList.add('active');
             el('#genreResults')?.classList.add('hidden');
+            el('#genreResults').style.display = 'none';
             el('#genreGrid')?.classList.remove('hidden');
             currentGenreId = null;
             currentGenreName = '';
@@ -872,6 +873,7 @@ async function loadGenreResults(type, genreId, genreName, page=1) {
     if (!section||!grid) return;
 
     section.classList.remove('hidden');
+    section.style.display = '';
     loading?.classList.remove('hidden');
     grid.innerHTML = '';
     el('#genreResultsTitle').textContent = genreName;
@@ -884,6 +886,7 @@ async function loadGenreResults(type, genreId, genreName, page=1) {
     if (backBtn) {
         backBtn.onclick = () => {
             section.classList.add('hidden');
+            section.style.display = 'none';
             el('#genreGrid')?.classList.remove('hidden');
             el('#genreGrid')?.scrollIntoView({behavior:'smooth', block:'start'});
             currentGenreId = null;
