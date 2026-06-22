@@ -787,3 +787,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (searchQ) doSearch(searchQ);
     }
 });
+
+// Direct init fallback (if DOMContentLoaded already fired)
+const p = window.location.pathname;
+if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    if (p.includes('movies.html')) initMoviesPage();
+    else if (p.includes('tv.html')) initTvPage();
+    else if (p.includes('genre.html')) initGenrePage();
+    else if (!p.includes('detail.html')) initHomePage();
+}
