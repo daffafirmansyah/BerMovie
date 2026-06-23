@@ -368,6 +368,7 @@ async function openPlayer(id, type, title, season=1, episode=1) {
     }
 
     all('.svr-btn').forEach(btn => {
+        if (!btn.dataset.server) return;
         btn.classList.toggle('active', btn.dataset.server===currentServer);
         btn.onclick = () => {
             currentServer = btn.dataset.server;
