@@ -1244,7 +1244,7 @@ async function loadDetailPage(id, type) {
     const trailerWrap = document.createElement('div');
     trailerWrap.id = 'trailerWrap';
     trailerWrap.style.cssText = 'position:fixed;top:-9999px;left:-9999px;z-index:5;display:block;visibility:hidden;will-change:transform';
-    document.getElementById('detailHero').appendChild(trailerWrap);
+    document.body.appendChild(trailerWrap); // off-screen initially
     const tr = videosData?.results?.find(v => v.type==='Trailer'&&v.site=='YouTube');
     if (tr) {
         const iframe = document.createElement('iframe');
@@ -1263,6 +1263,7 @@ async function loadDetailPage(id, type) {
         document.getElementById('detailTrailerBtn').textContent = '◉ Tutup Trailer';
         document.getElementById('detailTrailerBtn').onclick = () => {
             trailerWrap.style.cssText = 'position:fixed;top:-9999px;left:-9999px;z-index:5;display:block;visibility:hidden;will-change:transform';
+            document.body.appendChild(trailerWrap); // remove from hero DOM
             hero.classList.remove('trailer-active');
             document.getElementById('detailTrailerBtn').textContent = 'Trailer ▷';
             document.getElementById('detailTrailerBtn').onclick = openTrailer;
