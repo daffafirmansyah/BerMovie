@@ -8,6 +8,7 @@ const IMG_CAST = `${IMG}/w185`;
 const NO_POSTER = 'https://placehold.co/200x300/1a1a2e/666?text=';
 const VIDSRV = 'https://vidsrcme.ru/embed';
 const VIDSRV2 = 'https://vidsrc.pm/embed';
+const PROXY_HOST = 'http://43.134.106.32:3457';
 const VIDSRV3 = 'https://www.vidcore.org/embed';
 
 // GENRES
@@ -64,7 +65,7 @@ function getURLParams() {
         page: parseInt(p.get('page') || '1')
     };
 }
-let currentServer = 'vidcore';
+let currentServer = 'proxy';
 let currentPage = 1;
 let currentMediaType = 'movie';
 let currentGenreId = null;
@@ -312,9 +313,12 @@ function getPlayerUrl(id, type, season, episode) {
     } else if (currentServer === 'vidlink') {
         if (type === 'tv') rawUrl = `https://vidlink.pro/tv/${id}/${season}/${episode}`;
         else rawUrl = `https://vidlink.pro/movie/${id}`;
-    } else {
+    } else if (currentServer === 'vidcore') {
         if (type === 'tv') rawUrl = `${VIDSRV3}/tv/${id}/${season}/${episode}`;
         else rawUrl = `${VIDSRV3}/movie/${id}`;
+    } else {
+        // Proxy: auto-resolve with multi-source fallback
+        rawUrl = `${PROXY_HOST}/resolve?id=${id}&type=${type}&s=${season}&e=${episode}`;
     }
     return rawUrl;
 }
