@@ -1,0 +1,213 @@
+/* === FUTURISTIC ENHANCEMENTS === */
+
+/* 1. Secondary accent cyan */
+:root {
+  --accent2: #ea580c;
+  --cyan: #06b6d4;
+  --cyan-glow: rgba(6,182,212,.15);
+  --accent-gradient: linear-gradient(135deg, #f97316, #fb923c, #fbbf24);
+  --cyan-gradient: linear-gradient(135deg, #06b6d4, #22d3ee, #67e8f9);
+}
+
+/* 2. Glass navbar enhancement */
+.navbar {
+  background: rgba(10,10,15,.55);
+  backdrop-filter: blur(40px) saturate(2);
+  -webkit-backdrop-filter: blur(40px) saturate(2);
+  box-shadow: 0 1px 0 rgba(255,255,255,.04);
+  transition: all .3s ease;
+}
+.navbar.compact { height: 52px; background: rgba(10,10,15,.8); }
+.navbar.compact .logo { font-size: 1.15rem; }
+.navbar.compact .nav-search input { height: 32px; font-size: .78rem; }
+
+/* 3. Gradient text on section titles */
+.section-title {
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.section-title::before { display: none; }
+.section-title::after {
+  content: ''; display: inline-block;
+  width: 5px; height: 22px;
+  background: var(--cyan-gradient);
+  border-radius: 3px; flex-shrink: 0; margin-left: 12px;
+}
+
+/* 4. Futuristic nav link hover */
+.nav-links a { position: relative; overflow: hidden; }
+.nav-links a::after {
+  content: ''; position: absolute; bottom: 2px; left: 50%; right: 50%;
+  height: 2px; background: var(--accent);
+  border-radius: 2px; transition: all .35s cubic-bezier(.4,0,.2,1);
+  opacity: 0;
+}
+.nav-links a:hover::after,
+.nav-links a.active::after { left: 20%; right: 20%; opacity: 1; }
+.nav-links a.active { background: transparent; color: #fff; }
+.nav-links a.active::after { background: var(--cyan); }
+
+/* 5. Animated mesh gradient behind hero */
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 20%, rgba(6,182,212,.08) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 60%, rgba(249,115,22,.06) 0%, transparent 50%),
+    radial-gradient(ellipse 70% 40% at 50% 40%, rgba(251,191,36,.04) 0%, transparent 50%);
+  animation: meshShift 12s ease-in-out infinite alternate;
+}
+@keyframes meshShift {
+  0% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.1) rotate(1deg); }
+  100% { transform: scale(1) rotate(-0.5deg); }
+}
+
+/* 6. Gradient text hero title */
+.hero-title {
+  background: linear-gradient(135deg, #f1f1f6 0%, #f97316 60%, #fb923c 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: none;
+}
+
+/* 7. Card 3D perspective */
+.card {
+  transition: transform .4s cubic-bezier(.2,0,0,1), border-color .3s ease, box-shadow .4s ease;
+  will-change: transform;
+}
+.card:hover {
+  border-color: rgba(249,115,22,.3);
+  box-shadow:
+    0 0 30px rgba(249,115,22,.12),
+    0 20px 60px rgba(0,0,0,.5),
+    inset 0 1px 0 rgba(255,255,255,.04);
+}
+.card-glow {
+  position: absolute; inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity .4s ease;
+  background: radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(249,115,22,.12), transparent 60%);
+}
+.card:hover .card-glow { opacity: 1; }
+
+/* 8. Trendng card glow */
+.trending-card { transition: transform .35s ease, box-shadow .35s ease, border-color .3s ease; }
+.trending-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 0 40px rgba(249,115,22,.12), 0 12px 48px rgba(0,0,0,.4);
+  border-color: rgba(249,115,22,.25);
+}
+
+/* 9. Futuristic genre cards */
+.genre-card {
+  position: relative; overflow: hidden;
+  transition: transform .35s cubic-bezier(.2,0,0,1), border-color .3s ease, box-shadow .3s ease;
+}
+.genre-card::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(249,115,22,.03), rgba(6,182,212,.02));
+  opacity: 0; transition: opacity .4s ease;
+}
+.genre-card:hover::before { opacity: 1; }
+.genre-card:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 0 40px rgba(249,115,22,.1), 0 12px 40px rgba(0,0,0,.3);
+}
+
+/* 10. Detail hero reveal */
+.detail-hero { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+.detail-hero.reveal { animation: heroReveal .8s cubic-bezier(.2,0,0,1) forwards; }
+@keyframes heroReveal {
+  0% { clip-path: polygon(0 0, 100% 0, 100% 0, 0 0); }
+  100% { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+}
+
+/* 11. Cast with glow */
+.detail-cast-item img {
+  border: 2px solid rgba(255,255,255,.06);
+  box-shadow: 0 0 0px rgba(249,115,22,0);
+  transition: all .35s ease;
+}
+.detail-cast-item:hover img {
+  border-color: var(--accent);
+  box-shadow: 0 0 20px rgba(249,115,22,.3), 0 0 40px rgba(249,115,22,.1);
+  transform: scale(1.1);
+}
+
+/* 12. Scroll animation keyframes */
+@keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+.fade-in { opacity: 0; transform: translateY(30px); transition: opacity .6s ease, transform .6s cubic-bezier(.2,0,0,1); }
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+.fade-in:nth-child(2) { transition-delay: .05s; }
+.fade-in:nth-child(3) { transition-delay: .1s; }
+.fade-in:nth-child(4) { transition-delay: .15s; }
+.fade-in:nth-child(5) { transition-delay: .2s; }
+.fade-in:nth-child(6) { transition-delay: .25s; }
+
+/* 13. Loading shimmer enhanced */
+@keyframes shimmerWave {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.loading { animation: shimmerWave 1.5s ease-in-out infinite; }
+
+/* 14. Page transition */
+body { opacity: 0; animation: pageFade .25s ease forwards; }
+@keyframes pageFade { from { opacity: 0; } to { opacity: 1; } }
+
+/* 15. Dropdown glass */
+.dropdown-menu {
+  background: rgba(17,17,24,.95);
+  backdrop-filter: blur(30px) saturate(1.5);
+  -webkit-backdrop-filter: blur(30px) saturate(1.5);
+  border: 1px solid rgba(255,255,255,.06);
+  box-shadow: 0 20px 60px rgba(0,0,0,.6);
+}
+
+/* 16. Mobile menu glass */
+.mobile-menu {
+  background: rgba(17,17,24,.96)!important;
+  backdrop-filter: blur(40px) saturate(1.5)!important;
+  -webkit-backdrop-filter: blur(40px) saturate(1.5)!important;
+}
+
+/* 17. Pagination buttons glow */
+.pagination button.active {
+  background: var(--accent-gradient);
+  box-shadow: 0 4px 20px rgba(249,115,22,.3);
+}
+.pagination button:hover:not(.active) {
+  border-color: rgba(249,115,22,.3);
+  transform: translateY(-2px);
+}
+
+/* 18. Filter selects futuristic */
+.filters select {
+  transition: all .3s ease;
+}
+.filters select:hover {
+  border-color: rgba(249,115,22,.3);
+  background: var(--bg4);
+}
+
+/* 19. Genre type button glow active */
+.genre-type-btn.active {
+  background: var(--accent-gradient);
+  box-shadow: 0 4px 24px rgba(249,115,22,.35);
+}
+
+/* 20. Badge glow pulse */
+.card-badge {
+  animation: badgePulse 3s ease-in-out infinite;
+}
+@keyframes badgePulse {
+  0%, 100% { box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+  50% { box-shadow: 0 2px 16px rgba(249,115,22,.25), 0 0 20px rgba(249,115,22,.08); }
+}
