@@ -9,7 +9,6 @@ const NO_POSTER = 'https://placehold.co/200x300/1a1a2e/666?text=';
 const VIDSRV = 'https://vidsrcme.ru/embed';
 const VIDSRV2 = 'https://vidsrc.pm/embed';
 const VIDSRV3 = 'https://www.vidcore.org/embed';
-const PROXY = 'https://tropical-warcraft-finally-struck.trycloudflare.com';
 
 // Subtitle state
 let subCues = [];
@@ -390,57 +389,14 @@ async function searchAndShowSubs() {
     const sheet = el('#subSheet');
     const list = el('#subList');
     const status = el('#subSearchStatus');
-    if (!sheet || !currentImdbId) { return; }
+    if (!sheet) return;
     sheet.classList.remove('hidden');
     list.innerHTML = '';
-    status.textContent = 'Mencari subtitle Indonesia...';
-    try {
-        const res = await fetch(`${PROXY}/api/subs/search?imdb_id=${currentImdbId}&lang=ind`);
-        const data = await res.json();
-        if (!data.count) {
-            status.textContent = 'Tidak ada subtitle Indonesia untuk film ini.';
-            return;
-        }
-        status.textContent = `${data.count} subtitle ditemukan`;
-        data.results.forEach(s => {
-            const item = document.createElement('div');
-            item.className = 'sub-item';
-            item.innerHTML = `
-                <div>
-                    <div class="sub-item-name">${s.file}</div>
-                    <div class="sub-item-dl">${s.downloads} unduhan</div>
-                </div>
-                <span class="sub-item-load">Muat</span>
-            `;
-            item.onclick = () => loadSubtitle(s.id, currentImdbId);
-            list.appendChild(item);
-        });
-    } catch(e) {
-        status.textContent = 'Gagal mencari subtitle. Cek koneksi ke proxy.';
-    }
+    status.textContent = 'Subtitle belum tersedia.';
 }
 
 async function loadSubtitle(subId) {
-    // Close sheet
     el('#subSheet')?.classList.add('hidden');
-    el('#subSearchStatus').textContent = 'Memuat...';
-    try {
-        const res = await fetch(`${PROXY}/api/subs/cues?id=${subId}&imdb_id=${currentImdbId}&lang=ind`);
-        const data = await res.json();
-        if (!data.cues || !data.cues.length) {
-            el('#subSearchStatus').textContent = 'Gagal memuat subtitle.';
-            return;
-        }
-        subCues = data.cues;
-        subIdx = 0;
-        // Show overlay
-        const ov = el('#subOverlay');
-        if (ov) ov.classList.remove('hidden');
-        showSub(0);
-        el('#subTriggerBtn').textContent = 'CC ✓';
-    } catch(e) {
-        el('#subSearchStatus').textContent = 'Gagal memuat: ' + e.message;
-    }
 }
 
 function showSub(idx) {
@@ -460,8 +416,7 @@ function closeSubs() {
     subCues = [];
     subIdx = 0;
     el('#subOverlay')?.classList.add('hidden');
-    el('#subText').textContent = '';
-    el('#subTriggerBtn').textContent = 'CC';
+    if (el('#subText')) el('#subText').textContent = '';
 }
 
 function closeAllModals() {
@@ -513,7 +468,6 @@ el('#epSheetClose') && (el('#epSheetClose').onclick = () => {
 // Subtitle controls
 el('#subTriggerBtn') && (el('#subTriggerBtn').onclick = () => {
     if (subCues.length) {
-        // Already loaded: toggle sheet or close
         el('#subSheet')?.classList.toggle('hidden');
         return;
     }
@@ -585,8 +539,8 @@ function renderHeroSlide(idx) {
         slide.classList.toggle('active', i === idx);
         slide.style.backgroundImage = i === idx ? `url(${backdropUrl(item.backdrop_path)})` : '';
     }
-    el('#heroTitle').textContent = displayTitle(item);
-    el('#heroOverview').textContent = truncate(item.overview, 200);
+    if (el('#heroTitle')) el('#heroTitle').textContent = displayTitle(item);
+    if (el('#heroOverview')) el('#heroOverview').textContent = truncate(item.overview, 200);
         // Hero genre tags
     const gnames = item.genre_ids?.slice(0,3).map(id => {
         const list = type==='movie' ? MOVIE_GENRES : TV_GENRES;
@@ -594,8 +548,8 @@ function renderHeroSlide(idx) {
         return g ? g.name : null;
     }).filter(Boolean) || [];
     let genreHtml = gnames.length ? `<div class="hero-genres">${gnames.map(n => `<span class="hero-genre">${n}</span>`).join('')}</div>` : '';
-    el('#heroMeta').innerHTML = genreHtml + `<span class="rating-badge">★ ${rating(item.vote_average)}</span><span>${year(item.release_date||item.first_air_date)}</span><span>${type==='movie'?'Film':'Series'}</span>`;
-    el('#heroBtn').onclick = () => { window.location.href = `detail.html?id=${item.id}&type=${type}`; };
+    if (el('#heroMeta')) el('#heroMeta').innerHTML = genreHtml + `<span class="rating-badge">★ ${rating(item.vote_average)}</span><span>${year(item.release_date||item.first_air_date)}</span><span>${type==='movie'?'Film':'Series'}</span>`;
+    if (el('#heroBtn')) el('#heroBtn').onclick = () => { window.location.href = `detail.html?id=${item.id}&type=${type}`; };
     // Update dots
     document.querySelectorAll('.hero-dot').forEach((d, i) => d.classList.toggle('active', i === idx));
 }
@@ -964,7 +918,7 @@ function initGenrePage() {
             all('.genre-type-btn').forEach(b=>b.classList.remove('active'));
             btn.classList.add('active');
             el('#genreResults')?.classList.add('hidden');
-            el('#genreResults').style.display = 'none';
+            if (el('#genreResults')) el('#genreResults').style.display = 'none';
             el('#genreGrid')?.classList.remove('hidden');
             currentGenreId = null;
             currentGenreName = '';
@@ -1035,7 +989,7 @@ async function loadGenreResults(type, genreId, genreName, page=1) {
     section.style.display = '';
     loading?.classList.remove('hidden');
     grid.innerHTML = '';
-    el('#genreResultsTitle').textContent = genreName;
+    if (el('#genreResultsTitle')) el('#genreResultsTitle').textContent = genreName;
     el('#genreGrid')?.classList.add('hidden');
     currentGenreId = genreId;
     currentGenreName = genreName;
@@ -1105,7 +1059,7 @@ async function doSearch(query, page=1) {
         return;
     }
     section.classList.remove('hidden');
-    el('#searchTitle').textContent = `Hasil: "${query}" (${data.total_results})`;
+    if (el('#searchTitle')) el('#searchTitle').textContent = `Hasil: "${query}" (${data.total_results})`;
     // Update section title with count
     const st = el('.page-title');
     if (st && data.total_results > 0) {
