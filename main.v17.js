@@ -1311,45 +1311,66 @@ function initGlobalEvents() {
         // Country/Tahun inline expandable lists in mobile menu
         const mobExpandData = {
             country: {label:'Country', items:[
-                ['','Semua'],['ID','Indonesia'],['US','Amerika'],['JP','Jepang'],['KR','Korea'],['CN','China'],
-                ['IN','India'],['GB','Inggris'],['FR','Perancis'],['DE','Jerman'],['TH','Thailand'],
-                ['MY','Malaysia'],['SG','Singapura'],['PH','Filipina'],['HK','Hong Kong'],['AU','Australia'],
-                ['CA','Kanada'],['BR','Brazil'],['MX','Meksiko'],['RU','Rusia'],['ES','Spanyol'],['IT','Italia'],
-                ['NL','Belanda'],['SE','Swedia'],['TR','Turki'],['AE','UEA'],['SA','Arab Saudi'],['ID','Indonesia']
+                ['','Semua Negara'],['ID','🇮🇩 Indonesia'],['US','🇺🇸 Amerika'],['JP','🇯🇵 Jepang'],['KR','🇰🇷 Korea'],['CN','🇨🇳 China'],
+                ['IN','🇮🇳 India'],['GB','🇬🇧 Inggris'],['FR','🇫🇷 Perancis'],['DE','🇩🇪 Jerman'],['TH','🇹🇭 Thailand'],
+                ['MY','🇲🇾 Malaysia'],['SG','🇸🇬 Singapura'],['PH','🇵🇭 Filpina'],['HK','🇭🇰 Hong Kong'],['AU','🇦🇺 Australia'],
+                ['CA','🇨🇦 Kanada'],['BR','🇧🇷 Brazil'],['MX','🇲🇽 Meksiko'],['RU','🇷🇺 Rusia'],['ES','🇪🇸 Spanyol'],['IT','🇮🇹 Italia'],
+                ['NL','🇳🇱 Belanda'],['SE','🇸🇪 Swedia'],['TR','🇹🇷 Turki'],['AE','🇦🇪 UEA'],['SA','🇸🇦 Arab Saudi']
             ]},
-            tahun: {label:'Tahun', items: (function(){let a=[['','Semua']];for(let y=new Date().getFullYear();y>=1970;y--)a.push([y+'',y+'']);return a;})()}
+            tahun: {label:'Tahun', items: (function(){let a=[['','Semua Tahun']];for(let y=new Date().getFullYear();y>=1970;y--)a.push([y+'',y+'']);return a;})()}
         };
+        // Inject sub-list CSS once
+        if (!document.querySelector('#mob-sub-css')) {
+            const css = document.createElement('style');
+            css.id = 'mob-sub-css';
+            css.textContent = `.mob-sub-list{padding:0 20px;overflow:hidden;transition:max-height .3s ease,opacity .25s ease}.mob-sub-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:12px 0 16px}.mob-sub-grid a{display:flex;align-items:center;justify-content:center;padding:10px 6px;border-radius:10px;font-size:.8rem;font-weight:500;color:var(--text2);background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.04);text-decoration:none;transition:all .15s ease;min-height:42px}.mob-sub-grid a:active{transform:scale(.95);background:rgba(249,115,22,.15);border-color:rgba(249,115,22,.3);color:var(--accent)}.mob-sub-grid a.mob-active{background:rgba(249,115,22,.12);border-color:rgba(249,115,22,.25);color:var(--accent);font-weight:600}.mob-sub-label{font-size:.7rem;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;padding:8px 0 2px}`;
+            document.head.appendChild(css);
+        }
         mobileMenu.querySelectorAll('a[data-nav]').forEach(a => {
             const nav = a.getAttribute('data-nav');
             if (mobExpandData[nav]) {
+                a.style.cssText += 'display:flex;align-items:center;justify-content:space-between;';
+                a.innerHTML += '<span style="font-size:.7rem;color:var(--text3);transition:transform .2s">▾</span>';
                 a.onclick = (e) => {
                     e.preventDefault();
                     e.stopPropagation();
+                    const arrow = a.querySelector('span');
                     // Toggle inline list
                     let sub = a.nextElementSibling;
                     if (sub && sub.classList.contains('mob-sub-list')) {
-                        sub.remove();
+                        sub.style.maxHeight = '0';
+                        sub.style.opacity = '0';
+                        if (arrow) arrow.style.transform = '';
                         a.style.color = '';
+                        setTimeout(() => sub.remove(), 300);
                         return;
                     }
                     // Close any other open sub-lists
-                    mobileMenu.querySelectorAll('.mob-sub-list').forEach(s => s.remove());
-                    mobileMenu.querySelectorAll('a[data-nav]').forEach(x => x.style.color = '');
+                    mobileMenu.querySelectorAll('.mob-sub-list').forEach(s => { s.style.maxHeight='0'; s.style.opacity='0'; setTimeout(()=>s.remove(),300); });
+                    mobileMenu.querySelectorAll('a[data-nav]').forEach(x => { x.style.color = ''; const sp=x.querySelector('span'); if(sp) sp.style.transform=''; });
                     a.style.color = 'var(--accent)';
+                    if (arrow) arrow.style.transform = 'rotate(180deg)';
                     sub = document.createElement('div');
                     sub.className = 'mob-sub-list';
-                    sub.style.cssText = 'display:grid;grid-template-columns:repeat(3,1fr);gap:2px;padding:8px 20px;background:rgba(255,255,255,.03);max-height:40vh;overflow-y:auto;';
+                    sub.style.maxHeight = '0';
+                    sub.style.opacity = '0';
+                    const label = document.createElement('div');
+                    label.className = 'mob-sub-label';
+                    label.textContent = mobExpandData[nav].label;
+                    const grid = document.createElement('div');
+                    grid.className = 'mob-sub-grid';
                     const basePage = nav === 'country' ? 'movies.html?country=' : 'movies.html?year=';
                     mobExpandData[nav].items.forEach(([val,label]) => {
                         const btn = document.createElement('a');
                         btn.textContent = label;
                         btn.href = val ? basePage+val : 'movies.html';
-                        btn.style.cssText = 'padding:10px 8px;text-align:center;font-size:.82rem;border-radius:6px;color:#e8e8ef;background:rgba(255,255,255,.04);border-bottom:none;';
-                        btn.onmouseenter = () => btn.style.background = 'var(--accent)';
-                        btn.onmouseleave = () => btn.style.background = 'rgba(255,255,255,.04)';
-                        sub.appendChild(btn);
+                        grid.appendChild(btn);
                     });
+                    sub.appendChild(label);
+                    sub.appendChild(grid);
                     a.after(sub);
+                    // Trigger animation
+                    requestAnimationFrame(() => { sub.style.maxHeight = '50vh'; sub.style.opacity = '1'; });
                 };
             }
         });
