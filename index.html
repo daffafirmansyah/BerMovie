@@ -1,429 +1,236 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>BerMovie</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BerMovie - Nonton Film & Series</title>
+    <meta name="description" content="Nonton film dan series terbaru dengan subtitle Indonesia gratis.">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.v11.css?v=1">
+<link rel="stylesheet" href="futuristic.css?v=1">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;500;600&display=swap');
-
-:root{
-  --bg:#0a0a0f;--card-bg:#12121a;--text:#e8e8ed;--text-dim:#7a7a8a;
-  --accent:#f97316;--accent-glow:rgba(249,115,22,.3);
-  --radius:10px;--transition:.4s cubic-bezier(.22,1,.36,1);
-}
-html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overflow-x:hidden}
-body{background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");background-size:256px 256px}
-
-/* LOGO */
-.logo{position:fixed;bottom:24px;right:28px;font-family:Cinzel,serif;font-size:1.1rem;letter-spacing:3px;color:var(--text-dim);opacity:.25;z-index:0;pointer-events:none;text-transform:uppercase}
-.logo span{color:var(--accent)}
-
-/* GRID */
-.grid-wrap{padding:24px;max-width:1600px;margin:0 auto;position:relative;z-index:1}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
-.card{aspect-ratio:2/3;border-radius:var(--radius);overflow:hidden;cursor:pointer;position:relative;background:var(--card-bg);transition:transform var(--transition),opacity var(--transition),filter var(--transition);will-change:transform;border:1px solid rgba(255,255,255,.04)}
-.card img{width:100%;height:100%;object-fit:cover;display:block;transition:transform var(--transition)}
-.card:hover{transform:scale(1.03);z-index:2}
-.card:hover img{transform:scale(1.06)}
-
-/* FOCUS STATE */
-.grid.focused .card:not(.focus){opacity:.15;filter:blur(2px) brightness(.4)}
-.card.focus{transform:scale(1.12);z-index:10;position:relative;box-shadow:0 20px 80px rgba(0,0,0,.6)}
-.card.focus .focus-info{opacity:1;transform:translateY(0)}
-
-.focus-info{position:absolute;bottom:0;left:0;right:0;padding:20px 16px 16px;background:linear-gradient(transparent,rgba(0,0,0,.85));opacity:0;transform:translateY(10px);transition:all var(--transition);pointer-events:none}
-.focus-info.visible{opacity:1;transform:translateY(0);pointer-events:auto}
-.focus-info .title{font-weight:600;font-size:1.05rem;margin-bottom:4px}
-.focus-info .meta{font-size:.8rem;color:var(--text-dim);margin-bottom:10px}
-.focus-info .meta .star{color:#f5c518}
-.focus-info .tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
-.focus-info .tag{font-size:.7rem;padding:2px 10px;border-radius:999px;background:rgba(255,255,255,.08);color:var(--text-dim);border:1px solid rgba(255,255,255,.06)}
-.focus-info .actions{display:flex;gap:10px}
-.focus-info .btn{padding:10px 22px;border-radius:999px;border:none;font-size:.85rem;font-weight:500;cursor:pointer;transition:all .25s}
-.focus-info .btn-play{background:var(--accent);color:#fff;box-shadow:0 0 20px var(--accent-glow)}
-.focus-info .btn-play:hover{box-shadow:0 0 40px var(--accent-glow);transform:scale(1.04)}
-.focus-info .btn-trailer{padding:10px 22px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:transparent;color:var(--text);font-size:.85rem;cursor:pointer;transition:all .25s}
-.focus-info .btn-trailer:hover{background:rgba(255,255,255,.06);border-color:var(--accent)}
-
-/* COMMAND PALETTE */
-.cmd-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);z-index:100;opacity:0;visibility:hidden;transition:all .3s}
-.cmd-overlay.active{opacity:1;visibility:visible}
-.cmd-palette{position:fixed;top:0;left:50%;transform:translateX(-50%) translateY(-120%);width:min(600px,90vw);background:#14141e;border-radius:0 0 16px 16px;border:1px solid rgba(255,255,255,.06);border-top:none;padding:20px;z-index:101;transition:transform .35s cubic-bezier(.22,1,.36,1),opacity .25s;box-shadow:0 20px 100px rgba(0,0,0,.5)}
-.cmd-palette.active{transform:translateX(-50%) translateY(0)}
-.cmd-input{width:100%;background:transparent;border:none;color:var(--text);font-size:1.2rem;padding:10px 4px 14px;outline:none;font-family:'Inter',sans-serif}
-.cmd-input::placeholder{color:var(--text-dim);opacity:.4}
-.cmd-results{margin-top:4px;max-height:320px;overflow-y:auto}
-.cmd-item{display:flex;align-items:center;gap:14px;padding:10px 10px;border-radius:8px;cursor:pointer;transition:background .2s}
-.cmd-item:hover,.cmd-item.sel{background:rgba(255,255,255,.05)}
-.cmd-item img{width:36px;height:54px;object-fit:cover;border-radius:4px}
-.cmd-item .info{flex:1;min-width:0}
-.cmd-item .info .t{font-size:.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.cmd-item .info .s{font-size:.75rem;color:var(--text-dim)}
-.cmd-item .info .s .star{color:#f5c518}
-.cmd-item .go{color:var(--text-dim);font-size:.75rem}
-
-/* PLAYER MORPH OVERLAY */
-.player-overlay{position:fixed;inset:0;z-index:200;display:none;background:#000}
-.player-overlay.active{display:block}
-.player-overlay .player-bg{position:absolute;inset:0;background-size:cover;background-position:center;filter:blur(40px) brightness(.3);transform:scale(1.1)}
-.player-overlay iframe{position:absolute;inset:64px 40px 100px;width:calc(100% - 80px);height:calc(100% - 164px);border:none;border-radius:12px;opacity:0;transition:opacity .5s}
-.player-overlay iframe.loaded{opacity:1}
-
-/* LOADER / FILM LEADER */
-.loader{position:fixed;inset:0;z-index:300;background:var(--bg);display:none;flex-direction:column;align-items:center;justify-content:center}
-.loader.active{display:flex}
-.loader .count{font-size:8rem;font-weight:700;font-family:Cinzel,serif;color:var(--accent);line-height:1;text-shadow:0 0 60px var(--accent-glow)}
-.loader .label{font-size:.9rem;color:var(--text-dim);margin-top:12px;letter-spacing:4px;text-transform:uppercase}
-@keyframes grain{0%,100%{transform:translate(0,0)}10%{transform:translate(-5%,-5%)}20%{transform:translate(-10%,5%)}30%{transform:translate(5%,-10%)}40%{transform:translate(-5%,15%)}50%{transform:translate(-10%,10%)}60%{transform:translate(15%,0)}70%{transform:translate(0,10%)}80%{transform:translate(3%,-8%)}90%{transform:translate(-8%,3%)}}
-.loader::after{content:'';position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='.08'/%3E%3C/svg%3E");background-size:512px 512px;animation:grain .2s infinite;pointer-events:none}
-
-/* PLAYER INFOBAR */
-.player-info{position:absolute;bottom:0;left:0;right:0;padding:20px 40px 28px;background:linear-gradient(transparent,rgba(0,0,0,.9));display:flex;justify-content:space-between;align-items:center;transform:translateY(100%);transition:transform .5s .2s}
-.player-overlay.active .player-info{transform:translateY(0)}
-.player-info .left .pt{font-weight:600;font-size:1.1rem}
-.player-info .left .ps{font-size:.8rem;color:var(--text-dim);margin-top:2px}
-.player-info .right{display:flex;gap:8px}
-.player-info .right button{padding:8px 18px;border-radius:999px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:var(--text);font-size:.8rem;cursor:pointer;transition:all .25s}
-.player-info .right button:hover{background:rgba(255,255,255,.08)}
-.player-info .right .close-btn{padding:8px 16px;background:rgba(255,0,0,.15);border-color:rgba(255,0,0,.2)}
-.player-info .right .close-btn:hover{background:rgba(255,0,0,.25)}
-
-/* TRAILER PIP */
-.trailer-pip{position:fixed;bottom:24px;right:24px;width:320px;height:180px;z-index:150;border-radius:10px;overflow:hidden;border:1px solid rgba(255,255,255,.1);display:none;box-shadow:0 10px 40px rgba(0,0,0,.6)}
-.trailer-pip.active{display:block}
-.trailer-pip iframe{width:100%;height:100%;border:none}
-.trailer-pip .close-pip{position:absolute;top:6px;right:6px;width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,.6);border:none;color:#fff;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
-
-/* SCROLLBAR */
-::-webkit-scrollbar{width:6px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:3px}
-
-/* HINT */
-.hint{position:fixed;top:20px;left:50%;transform:translateX(-50%);color:var(--text-dim);font-size:.8rem;opacity:.5;z-index:1;pointer-events:none;transition:opacity .5s}
-.hint kbd{padding:2px 7px;border-radius:4px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);font-family:inherit;font-size:.75rem}
-
-@media(max-width:768px){
-  .grid-wrap{padding:12px}
-  .grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
-  .player-overlay iframe{inset:40px 0 80px;width:100%;height:calc(100% - 120px);border-radius:0}
-  .player-info{padding:16px 16px 24px;flex-direction:column;gap:10px}
-  .trailer-pip{width:200px;height:112px;bottom:12px;right:12px}
-  .card.focus{transform:scale(1.05)}
-  .hint{display:none}
-}
+.mobile-menu{position:fixed;top:64px;left:0;right:0;height:calc(100vh - 64px);height:calc(100dvh - 64px);background:#0c0c14!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;z-index:99;overflow-y:auto;-webkit-overflow-scrolling:touch;transform:translateX(100%);transition:transform .3s ease}.mobile-menu.open{transform:translateX(0)}.mobile-menu a{display:block;padding:16px 20px;font-size:1rem;font-weight:600;color:#e8e8ef;touch-action:manipulation;border-bottom:1px solid rgba(255,255,255,.06)}.mobile-menu a:last-child{border-bottom:none}.mobile-menu a:active{background:rgba(255,255,255,.06)}.mobile-menu a.active{color:var(--accent)}
 </style>
 </head>
 <body>
+<div class="scroll-progress" id="scrollProgress"></div>
 
-<div class="hint">Tekan <kbd>/</kbd> untuk cari</div>
-<div class="logo">Ber<span>Movie</span></div>
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="./" class="logo">BerMovie</a>
+            <div class="nav-search">
+                <input type="text" id="searchInput" placeholder="Cari film atau series..." autocomplete="off">
+                <button id="searchBtn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></button>
+            </div>
+            <div class="nav-links">
+                <a href="./" class="active" data-nav="home">Home</a>
+                <a href="movies.html" data-nav="movies">Film</a>
+                <a href="tv.html" data-nav="tv">Series</a>
+                <div class="nav-dropdown">
+                    <span class="nav-dropdown-trigger" data-nav="genre">Genre ▾</span>
+                    <div class="dropdown-menu" id="genreDropdown"></div>
+                </div>
+                <div class="nav-dropdown">
+                    <span class="nav-dropdown-trigger">Country ▾</span>
+                    <div class="dropdown-menu" id="countryDropdown"></div>
+                </div>
+                <div class="nav-dropdown">
+                    <span class="nav-dropdown-trigger">Tahun ▾</span>
+                    <div class="dropdown-menu" id="yearDropdown"></div>
+                </div>
+                <a href="./?watchlist" class="nav-fav">Favorit</a>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn" style="cursor:pointer;z-index:101;position:relative"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="pointer-events:none"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
+        </div>
+        <!-- Mobile Menu -->
+        <div class="mobile-menu" id="mobileMenu">
+            <div class="mobile-search">
+                <input type="text" id="mobileSearchInput" placeholder="Cari film atau series..." autocomplete="off">
+                <button id="mobileSearchBtn" >Cari</button>
+            </div>
+            <a href="./" data-nav="home">Home</a>
+            <a href="movies.html" data-nav="movies">Film</a>
+            <a href="tv.html" data-nav="tv">Series</a>
+            <a href="genre.html" data-nav="genre">Genre</a>
+            <a href="leaderboard.html" data-nav="leaderboard">Peringkat</a>
+            <a href="movies.html" data-nav="tahun">Tahun</a>
+            <a href="movies.html" data-nav="country">Country</a>
+            <a href="./?watchlist" data-nav="watchlist">Favorit</a>
+        </div>
+    </nav>
 
-<div class="grid-wrap">
-  <div class="grid" id="grid"></div>
-</div>
+    <!-- HERO CAROUSEL -->
+    <section class="hero" id="hero">
+        <div class="hero-slides" id="heroSlides">
+            <div class="hero-slide active" id="heroSlide0"></div>
+            <div class="hero-slide" id="heroSlide1"></div>
+            <div class="hero-slide" id="heroSlide2"></div>
+            <div class="hero-slide" id="heroSlide3"></div>
+            <div class="hero-slide" id="heroSlide4"></div>
+        </div>
+        <div class="hero-content" id="heroContent">
+            <div class="hero-badge" id="heroBadge">Trending</div>
+            <h1 class="hero-title" id="heroTitle">Loading...</h1>
+            <p class="hero-desc" id="heroOverview"></p>
+            <div class="hero-meta" id="heroMeta"></div>
+            <div class="hero-actions">
+                <button class="btn-watch" id="heroBtn">Tonton Sekarang</button>
+            </div>
+        </div>
+        <div class="hero-dots" id="heroDots"></div>
+        <button class="hero-arrow hero-arrow-left" id="heroPrev">‹</button>
+        <button class="hero-arrow hero-arrow-right" id="heroNext">›</button>
+    </section>
 
-<div class="cmd-overlay" id="cmdOverlay"></div>
-<div class="cmd-palette" id="cmdPalette">
-  <input class="cmd-input" id="cmdInput" placeholder="Cari film, genre, tahun..." autofocus>
-  <div class="cmd-results" id="cmdResults"></div>
-</div>
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        <!-- TRENDING -->
+        <section class="section" id="trending">
+            <div class="section-header">
+                <h2 class="section-title">Trending Hari Ini</h2>
+            </div>
+            <div class="trending-filters">
+                <button class="trending-filter active" data-filter="all">All</button>
+                <button class="trending-filter" data-filter="movie">Movies</button>
+                <button class="trending-filter" data-filter="tv">TV Series</button>
+            </div>
+            <div class="trending-list" id="trendingList"></div>
+        </section>
+        
+        <!-- GENRE PILLS -->
+        <div class="genre-pills" id="genrePills"></div>
 
-<div class="player-overlay" id="playerOverlay">
-  <div class="player-bg" id="playerBg"></div>
-  <iframe id="playerIframe" allow="autoplay; fullscreen" allowfullscreen></iframe>
-  <div class="player-info">
-    <div class="left">
-      <div class="pt" id="playerTitle"></div>
-      <div class="ps" id="playerSub"></div>
+        <!-- POPULAR MOVIES -->
+        <section class="section" id="popularMovies">
+            <div class="section-header">
+                <h2 class="section-title">Film Populer</h2>
+                <a href="movies.html" class="see-all">Lihat Semua →</a>
+            </div>
+            <div class="carousel" id="moviesCarousel"></div>
+        </section>
+
+        <!-- POPULAR TV -->
+        <section class="section" id="popularTv">
+            <div class="section-header">
+                <h2 class="section-title">Series Populer</h2>
+                <a href="tv.html" class="see-all">Lihat Semua →</a>
+            </div>
+            <div class="carousel" id="tvCarousel"></div>
+        </section>
+
+        <!-- TOP RATED -->
+        <section class="section" id="topRated">
+            <div class="section-header">
+                <h2 class="section-title">Rating Tertinggi</h2>
+            </div>
+            <div class="carousel" id="topRatedCarousel"></div>
+        </section>
+
+        <!-- NOW PLAYING -->
+        <section class="section" id="nowPlaying">
+            <div class="section-header">
+                <h2 class="section-title">Sedang Tayang</h2>
+            </div>
+            <div class="carousel" id="nowPlayingCarousel"></div>
+        </section>
+
+        <!-- INDONESIA MOVIES -->
+        <section class="section" id="indoMovies">
+            <div class="section-header">
+                <h2 class="section-title">Film Indonesia</h2>
+                <a href="movies.html?country=ID" class="see-all">Lihat Semua →</a>
+            </div>
+            <div class="carousel" id="indoMoviesCarousel"></div>
+        </section>
+
+        <!-- INDONESIA SERIES -->
+        <section class="section" id="indoSeries">
+            <div class="section-header">
+                <h2 class="section-title">Series Indonesia</h2>
+                <a href="tv.html?country=ID" class="see-all">Lihat Semua →</a>
+            </div>
+            <div class="carousel" id="indoSeriesCarousel"></div>
+        </section>
+
+        <!-- SEARCH RESULTS -->
+        <section class="section hidden" id="searchResults">
+            <h2 class="section-title" id="searchTitle">Hasil Pencarian</h2>
+            <div class="grid" id="searchGrid"></div>
+            <div class="pagination" id="searchPagination"></div>
+        </section>
+
+        <!-- WATCHLIST -->
+        <section class="section hidden" id="watchlistSection">
+            <div class="section-header">
+                <h2 class="section-title">Favorit</h2>
+            </div>
+            <div class="grid" id="watchlistGrid"></div>
+            <div class="empty-state" id="watchlistEmpty"><p>Belum ada film favorit</p></div>
+        </section>
+    </main>
+
+    <!-- DETAIL MODAL -->
+    <div class="modal hidden" id="detailModal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <div class="modal-hero" id="modalHero"></div>
+            <div class="modal-body">
+                <h2 id="modalTitle"></h2>
+                <div class="modal-meta" id="modalMeta"></div>
+                <p class="modal-overview" id="modalOverview"></p>
+                <div class="modal-cast" id="modalCast"></div>
+                <div class="modal-actions">
+                    <button class="btn-watch" id="modalWatchBtn">Tonton</button>
+                    <button class="btn-secondary trailer-btn" id="modalTrailerBtn"><span class="t-il"></span><span class="t-txt">Trailer</span><span class="t-ir">▶</span></button>
+                </div>
+                <div class="seasons-section hidden" id="seasonsSection">
+                    <h3>Seasons</h3>
+                    <div class="seasons-list" id="seasonsList"></div>
+                </div>
+                <div class="similar-section">
+                    <h3>Rekomendasi</h3>
+                    <div class="carousel" id="similarCarousel"></div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="right">
-      <button id="trailerBtnPlayer">▷ Trailer</button>
-      <button id="nextBtnPlayer">→ Berikutnya</button>
-      <button class="close-btn" id="closePlayer">✕ Tutup</button>
+
+    <!-- PLAYER MODAL -->
+    <div class="player-modal hidden" id="playerModal">
+        <div class="player-backdrop"></div>
+        <div class="player-content">
+            <div class="player-header">
+                <h3 id="playerTitle"></h3>
+                <div class="player-servers">
+                    <span>Server:</span>
+                    <button class="server-btn active" data-server="vidsrc">VidSrc</button>
+                    <button class="server-btn" data-server="vidsrc2">VidSrc.su</button>
+                    <button class="server-btn" data-server="2embed">2Embed</button>
+                </div>
+                <button class="player-close">&times;</button>
+            </div>
+            <div class="episode-selector hidden" id="episodeSelector">
+                <select id="seasonSelect"></select>
+                <div class="episodes-grid" id="episodesGrid"></div>
+            </div>
+            <div class="iframe-container">
+                <iframe id="playerFrame" src="" frameborder="0" allowfullscreen></iframe>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 
-<div class="trailer-pip" id="trailerPip">
-  <iframe id="trailerIframe" allow="autoplay; fullscreen" allowfullscreen></iframe>
-  <button class="close-pip" id="closePip">✕</button>
-</div>
+    <!-- FOOTER -->
+<button class="back-top" id="backTop">&uarr;</button>
+<div class="toast" id="toast"></div>
+    <footer class="site-footer">
+        <p>BerMovie — Streaming Film & Series Sub Indo</p>
+        <p class="disclaimer">Kami tidak menyimpan file video di server kami. Semua konten disediakan oleh pihak ketiga.</p>
+    </footer>
 
-<div class="loader" id="loader">
-  <div class="count" id="loaderCount">3</div>
-  <div class="label">F I L M   L E A D E R</div>
-</div>
-
-<script>
-const TMDB_KEY = '245f8c4922de78b5017c149fbfa89ab5';
-const IMG = 'https://image.tmdb.org/t/p';
-const API = 'https://api.themoviedb.org/3';
-
-let movies = [];
-let focusedIdx = -1;
-let playerQueue = [];
-
-const $ = s => document.querySelector(s);
-const $$ = s => document.querySelectorAll(s);
-
-async function tmdb(endpoint){
-  const r = await fetch(`${API}${endpoint}${endpoint.includes('?')?'&':'?'}api_key=${TMDB_KEY}&language=id-ID`);
-  return r.json();
-}
-
-async function loadGrid(){
-  const [trending, movies_pop] = await Promise.all([
-    tmdb('/trending/all/day'),
-    tmdb('/movie/popular')
-  ]);
-  const seen = new Set();
-  movies = [...(trending.results||[]), ...(movies_pop.results||[])]
-    .filter(m => { if(seen.has(m.id)) return false; seen.add(m.id); return true; })
-    .slice(0, 40);
-
-  const grid = $('#grid');
-  grid.innerHTML = movies.map((m,i) => {
-    const p = m.poster_path ? `${IMG}/w500${m.poster_path}` : '';
-    const title = m.title || m.name || 'Unknown';
-    const year = (m.release_date||m.first_air_date||'').slice(0,4);
-    return `<div class="card" data-idx="${i}" data-id="${m.id}" style="background:var(--card-bg)">
-      ${p ? `<img src="${p}" alt="${title}" loading="lazy">` : '<div style="height:100%;display:flex;align-items:center;justify-content:center;color:var(--text-dim);font-size:.8rem">No Poster</div>'}
-      <div class="focus-info"><div class="title">${title}</div><div class="meta">${year} · <span class="star">★</span> ${m.vote_average?.toFixed(1)||'?'}</div>
-      <div class="tags">${(m.genre_ids||[]).slice(0,2).map(g => `<span class="tag">${genreName(g)}</span>`).join('')}</div>
-      <div class="actions"><button class="btn btn-play" data-action="play">► Tonton</button><button class="btn-trailer" data-action="trailer">▷ Trailer</button></div></div>
-    </div>`;
-  }).join('');
-}
-
-function genreName(id){
-  const map = {28:'Action',12:'Adventure',16:'Animation',35:'Comedy',80:'Crime',99:'Documentary',18:'Drama',10751:'Family',14:'Fantasy',36:'History',27:'Horror',10402:'Music',9648:'Mystery',10749:'Romance',878:'Sci-Fi',10770:'TV Movie',53:'Thriller',10752:'War',37:'Western'};
-  return map[id]||'Other';
-}
-
-// FOCUS
-$('#grid').addEventListener('click', e => {
-  const card = e.target.closest('.card');
-  if(!card) return;
-  if(e.target.closest('.btn-play')) return; // handled by play
-  if(e.target.closest('.btn-trailer')) return; // handled by trailer
-  toggleFocus(parseInt(card.dataset.idx));
-});
-
-// Double-click outside to unfocus
-$('#grid').addEventListener('dblclick', e => {
-  if(!e.target.closest('.card')) clearFocus();
-});
-
-document.addEventListener('keydown', e => {
-  if(e.key === 'Escape') {
-    if($('#cmdOverlay').classList.contains('active')) closeCmd();
-    else if($('#playerOverlay').classList.contains('active')) closePlayer();
-    else clearFocus();
-  }
-  if(e.key === '/' && !['INPUT','TEXTAREA'].includes(e.target.tagName)) {
-    e.preventDefault(); openCmd();
-  }
-  if(e.key === 'ArrowRight' && $('#cmdOverlay').classList.contains('active')) e.preventDefault();
-  if(e.key === 'Enter' && $('#cmdOverlay').classList.contains('active')) {
-    const sel = $('#cmdResults .sel');
-    if(sel) { selectCmdResult(sel.dataset.idx); closeCmd(); }
-  }
-  if(e.key.startsWith('Arrow') && !$('#cmdOverlay').classList.contains('active') && !$('#playerOverlay').classList.contains('active')) {
-    const dir = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
-    if(dir && focusedIdx >= 0) {
-      e.preventDefault();
-      const next = Math.max(0, Math.min(movies.length-1, focusedIdx + dir));
-      if(next !== focusedIdx) toggleFocus(next);
-    }
-  }
-});
-
-function toggleFocus(idx){
-  clearFocus();
-  focusedIdx = idx;
-  const grid = $('#grid');
-  grid.classList.add('focused');
-  const card = grid.children[idx];
-  if(!card) return;
-  card.classList.add('focus');
-  const info = card.querySelector('.focus-info');
-  if(info) info.classList.add('visible');
-  card.scrollIntoView({behavior:'smooth',block:'center'});
-}
-
-function clearFocus(){
-  focusedIdx = -1;
-  $('#grid').classList.remove('focused');
-  $$('.card.focus').forEach(c => {
-    c.classList.remove('focus');
-    const i = c.querySelector('.focus-info');
-    if(i) i.classList.remove('visible');
-  });
-}
-
-// COMMAND PALETTE
-function openCmd(){
-  $('#cmdOverlay').classList.add('active');
-  $('#cmdPalette').classList.add('active');
-  $('#cmdInput').value = '';
-  $('#cmdResults').innerHTML = '';
-  setTimeout(() => $('#cmdInput').focus(), 100);
-}
-
-function closeCmd(){
-  $('#cmdOverlay').classList.remove('active');
-  $('#cmdPalette').classList.remove('active');
-}
-
-$('#cmdOverlay').addEventListener('click', closeCmd);
-
-$('#cmdInput').addEventListener('input', async function(){
-  const q = this.value.trim();
-  if(!q) { $('#cmdResults').innerHTML = ''; return; }
-  const data = await tmdb(`/search/multi?query=${encodeURIComponent(q)}`);
-  const results = (data.results||[]).filter(r => r.media_type === 'movie' || r.media_type === 'tv').slice(0,8);
-  $('#cmdResults').innerHTML = results.map((r,i) => {
-    const p = r.poster_path ? `${IMG}/w92${r.poster_path}` : '';
-    const title = r.title || r.name || '';
-    const year = (r.release_date||r.first_air_date||'').slice(0,4);
-    return `<div class="cmd-item${i===0?' sel':''}" data-idx="${i}" data-id="${r.id}" data-type="${r.media_type}">
-      ${p ? `<img src="${p}">` : '<div style="width:36px;height:54px;background:var(--card-bg);border-radius:4px"></div>'}
-      <div class="info"><div class="t">${title}</div><div class="s">${year} · ${r.media_type==='movie'?'Film':'Serial'} · <span class="star">★</span> ${r.vote_average?.toFixed(1)||'?'}</div></div>
-      <span class="go">pilih</span>
-    </div>`;
-  }).join('');
-
-  $('#cmdResults').addEventListener('click', e => {
-    const item = e.target.closest('.cmd-item');
-    if(!item) return;
-    selectCmdResult(parseInt(item.dataset.idx));
-    closeCmd();
-  });
-});
-
-function selectCmdResult(idx){
-  const items = $$('#cmdResults .cmd-item');
-  // Just scroll to the movie in grid
-  const m = movies.find(m => m.id == items[idx]?.dataset.id);
-  if(m) {
-    const gridIdx = movies.indexOf(m);
-    if(gridIdx >= 0) toggleFocus(gridIdx);
-  }
-}
-
-// PLAYER
-$('#grid').addEventListener('click', e => {
-  const btn = e.target.closest('[data-action="play"]');
-  if(!btn) return;
-  const card = btn.closest('.card');
-  if(!card) return;
-  const idx = parseInt(card.dataset.idx);
-  playMovie(idx);
-});
-
-async function playMovie(idx){
-  const m = movies[idx];
-  if(!m) return;
-  focusedIdx = idx;
-
-  // Film leader
-  const loader = $('#loader');
-  loader.classList.add('active');
-  const countEl = $('#loaderCount');
-  for(let i=3; i>=1; i--){
-    countEl.textContent = i;
-    await new Promise(r => setTimeout(r, 500));
-  }
-
-  // Fetch detail for videos
-  const type = m.title ? 'movie' : 'tv';
-  const detail = await tmdb(`/${type}/${m.id}?append_to_response=videos`);
-  const vids = detail.videos?.results||[];
-  const trailer = vids.find(v => v.type==='Trailer'&&v.site==='YouTube');
-  const key = trailer?.key || '';
-
-  loader.classList.remove('active');
-
-  // Morph player
-  const overlay = $('#playerOverlay');
-  const bg = $('#playerBg');
-  const iframe = $('#playerIframe');
-  const title = $('.pt');
-  const sub = $('.ps');
-
-  const posterBg = m.backdrop_path ? `${IMG}/original${m.backdrop_path}` : (m.poster_path ? `${IMG}/w500${m.poster_path}` : '');
-
-  overlay.classList.add('active');
-  bg.style.backgroundImage = posterBg ? `url(${posterBg})` : 'none';
-  title.textContent = m.title || m.name || '';
-  sub.textContent = `${(m.release_date||m.first_air_date||'').slice(0,4)} · ★ ${m.vote_average?.toFixed(1)||'?'}`;
-  iframe.classList.remove('loaded');
-
-  // Load embed
-  const embedUrl = key ? `https://vidsrcme.ru/embed/${type}?tmdb=${m.id}` : `https://vidsrcme.ru/embed/${type}?tmdb=${m.id}`;
-  iframe.src = embedUrl;
-  setTimeout(() => iframe.classList.add('loaded'), 800);
-
-  // Queue
-  playerQueue = movies.filter((_,i) => i !== idx);
-  $('#nextBtnPlayer').onclick = () => {
-    if(playerQueue.length){
-      const nextM = playerQueue.shift();
-      const nIdx = movies.indexOf(nextM);
-      if(nIdx >= 0) closePlayer(() => playMovie(nIdx));
-    }
-  };
-
-  // Trailer from player
-  $('#trailerBtnPlayer').onclick = () => {
-    if(key){
-      const pip = $('#trailerPip');
-      pip.classList.add('active');
-      $('#trailerIframe').src = `https://www.youtube.com/embed/${key}?autoplay=1&rel=0`;
-    }
-  };
-
-  $('#closePlayer').onclick = () => closePlayer();
-  $('#closePip').onclick = () => {
-    $('#trailerPip').classList.remove('active');
-    $('#trailerIframe').src = '';
-  };
-}
-
-function closePlayer(cb){
-  const overlay = $('#playerOverlay');
-  overlay.classList.remove('active');
-  $('#playerIframe').src = '';
-  $('#trailerPip').classList.remove('active');
-  $('#trailerIframe').src = '';
-  if(cb) setTimeout(cb, 400);
-}
-
-// TRAILER from focus card
-$('#grid').addEventListener('click', e => {
-  const btn = e.target.closest('.btn-trailer');
-  if(!btn) return;
-  const card = btn.closest('.card');
-  if(!card) return;
-  const idx = parseInt(card.dataset.idx);
-  const m = movies[idx];
-  if(!m) return;
-  const type = m.title ? 'movie' : 'tv';
-  tmdb(`/${type}/${m.id}/videos`).then(data => {
-    const tr = (data.results||[]).find(v => v.type==='Trailer'&&v.site==='YouTube');
-    if(tr){
-      const pip = $('#trailerPip');
-      pip.classList.add('active');
-      $('#trailerIframe').src = `https://www.youtube.com/embed/${tr.key}?autoplay=1&rel=0`;
-    } else alert('Trailer tidak tersedia');
-  });
-});
-
-// Init
-loadGrid();
-</script>
+    <script src="main.v13.js?v=1"></script>
 </body>
 </html>
