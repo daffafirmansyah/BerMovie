@@ -1128,13 +1128,10 @@ function initKeyboard() {
                     document.body.style.overflow = '';
                 }
             });
-            // Reset trailer buttons - close if trailer is active
+            // Close trailer if active via click (triggers close handler)
             const hero = document.getElementById('detailHero');
             if (hero && hero.classList.contains('trailer-active')) {
                 document.getElementById('detailTrailerBtn')?.click();
-            } else {
-                const t = document.getElementById('detailTrailerBtn');
-                if (t) { t.textContent = 'Trailer'; t.onclick = null; }
             }
             const mt = document.getElementById('modalTrailerBtn');
             if (mt) { mt.textContent = 'Trailer'; mt.onclick = null; }
@@ -1260,7 +1257,7 @@ async function loadDetailPage(id, type) {
             document.getElementById('detailTrailerBtn').onclick = () => {
                 // Remove only the iframe
                 const f = hero.querySelector('iframe');
-                if (f) f.remove();
+                if (f) { f.src = ''; f.remove(); }
                 hero.style.backgroundImage = hero.dataset.bg || '';
                 hero.classList.remove('trailer-active');
                 document.getElementById('detailTrailerBtn').textContent = 'Trailer ▷';
