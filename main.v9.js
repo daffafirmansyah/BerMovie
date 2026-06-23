@@ -1240,25 +1240,27 @@ async function loadDetailPage(id, type) {
     });
 
     document.getElementById('detailWatchBtn').onclick = () => openPlayer(id, type, title);
+    const trailerWrap = document.createElement('div');
+    trailerWrap.id = 'trailerWrap';
+    trailerWrap.style.cssText = 'position:absolute;inset:0;z-index:5;display:none';
+    document.getElementById('detailHero').appendChild(trailerWrap);
     const openTrailer = () => {
         const tr = videosData?.results?.find(v => v.type==='Trailer'&&v.site=='YouTube');
         if(tr) {
             const hero = document.getElementById('detailHero');
-            hero.dataset.bg = hero.style.backgroundImage;
-            // Append iframe instead of replacing innerHTML (preserves back button)
-            const iframe = document.createElement('iframe');
-            iframe.src = `https://www.youtube.com/embed/${tr.key}?autoplay=1&rel=0&mute=1`;
-            iframe.setAttribute('allow', 'autoplay; fullscreen');
-            iframe.setAttribute('allowfullscreen', 'true');
-            iframe.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;border:none;z-index:5';
-            hero.appendChild(iframe);
+            if (!trailerWrap.querySelector('iframe')) {
+                const iframe = document.createElement('iframe');
+                iframe.src = `https://www.youtube.com/embed/${tr.key}?autoplay=1&rel=0&mute=1`;
+                iframe.setAttribute('allow', 'autoplay; fullscreen');
+                iframe.setAttribute('allowfullscreen', 'true');
+                iframe.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;border:none';
+                trailerWrap.appendChild(iframe);
+            }
+            trailerWrap.style.display = 'block';
             hero.classList.add('trailer-active');
             document.getElementById('detailTrailerBtn').textContent = '◉ Tutup Trailer';
             document.getElementById('detailTrailerBtn').onclick = () => {
-                // Remove only the iframe
-                const f = hero.querySelector('iframe');
-                if (f) { f.src = ''; f.remove(); }
-                hero.style.backgroundImage = hero.dataset.bg || '';
+                trailerWrap.style.display = 'none';
                 hero.classList.remove('trailer-active');
                 document.getElementById('detailTrailerBtn').textContent = 'Trailer ▷';
                 document.getElementById('detailTrailerBtn').onclick = openTrailer;
