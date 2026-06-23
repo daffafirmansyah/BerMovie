@@ -112,7 +112,7 @@
         </div>
     </nav>
 
-    <button class="back-btn" onclick="history.back()">←</button>
+    <button class="back-btn" id="detailBackBtn" onclick="history.back()">←</button>
 
     <div class="detail-loading" id="detailLoading">Memuat...</div>
 
@@ -169,6 +169,16 @@
         const type = urlParams.get('type') || 'movie';
         if (id) loadDetailPage(parseInt(id), type);
         else document.getElementById('detailLoading').textContent = 'ID tidak ditemukan';
+
+        // Hide back button when player modal is open
+        const playerModal = document.getElementById('playerModal');
+        const backBtn = document.getElementById('detailBackBtn');
+        if (playerModal && backBtn) {
+            const observer = new MutationObserver(() => {
+                backBtn.style.display = playerModal.classList.contains('hidden') ? '' : 'none';
+            });
+            observer.observe(playerModal, { attributes: true, attributeFilter: ['class'] });
+        }
     </script>
 </body>
 </html>
