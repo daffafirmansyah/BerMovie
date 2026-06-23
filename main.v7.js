@@ -787,13 +787,8 @@ function initGenrePage() {
             card.style.background = '';
             card.innerHTML = `<span class="genre-name">${g.name}</span>`;
             card.onclick = () => {
-                activeGenre = g;
-                currentGenreId = g.id;
-                currentGenreName = g.name;
-                updateURL();
-                loadGenreResults(type, g.id, g.name, 1);
-                all('.genre-card').forEach(c=>c.classList.remove('active'));
-                card.classList.add('active');
+                const base = type === 'tv' ? 'tv.html' : 'movies.html';
+                window.location.href = `${base}?genre=${g.id}`;
             };
             grid.appendChild(card);
         });
