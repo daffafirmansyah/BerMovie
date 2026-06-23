@@ -8,7 +8,9 @@ const IMG_CAST = `${IMG}/w185`;
 const NO_POSTER = 'https://placehold.co/200x300/1a1a2e/666?text=';
 const VIDSRV = 'https://vidsrcme.ru/embed';
 const VIDSRV2 = 'https://vidsrc.pm/embed';
-const VIDSRV3 = 'https://www.vidcore.org/embed';
+const VIDSRV4 = 'https://www.2embed.cc/embed';
+const VIDSRV5 = 'https://vixsrc.to/movie';
+const VIDSRV5_TV = 'https://vixsrc.to/tv';
 
 // Subtitle state
 let subCues = [];
@@ -70,7 +72,7 @@ function getURLParams() {
         page: parseInt(p.get('page') || '1')
     };
 }
-let currentServer = 'vidcore';
+let currentServer = 'vidlink';
 let currentPage = 1;
 let currentMediaType = 'movie';
 let currentGenreId = null;
@@ -299,13 +301,16 @@ function getPlayerUrl(id, type, season, episode) {
     } else if (currentServer === 'vidsrc2') {
         if (type === 'tv') rawUrl = `${VIDSRV2}/tv/${id}/${season}/${episode}`;
         else rawUrl = `${VIDSRV2}/movie/${id}`;
-    } else if (currentServer === 'vidlink') {
+    } else if (currentServer === '2embed') {
+        if (type === 'tv') rawUrl = `${VIDSRV4}/${id}`;
+        else rawUrl = `${VIDSRV4}/${id}`;
+    } else if (currentServer === 'vixsrc') {
+        if (type === 'tv') rawUrl = `${VIDSRV5_TV}/${id}/${season}/${episode}`;
+        else rawUrl = `${VIDSRV5}/${id}`;
+    } else {
+        // VidLink (default)
         if (type === 'tv') rawUrl = `https://vidlink.pro/tv/${id}/${season}/${episode}`;
         else rawUrl = `https://vidlink.pro/movie/${id}`;
-    } else {
-        // VidCore (default)
-        if (type === 'tv') rawUrl = `${VIDSRV3}/tv/${id}/${season}/${episode}`;
-        else rawUrl = `${VIDSRV3}/movie/${id}`;
     }
     return rawUrl;
 }
