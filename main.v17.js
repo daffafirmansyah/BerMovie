@@ -74,7 +74,7 @@ function getURLParams() {
         page: parseInt(p.get('page') || '1')
     };
 }
-let currentServer = 'vidlink';
+let currentServer = 'apiplayer';
 let currentPage = 1;
 let currentMediaType = 'movie';
 let currentGenreId = null;
