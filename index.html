@@ -1,249 +1,248 @@
-1|<!DOCTYPE html>
-2|<html lang="id">
-3|<head>
-4|    <meta charset="UTF-8">
-5|    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-6|    <title>BerMovie - Nonton Film & Series</title>
-7|    <meta name="description" content="Nonton film dan series terbaru dengan subtitle Indonesia gratis.">
-8|    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-9|    <link rel="preconnect" href="https://fonts.googleapis.com">
-10|    <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-11|    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎬</text></svg>">
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BerMovie - Nonton Film & Series</title>
+    <meta name="description" content="Nonton film dan series terbaru dengan subtitle Indonesia gratis.">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎬</text></svg>">
     <link rel="stylesheet" href="style.v12.css?v=6">
-12|<link rel="stylesheet" href="futuristic.css?v=1">
-13|<style>
-14|.mobile-menu{position:fixed;top:64px;left:0;right:0;height:calc(100vh - 64px);height:calc(100dvh - 64px);background:#0c0c14!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;z-index:99;overflow-y:auto;-webkit-overflow-scrolling:touch;transform:translateX(100%);transition:transform .3s ease}.mobile-menu.open{transform:translateX(0)}.mobile-menu a{display:block;padding:16px 20px;font-size:1rem;font-weight:600;color:#e8e8ef;touch-action:manipulation;border-bottom:1px solid rgba(255,255,255,.06)}.mobile-menu a:last-child{border-bottom:none}.mobile-menu a:active{background:rgba(255,255,255,.06)}.mobile-menu a.active{color:var(--accent)}
-15|</style>
-16|</head>
-17|<body>
-18|<div class="scroll-progress" id="scrollProgress"></div>
-19|
-20|    <!-- NAVBAR -->
-21|    <nav class="navbar">
-22|        <div class="nav-container">
-23|            <a href="./" class="logo">BerMovie</a>
-24|            <div class="nav-search">
-25|                <input type="text" id="searchInput" placeholder="Cari film atau series..." autocomplete="off">
-26|                <button id="searchBtn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></button>
-27|            </div>
-28|            <div class="nav-links">
-29|                <a href="./" class="active" data-nav="home">Home</a>
-30|                <a href="movies.html" data-nav="movies">Film</a>
-31|                <a href="tv.html" data-nav="tv">Series</a>
-32|                <div class="nav-dropdown">
-33|                    <span class="nav-dropdown-trigger" data-nav="genre">Genre ▾</span>
-34|                    <div class="dropdown-menu" id="genreDropdown"></div>
-35|                </div>
-36|                <div class="nav-dropdown">
-37|                    <span class="nav-dropdown-trigger">Country ▾</span>
-38|                    <div class="dropdown-menu" id="countryDropdown"></div>
-39|                </div>
-40|                <div class="nav-dropdown">
-41|                    <span class="nav-dropdown-trigger">Tahun ▾</span>
-42|                    <div class="dropdown-menu" id="yearDropdown"></div>
-43|                </div>
-44|                <a href="./?watchlist" class="nav-fav">Favorit</a>
-45|            </div>
-46|            <button class="mobile-menu-btn" id="mobileMenuBtn" style="cursor:pointer;z-index:101;position:relative"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="pointer-events:none"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
-47|        </div>
-48|        <!-- Mobile Menu -->
-49|        <div class="mobile-menu" id="mobileMenu">
-50|            <div class="mobile-search">
-51|                <input type="text" id="mobileSearchInput" placeholder="Cari film atau series..." autocomplete="off">
-52|                <button id="mobileSearchBtn" >Cari</button>
-53|            </div>
-54|            <a href="./" data-nav="home">Home</a>
-55|            <a href="movies.html" data-nav="movies">Film</a>
-56|            <a href="tv.html" data-nav="tv">Series</a>
-57|            <a href="genre.html" data-nav="genre">Genre</a>
-58|            <a href="leaderboard.html" data-nav="leaderboard">Peringkat</a>
-59|            <a href="movies.html" data-nav="tahun">Tahun</a>
-60|            <a href="movies.html" data-nav="country">Country</a>
-61|            <a href="./?watchlist" data-nav="watchlist">Favorit</a>
-62|        </div>
-63|    </nav>
-64|
-65|    <!-- HERO CAROUSEL -->
-66|    <section class="hero" id="hero">
-67|        <div class="hero-slides" id="heroSlides">
-68|            <div class="hero-slide active" id="heroSlide0"></div>
-69|            <div class="hero-slide" id="heroSlide1"></div>
-70|            <div class="hero-slide" id="heroSlide2"></div>
-71|            <div class="hero-slide" id="heroSlide3"></div>
-72|            <div class="hero-slide" id="heroSlide4"></div>
-73|        </div>
-74|        <div class="hero-content" id="heroContent">
-75|            <div class="hero-badge" id="heroBadge">Trending</div>
-76|            <h1 class="hero-title" id="heroTitle">Loading...</h1>
-77|            <p class="hero-desc" id="heroOverview"></p>
-78|            <div class="hero-meta" id="heroMeta"></div>
-79|            <div class="hero-actions">
-80|                <button class="btn-watch" id="heroBtn">Tonton Sekarang</button>
-81|            </div>
-82|        </div>
-83|        <div class="hero-dots" id="heroDots"></div>
-84|        <button class="hero-arrow hero-arrow-left" id="heroPrev">‹</button>
-85|        <button class="hero-arrow hero-arrow-right" id="heroNext">›</button>
-86|    </section>
-87|
-88|    <!-- MAIN CONTENT -->
-89|    <main class="main-content">
-90|        <!-- TRENDING -->
-91|        <section class="section" id="trending">
-92|            <div class="section-header">
-93|                <h2 class="section-title">Trending Hari Ini</h2>
-94|            </div>
-95|            <div class="trending-filters">
-96|                <button class="trending-filter active" data-filter="all">All</button>
-97|                <button class="trending-filter" data-filter="movie">Movies</button>
-98|                <button class="trending-filter" data-filter="tv">TV Series</button>
-99|            </div>
-100|            <div class="trending-list" id="trendingList"></div>
-101|        </section>
-102|        
-103|        <!-- GENRE PILLS -->
-104|        <div class="genre-pills" id="genrePills"></div>
-105|
-106|        <!-- POPULAR MOVIES -->
-107|        <section class="section" id="popularMovies">
-108|            <div class="section-header">
-109|                <h2 class="section-title">Film Populer</h2>
-110|                <a href="movies.html" class="see-all">Lihat Semua →</a>
-111|            </div>
-112|            <div class="carousel" id="moviesCarousel"></div>
-113|        </section>
-114|
-115|        <!-- POPULAR TV -->
-116|        <section class="section" id="popularTv">
-117|            <div class="section-header">
-118|                <h2 class="section-title">Series Populer</h2>
-119|                <a href="tv.html" class="see-all">Lihat Semua →</a>
-120|            </div>
-121|            <div class="carousel" id="tvCarousel"></div>
-122|        </section>
-123|
-124|        <!-- TOP RATED -->
-125|        <section class="section" id="topRated">
-126|            <div class="section-header">
-127|                <h2 class="section-title">Rating Tertinggi</h2>
-128|            </div>
-129|            <div class="carousel" id="topRatedCarousel"></div>
-130|        </section>
-131|
-132|        <!-- NOW PLAYING -->
-133|        <section class="section" id="nowPlaying">
-134|            <div class="section-header">
-135|                <h2 class="section-title">Sedang Tayang</h2>
-136|            </div>
-137|            <div class="carousel" id="nowPlayingCarousel"></div>
-138|        </section>
-139|
-140|        <!-- INDONESIA MOVIES -->
-141|        <section class="section" id="indoMovies">
-142|            <div class="section-header">
-143|                <h2 class="section-title">Film Indonesia</h2>
-144|                <a href="movies.html?country=ID" class="see-all">Lihat Semua →</a>
-145|            </div>
-146|            <div class="carousel" id="indoMoviesCarousel"></div>
-147|        </section>
-148|
-149|        <!-- INDONESIA SERIES -->
-150|        <section class="section" id="indoSeries">
-151|            <div class="section-header">
-152|                <h2 class="section-title">Series Indonesia</h2>
-153|                <a href="tv.html?country=ID" class="see-all">Lihat Semua →</a>
-154|            </div>
-155|            <div class="carousel" id="indoSeriesCarousel"></div>
-156|        </section>
-157|
-158|        <!-- SEARCH RESULTS -->
-159|        <section class="section hidden" id="searchResults">
-160|            <h2 class="section-title" id="searchTitle">Hasil Pencarian</h2>
-161|            <div class="grid" id="searchGrid"></div>
-162|            <div class="pagination" id="searchPagination"></div>
-163|        </section>
-164|
-165|        <!-- WATCHLIST -->
-166|        <section class="section hidden" id="watchlistSection">
-167|            <div class="section-header">
-168|                <h2 class="section-title">Favorit</h2>
-169|            </div>
-170|            <div class="grid" id="watchlistGrid"></div>
-171|            <div class="empty-state" id="watchlistEmpty"><p>Belum ada film favorit</p></div>
-172|        </section>
-173|    </main>
-174|
-175|    <!-- DETAIL MODAL -->
-176|    <div class="modal hidden" id="detailModal">
-177|        <div class="modal-backdrop"></div>
-178|        <div class="modal-content">
-179|            <button class="modal-close">&times;</button>
-180|            <div class="modal-hero" id="modalHero"></div>
-181|            <div class="modal-body">
-182|                <h2 id="modalTitle"></h2>
-183|                <div class="modal-meta" id="modalMeta"></div>
-184|                <p class="modal-overview" id="modalOverview"></p>
-185|                <div class="modal-cast" id="modalCast"></div>
-186|                <div class="modal-actions">
-187|                    <button class="btn-watch" id="modalWatchBtn">Tonton</button>
-188|                    <button class="btn-secondary trailer-btn" id="modalTrailerBtn"><span class="t-il"></span><span class="t-txt">Trailer</span><span class="t-ir">▶</span></button>
-189|                </div>
-190|                <div class="seasons-section hidden" id="seasonsSection">
-191|                    <h3>Seasons</h3>
-192|                    <div class="seasons-list" id="seasonsList"></div>
-193|                </div>
-194|                <div class="similar-section">
-195|                    <h3>Rekomendasi</h3>
-196|                    <div class="carousel" id="similarCarousel"></div>
-197|                </div>
-198|            </div>
-199|        </div>
-200|    </div>
-201|
-202|    <!-- PLAYER MODAL -->
-203|    <div class="player-modal hidden" id="playerModal">
-204|        <div class="player-backdrop"></div>
-205|        <div class="player-content">
-206|            <div class="player-top">
-207|                <button class="player-back" id="playerBackBtn">&larr;</button>
-208|                <span class="player-title" id="playerTitle"></span>
-209|                <div class="player-top-right">
-210|                    <button class="player-eps-btn hidden" id="playerEpsBtn">&#9776;</button>
-211|                    <button class="player-close" id="playerCloseBtn">&times;</button>
-212|                </div>
-213|            </div>
-214|            <div class="iframe-container">
-215|                <iframe id="playerFrame" src="" frameborder="0" allowfullscreen></iframe>
-216|                <div class="player-controls" id="playerControls">
-217|                    <div class="player-servers" id="playerServers">
-218|                        <button class="svr-btn" data-server="vidsrc">VidSrc</button>
-219|                        <button class="svr-btn" data-server="vidsrc2">VidSrc.pm</button>
-220|                        <button class="svr-btn" data-server="vidlink">VidLink</button>
-221|                        <button class="svr-btn active" data-server="vidcore">VidCore</button>
-222|                    </div>
-223|                </div>
-224|            </div>
-225|            <div class="episode-sheet hidden" id="episodeSheet">
-226|                <div class="ep-sheet-handle"></div>
-227|                <div class="ep-sheet-header">
-228|                    <h4>Episode</h4>
-229|                    <button class="ep-sheet-close" id="epSheetClose">&times;</button>
-230|                </div>
-231|                <select id="seasonSelect" class="ep-season-select"></select>
-232|                <div class="episodes-grid" id="episodesGrid"></div>
-233|            </div>
-234|        </div>
-235|    </div>
-236|
-237|    <!-- FOOTER -->
-238|<button class="back-top" id="backTop">&uarr;</button>
-239|<div class="toast" id="toast"></div>
-240|    <footer class="site-footer">
-241|        <p>BerMovie — Streaming Film & Series Sub Indo</p>
-242|        <p class="disclaimer">Kami tidak menyimpan file video di server kami. Semua konten disediakan oleh pihak ketiga.</p>
-243|    </footer>
-244|
-245|    <script src="main.v17.js?v=1"></script>
-246|</body>
-247|</html>
-248|
+<link rel="stylesheet" href="futuristic.css?v=1">
+<style>
+.mobile-menu{position:fixed;top:64px;left:0;right:0;height:calc(100vh - 64px);height:calc(100dvh - 64px);background:#0c0c14!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;z-index:99;overflow-y:auto;-webkit-overflow-scrolling:touch;transform:translateX(100%);transition:transform .3s ease}.mobile-menu.open{transform:translateX(0)}.mobile-menu a{display:block;padding:16px 20px;font-size:1rem;font-weight:600;color:#e8e8ef;touch-action:manipulation;border-bottom:1px solid rgba(255,255,255,.06)}.mobile-menu a:last-child{border-bottom:none}.mobile-menu a:active{background:rgba(255,255,255,.06)}.mobile-menu a.active{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="scroll-progress" id="scrollProgress"></div>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="./" class="logo">BerMovie</a>
+            <div class="nav-search">
+                <input type="text" id="searchInput" placeholder="Cari film atau series..." autocomplete="off">
+                <button id="searchBtn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></button>
+            </div>
+            <div class="nav-links">
+                <a href="./" class="active" data-nav="home">Home</a>
+                <a href="movies.html" data-nav="movies">Film</a>
+                <a href="tv.html" data-nav="tv">Series</a>
+                <div class="nav-dropdown">
+                    <span class="nav-dropdown-trigger" data-nav="genre">Genre ▾</span>
+                    <div class="dropdown-menu" id="genreDropdown"></div>
+                </div>
+                <div class="nav-dropdown">
+                    <span class="nav-dropdown-trigger">Country ▾</span>
+                    <div class="dropdown-menu" id="countryDropdown"></div>
+                </div>
+                <div class="nav-dropdown">
+                    <span class="nav-dropdown-trigger">Tahun ▾</span>
+                    <div class="dropdown-menu" id="yearDropdown"></div>
+                </div>
+                <a href="./?watchlist" class="nav-fav">Favorit</a>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn" style="cursor:pointer;z-index:101;position:relative"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="pointer-events:none"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
+        </div>
+        <!-- Mobile Menu -->
+        <div class="mobile-menu" id="mobileMenu">
+            <div class="mobile-search">
+                <input type="text" id="mobileSearchInput" placeholder="Cari film atau series..." autocomplete="off">
+                <button id="mobileSearchBtn" >Cari</button>
+            </div>
+            <a href="./" data-nav="home">Home</a>
+            <a href="movies.html" data-nav="movies">Film</a>
+            <a href="tv.html" data-nav="tv">Series</a>
+            <a href="genre.html" data-nav="genre">Genre</a>
+            <a href="leaderboard.html" data-nav="leaderboard">Peringkat</a>
+            <a href="movies.html" data-nav="tahun">Tahun</a>
+            <a href="movies.html" data-nav="country">Country</a>
+            <a href="./?watchlist" data-nav="watchlist">Favorit</a>
+        </div>
+    </nav>
+
+    <!-- HERO CAROUSEL -->
+    <section class="hero" id="hero">
+        <div class="hero-slides" id="heroSlides">
+            <div class="hero-slide active" id="heroSlide0"></div>
+            <div class="hero-slide" id="heroSlide1"></div>
+            <div class="hero-slide" id="heroSlide2"></div>
+            <div class="hero-slide" id="heroSlide3"></div>
+            <div class="hero-slide" id="heroSlide4"></div>
+        </div>
+        <div class="hero-content" id="heroContent">
+            <div class="hero-badge" id="heroBadge">Trending</div>
+            <h1 class="hero-title" id="heroTitle">Loading...</h1>
+            <p class="hero-desc" id="heroOverview"></p>
+            <div class="hero-meta" id="heroMeta"></div>
+            <div class="hero-actions">
+                <button class="btn-watch" id="heroBtn">Tonton Sekarang</button>
+            </div>
+        </div>
+        <div class="hero-dots" id="heroDots"></div>
+        <button class="hero-arrow hero-arrow-left" id="heroPrev">‹</button>
+        <button class="hero-arrow hero-arrow-right" id="heroNext">›</button>
+    </section>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        <!-- TRENDING -->
+        <section class="section" id="trending">
+            <div class="section-header">
+                <h2 class="section-title">Trending Hari Ini</h2>
+            </div>
+            <div class="trending-filters">
+                <button class="trending-filter active" data-filter="all">All</button>
+                <button class="trending-filter" data-filter="movie">Movies</button>
+                <button class="trending-filter" data-filter="tv">TV Series</button>
+            </div>
+            <div class="trending-list" id="trendingList"></div>
+        </section>
+        
+        <!-- GENRE PILLS -->
+        <div class="genre-pills" id="genrePills"></div>
+
+        <!-- POPULAR MOVIES -->
+        <section class="section" id="popularMovies">
+            <div class="section-header">
+                <h2 class="section-title">Film Populer</h2>
+                <a href="movies.html" class="see-all">Lihat Semua →</a>
+            </div>
+            <div class="carousel" id="moviesCarousel"></div>
+        </section>
+
+        <!-- POPULAR TV -->
+        <section class="section" id="popularTv">
+            <div class="section-header">
+                <h2 class="section-title">Series Populer</h2>
+                <a href="tv.html" class="see-all">Lihat Semua →</a>
+            </div>
+            <div class="carousel" id="tvCarousel"></div>
+        </section>
+
+        <!-- TOP RATED -->
+        <section class="section" id="topRated">
+            <div class="section-header">
+                <h2 class="section-title">Rating Tertinggi</h2>
+            </div>
+            <div class="carousel" id="topRatedCarousel"></div>
+        </section>
+
+        <!-- NOW PLAYING -->
+        <section class="section" id="nowPlaying">
+            <div class="section-header">
+                <h2 class="section-title">Sedang Tayang</h2>
+            </div>
+            <div class="carousel" id="nowPlayingCarousel"></div>
+        </section>
+
+        <!-- INDONESIA MOVIES -->
+        <section class="section" id="indoMovies">
+            <div class="section-header">
+                <h2 class="section-title">Film Indonesia</h2>
+                <a href="movies.html?country=ID" class="see-all">Lihat Semua →</a>
+            </div>
+            <div class="carousel" id="indoMoviesCarousel"></div>
+        </section>
+
+        <!-- INDONESIA SERIES -->
+        <section class="section" id="indoSeries">
+            <div class="section-header">
+                <h2 class="section-title">Series Indonesia</h2>
+                <a href="tv.html?country=ID" class="see-all">Lihat Semua →</a>
+            </div>
+            <div class="carousel" id="indoSeriesCarousel"></div>
+        </section>
+
+        <!-- SEARCH RESULTS -->
+        <section class="section hidden" id="searchResults">
+            <h2 class="section-title" id="searchTitle">Hasil Pencarian</h2>
+            <div class="grid" id="searchGrid"></div>
+            <div class="pagination" id="searchPagination"></div>
+        </section>
+
+        <!-- WATCHLIST -->
+        <section class="section hidden" id="watchlistSection">
+            <div class="section-header">
+                <h2 class="section-title">Favorit</h2>
+            </div>
+            <div class="grid" id="watchlistGrid"></div>
+            <div class="empty-state" id="watchlistEmpty"><p>Belum ada film favorit</p></div>
+        </section>
+    </main>
+
+    <!-- DETAIL MODAL -->
+    <div class="modal hidden" id="detailModal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <div class="modal-hero" id="modalHero"></div>
+            <div class="modal-body">
+                <h2 id="modalTitle"></h2>
+                <div class="modal-meta" id="modalMeta"></div>
+                <p class="modal-overview" id="modalOverview"></p>
+                <div class="modal-cast" id="modalCast"></div>
+                <div class="modal-actions">
+                    <button class="btn-watch" id="modalWatchBtn">Tonton</button>
+                    <button class="btn-secondary trailer-btn" id="modalTrailerBtn"><span class="t-il"></span><span class="t-txt">Trailer</span><span class="t-ir">▶</span></button>
+                </div>
+                <div class="seasons-section hidden" id="seasonsSection">
+                    <h3>Seasons</h3>
+                    <div class="seasons-list" id="seasonsList"></div>
+                </div>
+                <div class="similar-section">
+                    <h3>Rekomendasi</h3>
+                    <div class="carousel" id="similarCarousel"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PLAYER MODAL -->
+    <div class="player-modal hidden" id="playerModal">
+        <div class="player-backdrop"></div>
+        <div class="player-content">
+            <div class="player-top">
+                <button class="player-back" id="playerBackBtn">&larr;</button>
+                <span class="player-title" id="playerTitle"></span>
+                <div class="player-top-right">
+                    <button class="player-eps-btn hidden" id="playerEpsBtn">&#9776;</button>
+                    <button class="player-close" id="playerCloseBtn">&times;</button>
+                </div>
+            </div>
+            <div class="iframe-container">
+                <iframe id="playerFrame" src="" frameborder="0" allowfullscreen></iframe>
+                <div class="player-controls" id="playerControls">
+                    <div class="player-servers" id="playerServers">
+                        <button class="svr-btn" data-server="vidsrc">VidSrc</button>
+                        <button class="svr-btn" data-server="vidsrc2">VidSrc.pm</button>
+                        <button class="svr-btn" data-server="vidlink">VidLink</button>
+                        <button class="svr-btn active" data-server="vidcore">VidCore</button>
+                    </div>
+                </div>
+            </div>
+            <div class="episode-sheet hidden" id="episodeSheet">
+                <div class="ep-sheet-handle"></div>
+                <div class="ep-sheet-header">
+                    <h4>Episode</h4>
+                    <button class="ep-sheet-close" id="epSheetClose">&times;</button>
+                </div>
+                <select id="seasonSelect" class="ep-season-select"></select>
+                <div class="episodes-grid" id="episodesGrid"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+<button class="back-top" id="backTop">&uarr;</button>
+<div class="toast" id="toast"></div>
+    <footer class="site-footer">
+        <p>BerMovie — Streaming Film & Series Sub Indo</p>
+        <p class="disclaimer">Kami tidak menyimpan file video di server kami. Semua konten disediakan oleh pihak ketiga.</p>
+    </footer>
+
+    <script src="main.v17.js?v=1"></script>
+</body>
+</html>
