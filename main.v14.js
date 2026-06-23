@@ -984,7 +984,8 @@ async function doSearch(query, page=1) {
 
     let section = el('#searchResults');
     if (!section) {
-        window.location.href = `/?q=${encodeURIComponent(query)}`;
+        const base = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
+        window.location.href = `${base}?q=${encodeURIComponent(query)}`;
         return;
     }
     section.classList.remove('hidden');
