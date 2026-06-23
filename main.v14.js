@@ -123,8 +123,20 @@ function createCard(item, type) {
     const div = document.createElement('div');
     div.className = 'card';
     const genreName = item.genre_ids?.[0] ? (type==='movie'?MOVIE_GENRES:TV_GENRES).find(g=>g.id===item.genre_ids[0])?.name : null;
-    const qualities = ['WEB-DL','BluRay','HDRip','CAM'];
-    const quality = qualities[Math.floor(Math.random() * qualities.length)];
+    // Quality badge — determined from real data
+    const relDate = item.release_date || item.first_air_date;
+    let quality = '';
+    if (relDate) {
+        const relYear = parseInt(relDate.split('-')[0]);
+        const nowYear = new Date().getFullYear();
+        const age = nowYear - relYear;
+        if (age <= 0 && item.vote_average >= 6) quality = 'WEB-DL';
+        else if (age <= 0) quality = 'CAM';
+        else if (age <= 2) quality = 'WEB-DL';
+        else quality = 'BluRay';
+    } else {
+        quality = 'WEB-DL';
+    }
     const yearNum = parseInt(date?.substring(0,4));
     const isNew = yearNum === new Date().getFullYear();
     div.innerHTML = `
