@@ -9,7 +9,7 @@ const NO_POSTER = 'https://placehold.co/200x300/1a1a2e/666?text=';
 const VIDSRV = 'https://vidsrcme.ru/embed';
 const VIDSRV2 = 'https://vidsrc.pm/embed';
 const VIDSRV3 = 'https://www.vidcore.org/embed';
-const PROXY = 'http://43.134.106.32:3457';
+const PROXY = 'https://tropical-warcraft-finally-struck.trycloudflare.com';
 
 // Subtitle state
 let subCues = [];
