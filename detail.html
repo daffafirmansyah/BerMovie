@@ -63,6 +63,48 @@
         .season-card .info strong { display: block; }
         .season-card .info small { color: var(--text3); }
         .section-title-sm { font-size: 1.1rem; font-weight: 700; margin-bottom: 14px; margin-top: 24px; }
+        /* Subtitle overlay */
+        .sub-overlay {
+            position: absolute; bottom: 50px; left: 0; right: 0;
+            z-index: 20; pointer-events: none;
+            display: flex; flex-direction: column; align-items: center;
+            padding: 0 20px 10px;
+        }
+        .sub-overlay .sub-text {
+            background: rgba(0,0,0,0.78); color: #fff;
+            padding: 10px 18px; border-radius: 8px;
+            font-size: 1.1rem; line-height: 1.4;
+            text-align: center; max-width: 90%;
+            pointer-events: auto; cursor: pointer;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        .sub-overlay .sub-controls {
+            display: flex; gap: 8px; align-items: center;
+            margin-top: 8px; pointer-events: auto;
+        }
+        .sub-btn-ctrl {
+            background: rgba(0,0,0,0.6); color: #ccc; border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 50%; width: 32px; height: 32px;
+            font-size: 0.8rem; cursor: pointer; display: flex;
+            align-items: center; justify-content: center;
+            backdrop-filter: blur(4px); transition: all 0.2s;
+        }
+        .sub-btn-ctrl:hover { background: var(--accent); color: #fff; }
+        .sub-counter { color: #aaa; font-size: 0.75rem; font-weight: 600; min-width: 40px; text-align: center; }
+        /* Subtitle sheet */
+        .sub-search-status { padding: 16px 20px; color: var(--text3); font-size: 0.85rem; text-align: center; }
+        .sub-list { padding: 0 20px 20px; max-height: 50vh; overflow-y: auto; }
+        .sub-item {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 12px 14px; background: rgba(255,255,255,0.04);
+            border-radius: 10px; margin-bottom: 8px; cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.06); transition: all 0.2s;
+        }
+        .sub-item:hover { border-color: var(--accent); background: rgba(255,255,255,0.08); }
+        .sub-item .sub-item-name { font-size: 0.85rem; color: var(--text2); }
+        .sub-item .sub-item-dl { font-size: 0.72rem; color: var(--text3); }
+        .sub-item .sub-item-load { font-size: 0.75rem; color: var(--accent); font-weight: 600; }
     </style>
 </head>
 <body>
@@ -155,9 +197,20 @@
                 <div class="player-controls" id="playerControls">
                     <div class="player-servers" id="playerServers">
                         <button class="svr-btn" data-server="vidsrc">VidSrc</button>
-                        <button class="svr-btn" data-server="vidsrc2">VidSrc.pm</button>
                         <button class="svr-btn" data-server="vidlink">VidLink</button>
                         <button class="svr-btn active" data-server="vidcore">VidCore</button>
+                        <button class="svr-btn sub-trigger" id="subTriggerBtn">CC</button>
+                    </div>
+                </div>
+                <!-- Subtitle overlay -->
+                <div class="sub-overlay hidden" id="subOverlay">
+                    <div class="sub-text" id="subText"></div>
+                    <div class="sub-controls">
+                        <button class="sub-btn-ctrl" id="subPrevBtn">◀</button>
+                        <span class="sub-counter" id="subCounter">0/0</span>
+                        <button class="sub-btn-ctrl" id="subNextBtn">▶</button>
+                        <button class="sub-btn-ctrl" id="subSyncBtn">↺</button>
+                        <button class="sub-btn-ctrl" id="subCloseBtn">✕</button>
                     </div>
                 </div>
             </div>
@@ -170,10 +223,20 @@
                 <select id="seasonSelect" class="ep-season-select"></select>
                 <div class="episodes-grid" id="episodesGrid"></div>
             </div>
+            <!-- Subtitle Sheet -->
+            <div class="episode-sheet hidden" id="subSheet">
+                <div class="ep-sheet-handle"></div>
+                <div class="ep-sheet-header">
+                    <h4>Subtitle Indonesia</h4>
+                    <button class="ep-sheet-close" id="subSheetClose">&times;</button>
+                </div>
+                <div class="sub-search-status" id="subSearchStatus">Mencari subtitle...</div>
+                <div class="sub-list" id="subList"></div>
+            </div>
         </div>
     </div>
 
-    <script src="main.v14.js?v=5"></script>
+    <script src="main.v14.js?v=6"></script>
     <script>
         // Parse URL params
         const urlParams = new URLSearchParams(window.location.search);
