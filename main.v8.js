@@ -1247,18 +1247,23 @@ async function loadDetailPage(id, type) {
         if(tr) {
             const hero = document.getElementById('detailHero');
             hero.dataset.bg = hero.style.backgroundImage;
-            hero.innerHTML = `<iframe src="https://www.youtube.com/embed/${tr.key}?autoplay=1&rel=0&mute=1" allow="autoplay; fullscreen" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:none;z-index:5"></iframe>`;
+            // Append iframe instead of replacing innerHTML (preserves back button)
+            const iframe = document.createElement('iframe');
+            iframe.src = `https://www.youtube.com/embed/${tr.key}?autoplay=1&rel=0&mute=1`;
+            iframe.setAttribute('allow', 'autoplay; fullscreen');
+            iframe.setAttribute('allowfullscreen', 'true');
+            iframe.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;border:none;z-index:5';
+            hero.appendChild(iframe);
             hero.classList.add('trailer-active');
             document.getElementById('detailTrailerBtn').textContent = '◉ Tutup Trailer';
             document.getElementById('detailTrailerBtn').onclick = () => {
-                hero.innerHTML = '';
+                // Remove only the iframe
+                const f = hero.querySelector('iframe');
+                if (f) f.remove();
                 hero.style.backgroundImage = hero.dataset.bg || '';
                 hero.classList.remove('trailer-active');
                 document.getElementById('detailTrailerBtn').textContent = 'Trailer ▷';
                 document.getElementById('detailTrailerBtn').onclick = openTrailer;
-                // Show back button
-                const backBtn = document.getElementById('detailBackBtn');
-                if (backBtn) backBtn.style.display = '';
             };
             // Hide back button
             const backBtn = document.getElementById('detailBackBtn');
