@@ -664,7 +664,7 @@ async function loadTrending(filter) {
     let items = data.results.filter(i=>i.poster_path);
     if (filter === 'movie') items = items.filter(i=>i.media_type==='movie');
     else if (filter === 'tv') items = items.filter(i=>i.media_type==='tv');
-    items = items.slice(0,10);
+    items = items.slice(0,8);
     list.innerHTML = '';
     items.forEach((item, i) => {
         const t = displayTitle(item);
@@ -764,7 +764,7 @@ async function loadMovies(page = 1) {
     if (loadId !== movieLoadId) return;
     [...data.results, ...data2.results]
         .filter((item, i, arr) => arr.findIndex(x => x.id === item.id) === i)
-        .slice(0,21).forEach(i => grid.appendChild(createCard(i, 'movie')));
+        .slice(0,12).forEach(i => grid.appendChild(createCard(i, 'movie')));
     const totalPages = Math.ceil(Math.min(data.total_pages, 500) / 2);
     renderPagination('moviePagination', totalPages, page, p => {
         currentPage = p;
@@ -843,7 +843,7 @@ async function loadTvShows(page = 1) {
     if (loadId !== tvLoadId) return;
     [...data.results, ...data2.results]
         .filter((item, i, arr) => arr.findIndex(x => x.id === item.id) === i)
-        .slice(0,21).forEach(i => grid.appendChild(createCard(i, 'tv')));
+        .slice(0,12).forEach(i => grid.appendChild(createCard(i, 'tv')));
     const totalPages = Math.ceil(Math.min(data.total_pages, 500) / 2);
     renderPagination('tvPagination', totalPages, page, p => {
         currentPage = p;
@@ -1091,7 +1091,7 @@ async function doSearch(query, page=1) {
     const items = [...data.results, ...data2.results]
         .filter((item, i, arr) => arr.findIndex(x => x.id === item.id) === i)
         .filter(i => ['movie','tv'].includes(i.media_type))
-        .slice(0,21);
+        .slice(0,12);
     
     if (items.length === 0) {
         grid.innerHTML = '<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><p>Film tidak ditemukan untuk "${query}"</p></div>';
