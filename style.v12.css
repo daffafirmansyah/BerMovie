@@ -82,7 +82,7 @@ input{font-family:inherit;outline:none}
 .mobile-menu a.active{color:var(--accent);font-weight:600;background:linear-gradient(90deg,rgba(249,115,22,.08),transparent)}
 .mobile-menu a.active::before{opacity:1}
 .mobile-search{display:flex;gap:8px;padding:12px 20px 16px}
-.mobile-search input{flex:1;height:44px;padding:0 16px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:999px;color:var(--text);font-size:.88rem;font-family:'Poppins',sans-serif;backdrop-filter:blur(8px)}
+.mobile-search input{flex:1;height:44px;padding:0 16px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:999px;color:var(--text);font-size:.88rem;font-family:'Poppins',sans-serif;}
 .mobile-search input:focus{border-color:rgba(249,115,22,.4);box-shadow:0 0 0 3px rgba(249,115,22,.08)}
 .mobile-search input::placeholder{color:var(--text3);font-style:italic}
 .mobile-search button{padding:10px 20px;border-radius:999px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:600;font-size:.84rem;white-space:nowrap;touch-action:manipulation;box-shadow:0 2px 12px rgba(249,115,22,.3)}
