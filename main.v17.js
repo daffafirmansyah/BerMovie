@@ -135,29 +135,10 @@ function createCard(item, type) {
     div.className = 'card';
     const genreName = item.genre_ids?.[0] ? (type==='movie'?MOVIE_GENRES:TV_GENRES).find(g=>g.id===item.genre_ids[0])?.name : null;
     const releaseYear = year(date);
-    const currentYear = new Date().getFullYear();
-    const isNew = releaseYear >= currentYear - 1;
-    const isVeryNew = releaseYear >= currentYear;
-    const hasHighVotes = item.vote_average >= 7;
-    let qualityLabel = 'WEB-DL';
-    let qualityClass = 'q-webdl';
-    if (isVeryNew && !hasHighVotes) {
-      qualityLabel = 'CAM';
-      qualityClass = 'q-cam';
-    } else if (isNew && hasHighVotes) {
-      qualityLabel = 'BluRay';
-      qualityClass = 'q-bluray';
-    } else if (hasHighVotes) {
-      qualityLabel = 'WEB-DL';
-      qualityClass = 'q-webdl';
-    } else {
-      qualityLabel = 'HD';
-      qualityClass = 'q-hd';
-    }
     div.innerHTML = `
         <img class="card-poster" src="${posterUrl(item.poster_path)}" alt="${title}" loading="lazy" onerror="this.src='${NO_POSTER}'">
         <span class="card-type">${isTv ? 'TV' : 'MOVIE'}</span>
-        <span class="card-quality ${qualityClass}">${qualityLabel}</span>
+        <span class="card-quality q-hd">HD</span>
         ${item.vote_average >= 8 ? '<span class="card-badge">Top</span>' : ''}
         <div class="card-info">
             <div class="card-title" title="${title}">${title}</div>
