@@ -1381,9 +1381,8 @@ function initGlobalEvents() {
             const nav = a.getAttribute('data-nav');
             if (nav !== 'tahun' && nav !== 'country') {
                 a.onclick = () => toggleMenu(false);
-            } else {
-                a.onclick = (e) => { e.preventDefault(); };
             }
+            // tahun/country onclick already set by expand logic above — don't override
         });
     }
 
