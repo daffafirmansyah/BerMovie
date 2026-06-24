@@ -339,3 +339,13 @@ input{font-family:inherit;outline:none}
 .hero-meta span{padding:3px 12px;border-radius:999px;font-size:.78rem;font-weight:500;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.06);letter-spacing:.3px}
 .hero-rating-s{color:#f5a623;font-weight:600}
 @media(hover:none) and (pointer:coarse){*{-webkit-tap-highlight-color:rgba(0,0,0,0)!important;transition-duration:0s!important}a:active,button:active,.card:active,.pill:active,.svr-btn:active,.btn-watch:active,.btn-secondary:active,.nav-dropdown-trigger:active,.genre-card:active,.trending-filter:active,.see-all:active,.mobile-menu a:active{-webkit-tap-highlight-color:rgba(0,0,0,0)!important;transition:none!important;transform:none!important}}
+
+/* Mobile 60fps optimizations */
+@media(max-width:639px){
+  .navbar,.navbar.scrolled{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;background:rgba(10,10,15,.98)!important}
+  .mobile-menu{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+  .hero{contain:layout style paint}
+  .scroll-row{-webkit-overflow-scrolling:touch;contain:layout style}
+  .card{contain:layout style paint}
+  .section h2{contain:layout style}
+}
