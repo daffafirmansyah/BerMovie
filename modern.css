@@ -1,0 +1,200 @@
+/* === MODERN UI UPGRADES === */
+/* Loaded after style.v12.css — overrides only */
+
+/* --- CARDS: Glassmorphism + Depth --- */
+.card {
+  background: linear-gradient(145deg, rgba(17,17,24,.9), rgba(17,17,24,.6));
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 4px 20px rgba(0,0,0,.3);
+}
+.card:hover {
+  box-shadow: 0 0 40px rgba(249,115,22,.12), 0 20px 60px rgba(0,0,0,.5);
+  border-color: rgba(249,115,22,.35);
+}
+
+/* --- HERO: Enhanced Gradient Overlay --- */
+.hero-bg::after {
+  background: linear-gradient(to top, var(--bg) 0%, rgba(10,10,15,.4) 40%, transparent 60%);
+}
+.hero-bg::before {
+  background: linear-gradient(90deg, rgba(10,10,15,.85) 0, rgba(10,10,15,.35) 40%, transparent 60%);
+}
+
+/* --- DETAIL PAGE: Modern --- */
+.detail-hero::after {
+  background: linear-gradient(to top, var(--bg) 0%, rgba(10,10,15,.5) 50%, transparent 100%);
+  height: 250px;
+}
+.detail-hero::before {
+  background: linear-gradient(90deg, rgba(10,10,15,.6) 0, rgba(10,10,15,.15) 50%, transparent 80%),
+              linear-gradient(180deg, transparent 40%, rgba(10,10,15,.4) 100%);
+}
+.detail-meta span {
+  background: rgba(255,255,255,.05);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,.06);
+  transition: all .2s ease;
+}
+.detail-meta span:hover {
+  background: rgba(255,255,255,.1);
+  border-color: rgba(255,255,255,.12);
+}
+.detail-overview {
+  color: rgba(224,224,235,.85);
+  line-height: 1.85;
+}
+
+/* --- BUTTONS: Glow + Pulse --- */
+.btn-watch {
+  position: relative;
+  overflow: hidden;
+}
+.btn-watch::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,.15) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity .4s ease;
+}
+.btn-watch:hover::before {
+  opacity: 1;
+}
+.btn-secondary {
+  transition: all .25s cubic-bezier(.4,0,.2,1);
+}
+
+/* --- SECTIONS: Spacing + Separator --- */
+.section {
+  padding-bottom: 52px;
+}
+.section-header {
+  margin-bottom: 24px;
+}
+.section-title {
+  font-size: 1.25rem;
+  letter-spacing: .8px;
+}
+
+/* --- TRENDING: Glass Effect --- */
+.trending-card {
+  background: linear-gradient(145deg, rgba(17,17,24,.85), rgba(17,17,24,.5));
+  backdrop-filter: blur(6px);
+  box-shadow: 0 4px 20px rgba(0,0,0,.25);
+}
+.trending-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 40px rgba(0,0,0,.4), 0 0 24px rgba(249,115,22,.08);
+}
+
+/* --- GENRE CARDS: Glass + Glow --- */
+.genre-card {
+  background: linear-gradient(145deg, rgba(17,17,24,.8), rgba(17,17,24,.5));
+  backdrop-filter: blur(6px);
+}
+.genre-card:hover {
+  box-shadow: 0 8px 30px rgba(0,0,0,.4), 0 0 20px rgba(249,115,22,.06);
+}
+
+/* --- CAST: Smooth Hover --- */
+.detail-cast-item img {
+  transition: all .3s cubic-bezier(.4,0,.2,1);
+}
+.detail-cast-item:hover img {
+  box-shadow: 0 0 20px rgba(249,115,22,.2);
+}
+
+/* --- MODAL: Glass Background --- */
+.modal-content {
+  background: rgba(17,17,24,.95);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+}
+
+/* --- SCROLL RE-ENABLE: Stagger fade-in --- */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.grid .card,
+.trending-card {
+  animation: fadeUp .5s ease both;
+}
+.grid .card:nth-child(1), .trending-card:nth-child(1) { animation-delay: .02s }
+.grid .card:nth-child(2), .trending-card:nth-child(2) { animation-delay: .06s }
+.grid .card:nth-child(3), .trending-card:nth-child(3) { animation-delay: .10s }
+.grid .card:nth-child(4), .trending-card:nth-child(4) { animation-delay: .14s }
+.grid .card:nth-child(5), .trending-card:nth-child(5) { animation-delay: .18s }
+.grid .card:nth-child(6), .trending-card:nth-child(6) { animation-delay: .22s }
+.grid .card:nth-child(7), .trending-card:nth-child(7) { animation-delay: .26s }
+.grid .card:nth-child(8), .trending-card:nth-child(8) { animation-delay: .30s }
+.grid .card:nth-child(9), .trending-card:nth-child(9) { animation-delay: .34s }
+.grid .card:nth-child(10), .trending-card:nth-child(10) { animation-delay: .38s }
+
+/* --- SCROLL PROGRESS: Thicker --- */
+.scroll-progress {
+  height: 3px;
+  background: linear-gradient(90deg, #f97316, #ea580c, #fbbf24, #f97316);
+  background-size: 200% 100%;
+  animation: progressShine 2s linear infinite;
+}
+@keyframes progressShine {
+  0% { background-position: 0% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* --- PAGE CONTENT: Extra Top Spacing --- */
+.main-content {
+  padding-top: calc(var(--nav-height) + 28px);
+}
+
+/* --- SEARCH RESULTS: Fade In --- */
+#searchResults .grid .card {
+  animation: fadeUp .35s ease both;
+}
+
+/* --- FOOTER: Glow Line --- */
+.site-footer::before {
+  opacity: .4;
+  left: 10%;
+  right: 10%;
+}
+
+/* --- FILTER SELECTS: Glass --- */
+.filters select {
+  background-color: rgba(17,17,24,.8);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.filters select:hover {
+  border-color: rgba(255,255,255,.12);
+}
+
+/* --- PAGINATION: Modern --- */
+.pagination button {
+  backdrop-filter: blur(4px);
+}
+.pagination button.active {
+  box-shadow: 0 2px 16px rgba(249,115,22,.3);
+}
+
+/* --- CAROUSEL SCROLL: Fade Edges --- */
+.carousel {
+  mask-image: linear-gradient(90deg, transparent 0, #000 3%, #000 97%, transparent 100%);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 3%, #000 97%, transparent 100%);
+}
+
+/* --- COUNTRY/TAHUN MOBILE GRID: Polish --- */
+.mob-sub-grid a {
+  backdrop-filter: blur(6px);
+  background: rgba(255,255,255,.03);
+}
+.mob-sub-grid a:hover {
+  background: rgba(249,115,22,.1) !important;
+  border-color: rgba(249,115,22,.2) !important;
+  color: var(--accent) !important;
+}
