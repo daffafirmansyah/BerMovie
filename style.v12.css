@@ -38,7 +38,7 @@
 html{scroll-behavior:smooth}
 body{font-family:'Poppins',system-ui,-apple-system,sans-serif;background:#0a0a0f;color:#f1f1f6;min-height:100vh;-webkit-font-smoothing:antialiased;background-image:radial-gradient(ellipse 80% 50% at 50% -20%,rgba(249,115,22,.06) 0,transparent 70%)}
 a{color:inherit;text-decoration:none;-webkit-tap-highlight-color:transparent}
-*{-webkit-tap-highlight-color:transparent}
+*{-webkit-tap-highlight-color:transparent!important;-webkit-tap-highlight-color:rgba(0,0,0,0)!important;user-select:none;-webkit-user-select:none}
 img{display:block;max-width:100%}
 button{cursor:pointer;font-family:inherit;border:none;background:none;color:inherit;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 input{font-family:inherit;outline:none}
@@ -321,4 +321,4 @@ input{font-family:inherit;outline:none}
 .hero-meta .rating-badge{background:var(--accent);color:#fff;border-color:transparent;box-shadow:0 2px 12px rgba(249,115,22,.3)}
 .hero-meta span{padding:3px 12px;border-radius:999px;font-size:.78rem;font-weight:500;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.06);letter-spacing:.3px}
 .hero-rating-s{color:#f5a623;font-weight:600}
-@media(hover:none) and (pointer:coarse){a:active,button:active,.card:active,.pill:active,.svr-btn:active,.btn-watch:active,.btn-secondary:active,.nav-dropdown-trigger:active,.genre-card:active,.trending-filter:active,.see-all:active,.mobile-menu a:active{-webkit-tap-highlight-color:transparent;transition:none!important}}
+@media(hover:none) and (pointer:coarse){*{-webkit-tap-highlight-color:rgba(0,0,0,0)!important;transition-duration:0s!important}a:active,button:active,.card:active,.pill:active,.svr-btn:active,.btn-watch:active,.btn-secondary:active,.nav-dropdown-trigger:active,.genre-card:active,.trending-filter:active,.see-all:active,.mobile-menu a:active{-webkit-tap-highlight-color:rgba(0,0,0,0)!important;transition:none!important;transform:none!important}}
