@@ -395,3 +395,22 @@
   border-color: rgba(249,115,22,.25);
   color: var(--accent);
 }
+
+/* --- MOBILE MENU: LEFT SLIDE + ACTIVE STATE --- */
+.mobile-menu a[data-nav] {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 20px;
+  color: var(--text2);
+  font-size: .92rem;
+  font-weight: 500;
+  border-left: 3px solid transparent;
+  transition: background .2s, color .2s, border-color .2s;
+}
+.mobile-menu a[data-nav]:active,
+.mobile-menu a[data-nav].active {
+  background: rgba(249,115,22,.12) !important;
+  color: var(--accent) !important;
+  border-left-color: var(--accent) !important;
+}
