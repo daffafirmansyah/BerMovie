@@ -1446,6 +1446,37 @@ async function loadDetailPage(id, type) {
         // Card click already navigates via createCard's onclick
         sim.appendChild(c);
     });
+
+    // Watchlist button on detail page
+    const wlBtn = document.getElementById('detailWatchlistBtn');
+    if (wlBtn) {
+        const item = { id, type: mediaType, title, poster: detail.poster_path };
+        const updateWlBtn = () => {
+            const inWl = isInWatchlist(item.id, item.type);
+            wlBtn.innerHTML = inWl ? '♥ Hapus dari Favorit' : '♥ Tambah ke Favorit';
+            wlBtn.classList.toggle('active', inWl);
+        };
+        updateWlBtn();
+        wlBtn.onclick = () => {
+            toggleWatchlist(item, item.type);
+            updateWlBtn();
+        };
+    }
+
+    // Trailer section (inline embed below synopsis)
+    const trailerSection = document.getElementById('trailerSection');
+    const trailerIframe = document.getElementById('trailerIframe');
+    if (trailerSection && trailerIframe) {
+        const tr = videosData?.results?.find(v => v.type==='Trailer'&&v.site=='YouTube');
+        if (tr) {
+            trailerIframe.src = `https://www.youtube.com/embed/${tr.key}?rel=0&enablejsapi=1`;
+            trailerSection.classList.remove('hidden');
+            document.getElementById('detailTrailerBtn').onclick = () => {
+                trailerSection.classList.toggle('hidden');
+                trailerIframe.src = `https://www.youtube.com/embed/${tr.key}?autoplay=1&rel=0`;
+            };
+        }
+    }
 }
 
 // === FUTURISTIC JS ENHANCEMENTS ===
