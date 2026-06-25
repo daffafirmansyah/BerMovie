@@ -3,6 +3,7 @@
 
 /* --- CARDS: Premium Glass + Glow --- */
 .card {
+  transition: all .4s cubic-bezier(.4,0,.2,1);
   background: linear-gradient(165deg, rgba(17,17,24,.97), rgba(22,22,35,.8));
   backdrop-filter: blur(12px) saturate(1.1);
   -webkit-backdrop-filter: blur(12px) saturate(1.1);
@@ -19,6 +20,7 @@
 .card-poster {
 }
 .card:hover .card-poster {
+  transition: transform .6s cubic-bezier(.4,0,.2,1);
   transform: scale(1.12);
 }
 .card-info {
@@ -76,6 +78,7 @@
   overflow: hidden;
 }
 .btn-watch::before {
+  transition: left .6s ease;
   content: '';
   position: absolute;
   top: 0;
@@ -91,6 +94,7 @@
   box-shadow: 0 8px 40px rgba(249,115,22,.5);
 }
 .btn-secondary {
+  transition: all .3s cubic-bezier(.4,0,.2,1);
   backdrop-filter: blur(8px);
   background: rgba(255,255,255,.06) !important;
   border: 1px solid rgba(255,255,255,.1) !important;
@@ -147,6 +151,7 @@
   white-space: nowrap;
 }
 .detail-actions .btn-watchlist {
+  transition: all .25s ease;
   padding: 14px 24px;
   font-size: .95rem;
 }
@@ -174,6 +179,7 @@
   gap: 10px;
 }
 .detail-meta span {
+  transition: all .25s ease;
   background: rgba(255,255,255,.05);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -222,6 +228,7 @@
   -webkit-mask-image: linear-gradient(90deg, #000 90%, transparent 100%);
 }
 .detail-cast-item img {
+  transition: all .35s cubic-bezier(.4,0,.2,1);
   width: 60px;
   height: 60px;
   border: 2px solid rgba(255,255,255,.08);
@@ -259,6 +266,7 @@
 
 /* --- TRENDING: Premium Glass --- */
 .trending-card {
+  transition: all .4s cubic-bezier(.4,0,.2,1);
   background: linear-gradient(165deg, rgba(17,17,24,.95), rgba(22,22,35,.7));
   backdrop-filter: blur(10px) saturate(1.1);
   -webkit-backdrop-filter: blur(10px) saturate(1.1);
@@ -285,6 +293,7 @@
 
 /* --- GENRE CARDS: Premium Glass --- */
 .genre-card {
+  transition: all .4s cubic-bezier(.4,0,.2,1);
   background: linear-gradient(165deg, rgba(17,17,24,.9), rgba(22,22,35,.65));
   backdrop-filter: blur(10px);
   border-radius: 20px;
@@ -379,6 +388,7 @@
 
 /* --- MOBILE GRID: Premium --- */
 .mob-sub-grid a {
+  transition: all .25s ease;
   backdrop-filter: blur(8px);
   background: rgba(255,255,255,.04);
   border-radius: 12px;
@@ -449,6 +459,7 @@
 
 /* --- WATCHLIST BUTTON --- */
 .btn-watchlist {
+  transition: all .25s ease;
   padding: 14px 28px;
   border-radius: 999px;
   background: transparent;
