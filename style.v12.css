@@ -360,17 +360,18 @@ to{transform:translateY(0)}}
 
 /* === MOBILE EXPANDABLE DROPDOWNS === */
 .mob-sub-grid {
+  display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 6px;
-  padding: 0 24px;
-  max-height: 0;
-  overflow: hidden;
+  padding: 8px 24px 12px;
   background: rgba(0,0,0,.2);
-  transition: max-height .2s ease, padding .2s ease;
+  height: 0;
+  visibility: hidden;
+  overflow: hidden;
 }
 .mob-sub-grid.show {
-  max-height: 50vh;
-  padding: 8px 24px 12px;
+  height: auto;
+  visibility: visible;
   overflow-y: auto;
 }
 .mob-sub-grid a {
