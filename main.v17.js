@@ -1692,7 +1692,12 @@ document.addEventListener('DOMContentLoaded', () => {
         // Will init home page, then trigger search
     }
 
-    if (path.includes('movies.html')) {
+    if (path.includes('detail.html')) {
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get('id');
+        const type = params.get('type') || 'movie';
+        if (id) loadDetailPage(parseInt(id), type);
+    } else if (path.includes('movies.html')) {
         if (window._moviesInit) return; window._moviesInit = 1;
         initMoviesPage();
     } else if (path.includes('tv.html')) {
@@ -1712,12 +1717,24 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
     if (p.includes('movies.html') && !window._moviesInit) { window._moviesInit = 1; initMoviesPage(); }
     else if (p.includes('tv.html') && !window._tvInit) { window._tvInit = 1; initTvPage(); }
     else if (p.includes('genre.html') && !window._genreInit) { window._genreInit = 1; initGenrePage(); }
-    else if (!p.includes('detail.html') && !window._homeInit) { window._homeInit = 1; initHomePage(); }
+    else if (p.includes('detail.html') && !window._detailInit) {
+        window._detailInit = 1;
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get('id');
+        const type = params.get('type') || 'movie';
+        if (id) loadDetailPage(parseInt(id), type);
+    } else if (!p.includes('detail.html') && !window._homeInit) { window._homeInit = 1; initHomePage(); }
 }
 // Ultimate fallback
 setTimeout(() => {
     if (p.includes('movies.html') && !window._moviesInit) { window._moviesInit = 1; initMoviesPage(); }
     else if (p.includes('tv.html') && !window._tvInit) { window._tvInit = 1; initTvPage(); }
     else if (p.includes('genre.html') && !window._genreInit) { window._genreInit = 1; initGenrePage(); }
-    else if (!p.includes('detail.html') && !window._homeInit && document.getElementById('hero')?.children.length === 0) { window._homeInit = 1; initHomePage(); }
+    else if (p.includes('detail.html') && !window._detailInit) {
+        window._detailInit = 1;
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get('id');
+        const type = params.get('type') || 'movie';
+        if (id) loadDetailPage(parseInt(id), type);
+    } else if (!p.includes('detail.html') && !window._homeInit && document.getElementById('hero')?.children.length === 0) { window._homeInit = 1; initHomePage(); }
 }, 100);
