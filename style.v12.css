@@ -235,7 +235,8 @@ to{transform:translateY(0)}}
 .iframe-container:hover .player-controls{pointer-events:auto;opacity:1}
 .player-controls:hover{pointer-events:auto;opacity:1}
 .player-controls.show{opacity:1}
-.player-servers{display:flex;gap:6px;align-items:center;background:rgba(0,0,0,.5);padding:4px 6px;border-radius:999px;border:1px solid rgba(255,255,255,.06)}
+.player-servers{display:flex;gap:6px;align-items:center;background:rgba(0,0,0,.5);padding:4px 6px;border-radius:999px;border:1px solid rgba(255,255,255,.06);overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
+.player-servers::-webkit-scrollbar{display:none}
 .svr-btn{padding:5px 14px;border-radius:999px;font-size:.72rem;font-weight:500;background:transparent;color:rgba(255,255,255,.5);border:none;cursor:pointer;transition:transform,background .25s;white-space:nowrap;font-family:'Poppins',sans-serif}
 .svr-btn:hover{color:#fff;background:rgba(255,255,255,.08)}
 .svr-btn.active{background:var(--accent);color:#fff}
