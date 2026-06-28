@@ -14,6 +14,10 @@ const VIDSRV5 = 'https://vixsrc.to/movie';
 const VIDSRV5_TV = 'https://vixsrc.to/tv';
 const APIPLAYER = 'https://apiplayer.ru/embed';
 const VIDSRV_VESY = 'https://streamsrcs.2embed.cc/vesy';
+const VIDSRV_VNEST = 'https://streamsrcs.2embed.cc/vnest';
+const VIDEASY = 'https://player.videasy.to';
+const VIDNEST = 'https://vidnest.fun';
+const VIDSRCSU = 'https://vidsrc.su/embed';
 
 // Subtitle state
 let subCues = [];
@@ -340,6 +344,18 @@ function getPlayerUrl(id, type, season, episode) {
     } else if (currentServer === 'apiplayer') {
         if (type === 'tv') rawUrl = `${APIPLAYER}/tv/${id}/${season}/${episode}`;
         else rawUrl = `${APIPLAYER}/movie/${id}`;
+    } else if (currentServer === 'videasy') {
+        if (type === 'tv') rawUrl = `${VIDEASY}/tv/${id}/${season}-${episode}`;
+        else rawUrl = `${VIDEASY}/movie/${id}`;
+    } else if (currentServer === 'vidnest') {
+        if (type === 'tv') rawUrl = `${VIDNEST}/tv/${id}/${season}-${episode}`;
+        else rawUrl = `${VIDNEST}/movie/${id}`;
+    } else if (currentServer === 'vidsrcsu') {
+        if (type === 'tv') rawUrl = `${VIDSRCSU}/tv/${id}/${season}/${episode}`;
+        else rawUrl = `${VIDSRCSU}/movie/${id}`;
+    } else if (currentServer === 'vnest') {
+        if (type === 'tv') rawUrl = `${VIDSRV_VNEST}?tmdb=${id}`;
+        else rawUrl = `${VIDSRV_VNEST}?tmdb=${id}`;
     } else {
         // VidLink (default)
         if (type === 'tv') rawUrl = `https://vidlink.pro/tv/${id}/${season}/${episode}`;
