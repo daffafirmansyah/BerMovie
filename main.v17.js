@@ -1255,7 +1255,7 @@ function initNavDropdowns() {
         genreDD.innerHTML = html;
     }
     if (countryDD) {
-        const countries = ['AE','AU','BR','CA','CN','DE','DK','ES','FI','FR','GB','HK','ID','IN','IT','JP','KR','MX','MY','NL','NO','PH','RU','SA','SE','SG','TH','TR','US'];
+        const countries = ['SA','AU','NL','BR','CN','DK','PH','FI','HK','IN','ID','GB','IT','JP','DE','CA','KR','MY','MX','NO','FR','RU','SG','ES','SE','TH','TR','AE','US'];
         const names = {'ID':'Indonesia','US':'Amerika Serikat','GB':'Inggris','JP':'Jepang','KR':'Korea','IN':'India','FR':'Perancis','DE':'Jerman','CN':'China','HK':'Hong Kong','MY':'Malaysia','SG':'Singapura','TH':'Thailand','PH':'Filipina','AU':'Australia','CA':'Kanada','MX':'Meksiko','BR':'Brazil','RU':'Rusia','ES':'Spanyol','IT':'Italia','NL':'Belanda','SE':'Swedia','NO':'Norwegia','DK':'Denmark','FI':'Finlandia','TR':'Turki','AE':'UEA','SA':'Arab Saudi'};
         let h = '<a href="movies.html">Semua Negara</a>';
         countries.forEach(c => { h += '<a href="movies.html?country='+c+'">'+(names[c]||c)+'</a>'; });
@@ -1431,7 +1431,7 @@ function initGlobalEvents() {
         // Country expandable
         const mobCountry = mobileMenu.querySelector('[data-nav="country"]');
         if (mobCountry) {
-            const cc = ['ID','US','GB','JP','KR','IN','FR','DE','CN','HK','MY','SG','TH','PH','AU','CA','MX','BR','RU','ES','IT','NL','SE','NO','DK','FI','TR','AE','SA'];
+            const cc = ['SA','AU','NL','BR','CN','DK','PH','FI','HK','IN','ID','GB','IT','JP','DE','CA','KR','MY','MX','NO','FR','RU','SG','ES','SE','TH','TR','AE','US'];
             const nm = {'ID':'Indonesia','US':'Amerika','GB':'Inggris','JP':'Jepang','KR':'Korea','IN':'India','FR':'Perancis','DE':'Jerman','CN':'China','HK':'Hong Kong','MY':'Malaysia','SG':'Singapura','TH':'Thailand','PH':'Filipina','AU':'Australia','CA':'Kanada','MX':'Meksiko','BR':'Brazil','RU':'Rusia','ES':'Spanyol','IT':'Italia','NL':'Belanda','SE':'Swedia','NO':'Norwegia','DK':'Denmark','FI':'Finlandia','TR':'Turki','AE':'UEA','SA':'Arab Saudi'};
             let ch = '';
             cc.forEach(c => { ch += `<a href="movies.html?country=${c}">${nm[c]||c}</a>`; });
