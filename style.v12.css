@@ -291,6 +291,8 @@ to{transform:translateY(0)}}
 .nav-dropdown-trigger{padding:7px 14px;border-radius:8px;font-size:.84rem;font-weight:500;color:var(--text2);transition:var(--transition);letter-spacing:.2px;cursor:pointer;display:inline-block}
 .nav-dropdown-trigger:hover{color:var(--text);background:var(--bg3)}
 .nav-dropdown-trigger.active{color:#fff;background:var(--accent)}
+.nav-dropdown-trigger.active .nav-chevron{transform:rotate(180deg)}
+.nav-chevron{transition:transform .2s ease}
 .nav-fav{padding:7px 16px;border-radius:8px;font-size:.84rem;font-weight:600;color:var(--accent);transition:var(--transition);letter-spacing:.2px;white-space:nowrap}
 .nav-fav:hover{background:rgba(249,115,22,.1);color:var(--accent);text-decoration:none}
 .nav-lang-btn{padding:6px 12px;border-radius:7px;font-size:.8rem;font-weight:600;color:var(--text);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);cursor:pointer;transition:var(--transition);letter-spacing:.3px;white-space:nowrap}
