@@ -13,6 +13,60 @@ const VIDSRV4 = 'https://www.2embed.cc/embed';
 const VIDSRV5 = 'https://vixsrc.to/movie';
 const VIDSRV5_TV = 'https://vixsrc.to/tv';
 const APIPLAYER = 'https://apiplayer.ru/embed';
+
+// i18n
+const I18N = {
+    id: {
+        nav_home: 'Home', nav_movies: 'Film', nav_tv: 'Series', nav_genre: 'Genre', nav_country: 'Country', nav_tahun: 'Tahun', nav_favorit: 'Favorit', nav_leaderboard: 'Peringkat',
+        search: 'Cari film atau series...', search_movies: 'Cari film...', search_tv: 'Cari series...', search_btn: 'Cari',
+        trending: 'Trending Hari Ini', top_rated: 'Rating Tertinggi', now_playing: 'Sedang Tayang', indo_movies: 'Film Indonesia', indo_series: 'Series Indonesia',
+        watch_btn: 'Tonton', trailer_btn: 'Trailer', close_trailer: 'Tutup Trailer', fav_add: 'Tambah ke Favorit', fav_active: 'Difavoritkan',
+        cast_title: 'Pemain', seasons_title: 'Seasons', recommend_title: 'Rekomendasi', episode_title: 'Episode',
+        loading: 'Memuat...', load_fail: 'Gagal memuat detail. Coba lagi.', no_desc: 'No description available.',
+        trailer_unavailable: 'Trailer tidak tersedia', subtitle_unavailable: 'Subtitle belum tersedia.',
+        removed_fav: 'Dihapus dari favorit', added_fav: 'Ditambahkan ke favorit',
+        watchlist_title: 'Favorit', watchlist_empty: 'Belum ada film favorit',
+        search_result: 'Hasil Pencarian', no_result: 'Film tidak ditemukan untuk', sort_rating: 'Rating Tertinggi',
+        all_genre: 'Semua Genre', all_year: 'Semua Tahun', all_country: 'Semua Negara', all_network: 'Semua Network',
+        explore_genre: 'Jelajahi Genre', back_btn: '← Kembali',
+        genre_movies: 'Film', genre_tv: 'Series',
+        lang_label: 'Bahasa', lang_id: 'Indonesia', lang_en: 'English'
+    },
+    en: {
+        nav_home: 'Home', nav_movies: 'Movies', nav_tv: 'TV Shows', nav_genre: 'Genre', nav_country: 'Country', nav_tahun: 'Year', nav_favorit: 'Favorites', nav_leaderboard: 'Rankings',
+        search: 'Search movies or series...', search_movies: 'Search movies...', search_tv: 'Search series...', search_btn: 'Search',
+        trending: 'Trending Today', top_rated: 'Top Rated', now_playing: 'Now Playing', indo_movies: 'Indonesian Movies', indo_series: 'Indonesian Series',
+        watch_btn: 'Watch', trailer_btn: 'Trailer', close_trailer: 'Close Trailer', fav_add: 'Add to Favorites', fav_active: 'Favorited',
+        cast_title: 'Cast', seasons_title: 'Seasons', recommend_title: 'Recommended', episode_title: 'Episodes',
+        loading: 'Loading...', load_fail: 'Failed to load details. Try again.', no_desc: 'No description available.',
+        trailer_unavailable: 'Trailer not available', subtitle_unavailable: 'Subtitles not available yet.',
+        removed_fav: 'Removed from favorites', added_fav: 'Added to favorites',
+        watchlist_title: 'Favorites', watchlist_empty: 'No favorites yet',
+        search_result: 'Search Results', no_result: 'No movies found for', sort_rating: 'Top Rated',
+        all_genre: 'All Genres', all_year: 'All Years', all_country: 'All Countries', all_network: 'All Networks',
+        explore_genre: 'Explore Genres', back_btn: '← Back',
+        genre_movies: 'Movies', genre_tv: 'TV Shows',
+        lang_label: 'Language', lang_id: 'Indonesian', lang_en: 'English'
+    }
+};
+let _lang = localStorage.getItem('bermovie_lang') || 'id';
+function t(key) { return (I18N[_lang] && I18N[_lang][key]) || (I18N.id[key]) || key; }
+function applyLang() {
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        const val = t(key);
+        if (el.tagName === 'INPUT') el.placeholder = val; else el.textContent = val;
+    });
+    document.documentElement.lang = _lang;
+    // Update toggle labels
+    const toggleBtns = document.querySelectorAll('#langToggle, #langToggleMobile');
+    toggleBtns.forEach(btn => btn.textContent = _lang === 'id' ? 'EN' : 'ID');
+}
+function toggleLanguage() {
+    _lang = _lang === 'id' ? 'en' : 'id';
+    localStorage.setItem('bermovie_lang', _lang);
+    location.reload();
+}
 const VIDSRV_VESY = 'https://streamsrcs.2embed.cc/vesy';
 const VIDSRV_VNEST = 'https://streamsrcs.2embed.cc/vnest';
 const VIDEASY = 'https://player.videasy.to';
@@ -145,7 +199,7 @@ async function tmdb(path, params = {}) {
 async function loadCountries(selectEl, selectedValue) {
     const data = await tmdb('/configuration/countries');
     if (!data) return;
-    selectEl.innerHTML = '<option value="">Semua Negara</option>';
+    selectEl.innerHTML = '<option value="">' + t('all_country') + '</option>';
     data.sort((a,b) => a.native_name.localeCompare(b.native_name));
     data.forEach(c => {
         selectEl.innerHTML += `<option value="${c.iso_3166_1}">${c.native_name}</option>`;
@@ -204,7 +258,7 @@ function toggleWatchlist(item, type) {
     const idx = list.findIndex(i => i.id === item.id && i.type === type);
     if (idx > -1) {
         list.splice(idx, 1);
-        showToast('Dihapus dari favorit');
+        showToast(t('removed_fav'));
     } else {
         list.push({
             id: item.id, type: type || 'movie',
@@ -213,7 +267,7 @@ function toggleWatchlist(item, type) {
             year: (item.release_date || item.first_air_date || '').substring(0,4),
             rating: item.vote_average
         });
-        showToast('Ditambahkan ke favorit');
+        showToast(t('added_fav'));
     }
     saveWatchlist(list);
 }
@@ -274,11 +328,11 @@ async function openDetail(id, type = 'movie') {
         <span class="rating">★ ${rating(detail.vote_average)}</span>
         <span>${year(date)}</span>
         ${runtime ? `<span>${runtime} min</span>` : ''}
-        <span>${type === 'movie' ? 'Film' : 'Series'}</span>
+        <span>${type === 'movie' ? t('nav_movies') : t('nav_tv')}</span>
         ${detail.number_of_seasons ? `<span>${detail.number_of_seasons} Season</span>` : ''}
         ${genres ? `<span>${genres}</span>` : ''}
     `;
-    el('#modalOverview').textContent = detail.overview || 'No description available.';
+    el('#modalOverview').textContent = detail.overview || t('no_desc');
 
     const castEl = el('#modalCast');
     castEl.innerHTML = '';
@@ -297,10 +351,10 @@ async function openDetail(id, type = 'movie') {
             hero.classList.add('trailer-active');
             trailerBtn.querySelector('.t-il').textContent = '◉';
             trailerBtn.querySelector('.t-il').style.opacity = '1';
-            trailerBtn.querySelector('.t-txt').textContent = 'Tutup Trailer';
+            trailerBtn.querySelector('.t-txt').textContent = t('close_trailer');
             trailerBtn.querySelector('.t-ir').style.opacity = '0';
             trailerBtn.onclick = closeAllModals;
-        } else alert('Trailer tidak tersedia');
+        } else alert(t('trailer_unavailable'));
     };
 
     const seasonsSection = el('#seasonsSection');
@@ -311,7 +365,7 @@ async function openDetail(id, type = 'movie') {
         detail.seasons.filter(s=>s.season_number>0).forEach(s => {
             const card = document.createElement('div');
             card.className = 'season-card';
-            card.innerHTML = `${s.poster_path?`<img src="${IMG_POSTER}${s.poster_path}" alt="">`:''}<div class="info"><strong>Season ${s.season_number}</strong><small>${s.episode_count} Episode</small></div>`;
+            card.innerHTML = `${s.poster_path?`<img src="${IMG_POSTER}${s.poster_path}" alt="">`:''}<div class="info"><strong>${t('seasons_title')} ${s.season_number}</strong><small>${s.episode_count} ${t('episode_title')}</small></div>`;
             card.onclick = () => openPlayer(id, type, title, s.season_number, 1);
             list.appendChild(card);
         });
@@ -393,7 +447,7 @@ async function openPlayer(id, type, title, season=1, episode=1) {
         tvData?.seasons?.filter(s=>s.season_number>0).forEach(s => {
             const opt = document.createElement('option');
             opt.value = s.season_number;
-            opt.textContent = `Season ${s.season_number}`;
+            opt.textContent = t('seasons_title') + ' ' + s.season_number;
             if(s.season_number===season) opt.selected=true;
             sel.appendChild(opt);
         });
@@ -447,7 +501,7 @@ async function searchAndShowSubs() {
     if (!sheet) return;
     sheet.classList.remove('hidden');
     list.innerHTML = '';
-    status.textContent = 'Subtitle belum tersedia.';
+    status.textContent = t('subtitle_unavailable');
 }
 
 async function loadSubtitle(subId) {
@@ -603,7 +657,7 @@ function renderHeroSlide(idx) {
         return g ? g.name : null;
     }).filter(Boolean) || [];
     let genreHtml = gnames.length ? `<div class="hero-genres">${gnames.map(n => `<span class="hero-genre">${n}</span>`).join('')}</div>` : '';
-    if (el('#heroMeta')) el('#heroMeta').innerHTML = genreHtml + `<span class="rating-badge">★ ${rating(item.vote_average)}</span><span>${year(item.release_date||item.first_air_date)}</span><span>${type==='movie'?'Film':'Series'}</span>`;
+    if (el('#heroMeta')) el('#heroMeta').innerHTML = genreHtml + `<span class="rating-badge">★ ${rating(item.vote_average)}</span><span>${year(item.release_date||item.first_air_date)}</span><span>${type==='movie'?t('nav_movies'):t('nav_tv')}</span>`;
     if (el('#heroBtn')) el('#heroBtn').onclick = () => { window.location.href = `detail.html?id=${item.id}&type=${type}`; };
     // Update dots
     document.querySelectorAll('.hero-dot').forEach((d, i) => d.classList.toggle('active', i === idx));
@@ -873,7 +927,7 @@ function initMoviesPage() {
     const urlSort = urlParams.get('sort');
 
     if (genreSel) {
-        genreSel.innerHTML = '<option value="">Semua Genre</option>';
+        genreSel.innerHTML = '<option value="">' + t('all_genre') + '</option>';
         MOVIE_GENRES.forEach(g => {
             genreSel.innerHTML += `<option value="${g.id}">${g.name}</option>`;
         });
@@ -882,7 +936,7 @@ function initMoviesPage() {
     }
     if (yearSel) {
         const now = new Date().getFullYear();
-        yearSel.innerHTML = '<option value="">Semua Tahun</option>';
+        yearSel.innerHTML = '<option value="">' + t('all_year') + '</option>';
         for (let y = now; y >= 1950; y--) yearSel.innerHTML += `<option value="${y}">${y}</option>`;
         if (urlYear) { yearSel.value = urlYear; currentYear = urlYear; }
         yearSel.onchange = () => { currentYear = yearSel.value; currentPage=1; loadMovies(); updateURL(); };
@@ -955,7 +1009,7 @@ function initTvPage() {
 
     // Sync filters (semua synchronous)
     if (genreSel) {
-        genreSel.innerHTML = '<option value="">Semua Genre</option>';
+        genreSel.innerHTML = '<option value="">' + t('all_genre') + '</option>';
         TV_GENRES.forEach(g => {
             genreSel.innerHTML += `<option value="${g.id}">${g.name}</option>`;
         });
@@ -964,7 +1018,7 @@ function initTvPage() {
     }
     if (yearSel) {
         const now = new Date().getFullYear();
-        yearSel.innerHTML = '<option value="">Semua Tahun</option>';
+        yearSel.innerHTML = '<option value="">' + t('all_year') + '</option>';
         for (let y = now; y >= 1950; y--) yearSel.innerHTML += `<option value="${y}">${y}</option>`;
         if (urlYear) { yearSel.value = urlYear; currentYear = urlYear; }
         yearSel.onchange = () => { currentYear = yearSel.value; currentPage=1; loadTvShows(); updateURL(); };
@@ -974,7 +1028,7 @@ function initTvPage() {
         sortSel.onchange = () => { currentSort = sortSel.value; currentPage=1; loadTvShows(); updateURL(); };
     }
     if (networkSel) {
-        networkSel.innerHTML = '<option value="">Semua Network</option>';
+        networkSel.innerHTML = '<option value="">' + t('all_network') + '</option>';
         NETWORKS.forEach(n => { networkSel.innerHTML += `<option value="${n.id}">${n.name}</option>`; });
         if (urlNetwork) { networkSel.value = urlNetwork; currentNetwork = urlNetwork; }
         networkSel.onchange = () => { currentNetwork = networkSel.value; currentPage=1; loadTvShows(); updateURL(); };
@@ -1160,7 +1214,7 @@ async function doSearch(query, page=1) {
         return;
     }
     section.classList.remove('hidden');
-    if (el('#searchTitle')) el('#searchTitle').textContent = `Hasil: "${query}" (${data.total_results})`;
+    if (el('#searchTitle')) el('#searchTitle').textContent = t('search_result') + ': "' + query + '" (' + data.total_results + ')';
     // Update section title with count
     const st = el('.page-title');
     if (st && data.total_results > 0) {
@@ -1181,7 +1235,7 @@ async function doSearch(query, page=1) {
         .slice(0,21);
     
     if (items.length === 0) {
-        grid.innerHTML = '<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><p>Film tidak ditemukan untuk "${query}"</p></div>';
+        grid.innerHTML = '<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><p>' + t('no_result') + ' "${query}"</p></div>';
     } else {
         items.forEach(i => grid.appendChild(createCard(i, i.media_type)));
     }
@@ -1250,7 +1304,7 @@ function initNavDropdowns() {
     const countryDD = el('#countryDropdown');
     const yearDD = el('#yearDropdown');
     if (genreDD) {
-        let html = '<a href="movies.html">Semua Genre</a>';
+        let html = '<a href="movies.html">' + t('all_genre') + '</a>';
         MOVIE_GENRES.forEach(g => { html += '<a href="movies.html?genre='+g.id+'">'+g.name+'</a>'; });
         genreDD.innerHTML = html;
     }
@@ -1263,7 +1317,7 @@ function initNavDropdowns() {
     }
     if (yearDD) {
         const now = new Date().getFullYear();
-        let h = '<a href="movies.html">Semua Tahun</a>';
+        let h = '<a href="movies.html">' + t('all_year') + '</a>';
         for (let y = now; y >= 1950; y--) h += '<a href="movies.html?year='+y+'">'+y+'</a>';
         yearDD.innerHTML = h;
     }
@@ -1347,7 +1401,7 @@ function initKeyboard() {
                 document.getElementById('detailTrailerBtn')?.click();
             }
             const mt = document.getElementById('modalTrailerBtn');
-            if (mt) { mt.querySelector('.t-il').textContent = ''; mt.querySelector('.t-il').style.opacity = '0'; mt.querySelector('.t-txt').textContent = 'Trailer'; mt.querySelector('.t-ir').style.opacity = '1'; mt.onclick = null; }
+            if (mt) { mt.querySelector('.t-il').textContent = ''; mt.querySelector('.t-il').style.opacity = '0'; mt.querySelector('.t-txt').textContent = t('trailer_btn'); mt.querySelector('.t-ir').style.opacity = '1'; mt.onclick = null; }
             // Close episode sheet
             const epSheet = document.getElementById('episodeSheet');
             if (epSheet && !epSheet.classList.contains('hidden')) {
@@ -1501,7 +1555,7 @@ async function loadDetailPage(id, type) {
     ]);
 
     if (!detail) {
-        loading.textContent = 'Gagal memuat detail. Coba lagi.';
+        loading.textContent = t('load_fail');
         return;
     }
 
@@ -1524,12 +1578,12 @@ async function loadDetailPage(id, type) {
     document.getElementById('detailMeta').innerHTML = `
         <span class="detail-rating">★ ${rating(detail.vote_average)}</span>
         <span>${year(date)}</span>
-        <span>${type === 'movie' ? 'Film' : 'Series'}</span>
+        <span>${type === 'movie' ? t('nav_movies') : t('nav_tv')}</span>
         ${detail.number_of_seasons ? `<span>${detail.number_of_seasons} Season</span>` : ''}
         ${detail.runtime ? `<span>${detail.runtime} min</span>` : detail.episode_run_time?.[0] ? `<span>${detail.episode_run_time[0]} min</span>` : ''}
         ${detail.genres?.map(g => g.name).join(', ')}
     `;
-    document.getElementById('detailOverview').textContent = detail.overview || 'No description available.';
+    document.getElementById('detailOverview').textContent = detail.overview || t('no_desc');
 
     const castEl = document.getElementById('detailCast');
     castEl.innerHTML = '';
@@ -1544,7 +1598,7 @@ async function loadDetailPage(id, type) {
         const setActive = () => {
             const active = isInWatchlist(id, type);
             favBtn.classList.toggle('active', active);
-            favBtn.querySelector('.fav-txt').textContent = active ? 'Difavoritkan' : 'Tambah ke Favorit';
+            favBtn.querySelector('.fav-txt').textContent = active ? t('fav_active') : t('fav_add');
         };
         setActive();
         favBtn.onclick = () => {
@@ -1567,7 +1621,7 @@ async function loadDetailPage(id, type) {
         trailerWrap.appendChild(iframe);
     }
     const openTrailer = () => {
-        if (!tr) { alert('Trailer tidak tersedia'); return; }
+        if (!tr) { alert(t('trailer_unavailable')); return; }
         const hero = document.getElementById('detailHero');
         trailerWrap.style.cssText = 'position:absolute;inset:0;z-index:5;display:block;visibility:visible;will-change:transform';
         hero.appendChild(trailerWrap);
@@ -1575,7 +1629,7 @@ async function loadDetailPage(id, type) {
         const dtb = document.getElementById('detailTrailerBtn');
         dtb.querySelector('.t-il').textContent = '◉';
         dtb.querySelector('.t-il').style.opacity = '1';
-        dtb.querySelector('.t-txt').textContent = 'Tutup Trailer';
+        dtb.querySelector('.t-txt').textContent = t('close_trailer');
         dtb.querySelector('.t-ir').style.opacity = '0';
         dtb.onclick = () => {
             trailerWrap.style.cssText = 'position:fixed;top:-9999px;left:-9999px;z-index:5;display:block;visibility:hidden;will-change:transform';
@@ -1583,7 +1637,7 @@ async function loadDetailPage(id, type) {
             hero.classList.remove('trailer-active');
             dtb.querySelector('.t-il').textContent = '';
             dtb.querySelector('.t-il').style.opacity = '0';
-            dtb.querySelector('.t-txt').textContent = 'Trailer';
+            dtb.querySelector('.t-txt').textContent = t('trailer_btn');
             dtb.querySelector('.t-ir').style.opacity = '1';
             dtb.onclick = openTrailer;
             // Show back button
@@ -1605,7 +1659,7 @@ async function loadDetailPage(id, type) {
         detail.seasons.filter(s => s.season_number > 0).forEach(s => {
             const card = document.createElement('div');
             card.className = 'season-card';
-            card.innerHTML = `${s.poster_path ? `<img src="${IMG_POSTER}${s.poster_path}" alt="">` : ''}<div class="info"><strong>Season ${s.season_number}</strong><small>${s.episode_count} Episode</small></div>`;
+            card.innerHTML = `${s.poster_path ? `<img src="${IMG_POSTER}${s.poster_path}" alt="">` : ''}<div class="info"><strong>${t('seasons_title')} ${s.season_number}</strong><small>${s.episode_count} ${t('episode_title')}</small></div>`;
             card.onclick = () => openPlayer(id, type, title, s.season_number, 1);
             list.appendChild(card);
         });
@@ -1697,6 +1751,7 @@ document.addEventListener('DOMContentLoaded', initDetailHeroReveal);
 
 
 document.addEventListener('DOMContentLoaded', () => {
+    applyLang();
     initGlobalEvents();
     initAutocomplete();
 
