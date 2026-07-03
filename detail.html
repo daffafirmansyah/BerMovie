@@ -195,7 +195,7 @@
         const id = urlParams.get('id');
         const type = urlParams.get('type') || 'movie';
         if (id) loadDetailPage(parseInt(id), type);
-        else document.getElementById('detailLoading').textContent = 'ID tidak ditemukan';
+        else document.getElementById('detailLoading').textContent = (typeof t === 'function' ? t('id_not_found') : 'ID tidak ditemukan');
     </script>
 </body>
 </html>

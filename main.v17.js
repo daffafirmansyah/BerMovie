@@ -22,7 +22,7 @@ const I18N = {
         trending: 'Trending Hari Ini', top_rated: 'Rating Tertinggi', now_playing: 'Sedang Tayang', indo_movies: 'Film Indonesia', indo_series: 'Series Indonesia',
         watch_btn: 'Tonton', watch_now: 'Tonton Sekarang', trailer_btn: 'Trailer', close_trailer: 'Tutup Trailer', fav_add: 'Tambah ke Favorit', fav_active: 'Difavoritkan',
         cast_title: 'Pemain', seasons_title: 'Seasons', recommend_title: 'Rekomendasi', episode_title: 'Episode',
-        loading: 'Memuat...', load_fail: 'Gagal memuat detail. Coba lagi.', no_desc: 'No description available.',
+        loading: 'Memuat...', load_fail: 'Gagal memuat detail. Coba lagi.', no_desc: 'No description available.', id_not_found: 'ID tidak ditemukan',
         trailer_unavailable: 'Trailer tidak tersedia', subtitle_unavailable: 'Subtitle belum tersedia.',
         removed_fav: 'Dihapus dari favorit', added_fav: 'Ditambahkan ke favorit',
         watchlist_title: 'Favorit', watchlist_empty: 'Belum ada film favorit',
@@ -45,7 +45,7 @@ const I18N = {
         trending: 'Trending Today', top_rated: 'Top Rated', now_playing: 'Now Playing', indo_movies: 'Indonesian Movies', indo_series: 'Indonesian Series',
         watch_btn: 'Watch', watch_now: 'Watch Now', trailer_btn: 'Trailer', close_trailer: 'Close Trailer', fav_add: 'Add to Favorites', fav_active: 'Favorited',
         cast_title: 'Cast', seasons_title: 'Seasons', recommend_title: 'Recommended', episode_title: 'Episodes',
-        loading: 'Loading...', load_fail: 'Failed to load details. Try again.', no_desc: 'No description available.',
+        loading: 'Loading...', load_fail: 'Failed to load details. Try again.', no_desc: 'No description available.', id_not_found: 'ID not found',
         trailer_unavailable: 'Trailer not available', subtitle_unavailable: 'Subtitles not available yet.',
         removed_fav: 'Removed from favorites', added_fav: 'Added to favorites',
         watchlist_title: 'Favorites', watchlist_empty: 'No favorites yet',
@@ -343,7 +343,7 @@ async function openDetail(id, type = 'movie') {
         <span>${year(date)}</span>
         ${runtime ? `<span>${runtime} min</span>` : ''}
         <span>${type === 'movie' ? t('nav_movies') : t('nav_tv')}</span>
-        ${detail.number_of_seasons ? `<span>${detail.number_of_seasons} Season</span>` : ''}
+        ${detail.number_of_seasons ? `<span>${detail.number_of_seasons} ${t('seasons_title')}</span>` : ''}
         ${genres ? `<span>${genres}</span>` : ''}
     `;
     el('#modalOverview').textContent = detail.overview || t('no_desc');
@@ -496,7 +496,7 @@ async function loadEpisodes(id, season, type, activeEp=1) {
         btn.className = 'ep-btn'+(ep.episode_number===activeEp?' active':'');
         btn.dataset.ep = ep.episode_number;
         btn.textContent = `E${ep.episode_number}`;
-        btn.title = ep.name||`Episode ${ep.episode_number}`;
+        btn.title = ep.name||`${t('episode_title')} ${ep.episode_number}`;
         btn.onclick = () => {
             all('.ep-btn').forEach(b=>b.classList.remove('active'));
             btn.classList.add('active');
@@ -1324,8 +1324,8 @@ function initNavDropdowns() {
     }
     if (countryDD) {
         const countries = ['SA','AU','NL','BR','CN','DK','PH','FI','HK','IN','ID','GB','IT','JP','DE','CA','KR','MY','MX','NO','FR','RU','SG','ES','SE','TH','TR','AE','US'];
-        const names = {'ID':'Indonesia','US':'Amerika Serikat','GB':'Inggris','JP':'Jepang','KR':'Korea','IN':'India','FR':'Perancis','DE':'Jerman','CN':'China','HK':'Hong Kong','MY':'Malaysia','SG':'Singapura','TH':'Thailand','PH':'Filipina','AU':'Australia','CA':'Kanada','MX':'Meksiko','BR':'Brazil','RU':'Rusia','ES':'Spanyol','IT':'Italia','NL':'Belanda','SE':'Swedia','NO':'Norwegia','DK':'Denmark','FI':'Finlandia','TR':'Turki','AE':'UEA','SA':'Arab Saudi'};
-        let h = '<a href="movies.html">Semua Negara</a>';
+        const names = (_lang === 'id') ? {'ID':'Indonesia','US':'Amerika Serikat','GB':'Inggris','JP':'Jepang','KR':'Korea','IN':'India','FR':'Perancis','DE':'Jerman','CN':'China','HK':'Hong Kong','MY':'Malaysia','SG':'Singapura','TH':'Thailand','PH':'Filipina','AU':'Australia','CA':'Kanada','MX':'Meksiko','BR':'Brazil','RU':'Rusia','ES':'Spanyol','IT':'Italia','NL':'Belanda','SE':'Swedia','NO':'Norwegia','DK':'Denmark','FI':'Finlandia','TR':'Turki','AE':'UEA','SA':'Arab Saudi'} : {'ID':'Indonesia','US':'United States','GB':'United Kingdom','JP':'Japan','KR':'Korea','IN':'India','FR':'France','DE':'Germany','CN':'China','HK':'Hong Kong','MY':'Malaysia','SG':'Singapore','TH':'Thailand','PH':'Philippines','AU':'Australia','CA':'Canada','MX':'Mexico','BR':'Brazil','RU':'Russia','ES':'Spain','IT':'Italy','NL':'Netherlands','SE':'Sweden','NO':'Norway','DK':'Denmark','FI':'Finland','TR':'Turkey','AE':'UAE','SA':'Saudi Arabia'};
+        let h = '<a href="movies.html">' + t('all_country') + '</a>';
         countries.forEach(c => { h += '<a href="movies.html?country='+c+'">'+(names[c]||c)+'</a>'; });
         countryDD.innerHTML = h;
     }
@@ -1500,7 +1500,7 @@ function initGlobalEvents() {
         const mobCountry = mobileMenu.querySelector('[data-nav="country"]');
         if (mobCountry) {
             const cc = ['SA','AU','NL','BR','CN','DK','PH','FI','HK','IN','ID','GB','IT','JP','DE','CA','KR','MY','MX','NO','FR','RU','SG','ES','SE','TH','TR','AE','US'];
-            const nm = {'ID':'Indonesia','US':'Amerika','GB':'Inggris','JP':'Jepang','KR':'Korea','IN':'India','FR':'Perancis','DE':'Jerman','CN':'China','HK':'Hong Kong','MY':'Malaysia','SG':'Singapura','TH':'Thailand','PH':'Filipina','AU':'Australia','CA':'Kanada','MX':'Meksiko','BR':'Brazil','RU':'Rusia','ES':'Spanyol','IT':'Italia','NL':'Belanda','SE':'Swedia','NO':'Norwegia','DK':'Denmark','FI':'Finlandia','TR':'Turki','AE':'UEA','SA':'Arab Saudi'};
+            const nm = (_lang === 'id') ? {'ID':'Indonesia','US':'Amerika','GB':'Inggris','JP':'Jepang','KR':'Korea','IN':'India','FR':'Perancis','DE':'Jerman','CN':'China','HK':'Hong Kong','MY':'Malaysia','SG':'Singapura','TH':'Thailand','PH':'Filipina','AU':'Australia','CA':'Kanada','MX':'Meksiko','BR':'Brazil','RU':'Rusia','ES':'Spanyol','IT':'Italia','NL':'Belanda','SE':'Swedia','NO':'Norwegia','DK':'Denmark','FI':'Finlandia','TR':'Turki','AE':'UEA','SA':'Arab Saudi'} : {'ID':'Indonesia','US':'United States','GB':'United Kingdom','JP':'Japan','KR':'Korea','IN':'India','FR':'France','DE':'Germany','CN':'China','HK':'Hong Kong','MY':'Malaysia','SG':'Singapore','TH':'Thailand','PH':'Philippines','AU':'Australia','CA':'Canada','MX':'Mexico','BR':'Brazil','RU':'Russia','ES':'Spain','IT':'Italy','NL':'Netherlands','SE':'Sweden','NO':'Norway','DK':'Denmark','FI':'Finland','TR':'Turkey','AE':'UAE','SA':'Saudi Arabia'};
             let ch = '';
             cc.forEach(c => { ch += `<a href="movies.html?country=${c}">${nm[c]||c}</a>`; });
             makeExpandable(mobCountry, ch);
@@ -1593,7 +1593,7 @@ async function loadDetailPage(id, type) {
         <span class="detail-rating">★ ${rating(detail.vote_average)}</span>
         <span>${year(date)}</span>
         <span>${type === 'movie' ? t('nav_movies') : t('nav_tv')}</span>
-        ${detail.number_of_seasons ? `<span>${detail.number_of_seasons} Season</span>` : ''}
+        ${detail.number_of_seasons ? `<span>${detail.number_of_seasons} ${t('seasons_title')}</span>` : ''}
         ${detail.runtime ? `<span>${detail.runtime} min</span>` : detail.episode_run_time?.[0] ? `<span>${detail.episode_run_time[0]} min</span>` : ''}
         ${detail.genres?.map(g => g.name).join(', ')}
     `;
