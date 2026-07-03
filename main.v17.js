@@ -32,7 +32,7 @@ const I18N = {
         genre_movies: 'Film', genre_tv: 'Series',
         popular_movies: 'Film Populer', popular_tv: 'Series Populer', see_all: 'Lihat Semua →',
         best_movies: 'Film Terbaik', best_tv: 'Series Terbaik',
-        filter_all: 'All', filter_movies: 'Movies', filter_tv: 'TV Series',
+        filter_all: 'Semua', filter_movies: 'Film', filter_tv: 'Series',
         sort_popular: 'Populer',
         footer_tagline: 'BerMovie — Streaming Film & Series Sub Indo',
         footer_disclaimer: 'Kami tidak menyimpan file video di server kami. Semua konten disediakan oleh pihak ketiga.',
@@ -95,19 +95,20 @@ let currentTmdbId = 0;
 
 // GENRES
 const MOVIE_GENRES = [
-    {id:28,name:"Action"},{id:12,name:"Adventure"},{id:16,name:"Animation"},{id:35,name:"Comedy"},
-    {id:80,name:"Crime"},{id:99,name:"Documentary"},{id:18,name:"Drama"},{id:10751,name:"Family"},
-    {id:14,name:"Fantasy"},{id:36,name:"History"},{id:27,name:"Horror"},{id:10402,name:"Music"},
-    {id:9648,name:"Mystery"},{id:10749,name:"Romance"},{id:878,name:"Sci-Fi"},{id:10770,name:"TV Movie"},
-    {id:53,name:"Thriller"},{id:10752,name:"War"},{id:37,name:"Western"}
+    {id:28,name:"Action",id_name:"Aksi"},{id:12,name:"Adventure",id_name:"Petualangan"},{id:16,name:"Animation",id_name:"Animasi"},{id:35,name:"Comedy",id_name:"Komedi"},
+    {id:80,name:"Crime",id_name:"Kejahatan"},{id:99,name:"Documentary",id_name:"Dokumenter"},{id:18,name:"Drama",id_name:"Drama"},{id:10751,name:"Family",id_name:"Keluarga"},
+    {id:14,name:"Fantasy",id_name:"Fantasi"},{id:36,name:"History",id_name:"Sejarah"},{id:27,name:"Horror",id_name:"Horor"},{id:10402,name:"Music",id_name:"Musikal"},
+    {id:9648,name:"Mystery",id_name:"Misteri"},{id:10749,name:"Romance",id_name:"Romansa"},{id:878,name:"Sci-Fi",id_name:"Sci-Fi"},{id:10770,name:"TV Movie",id_name:"TV Movie"},
+    {id:53,name:"Thriller",id_name:"Thriller"},{id:10752,name:"War",id_name:"Perang"},{id:37,name:"Western",id_name:"Barat"}
 ];
 const TV_GENRES = [
-    {id:10759,name:"Action & Adventure"},{id:16,name:"Animation"},{id:35,name:"Comedy"},
-    {id:80,name:"Crime"},{id:99,name:"Documentary"},{id:18,name:"Drama"},{id:10751,name:"Family"},
-    {id:10762,name:"Kids"},{id:9648,name:"Mystery"},{id:10763,name:"News"},{id:10764,name:"Reality"},
-    {id:10765,name:"Sci-Fi & Fantasy"},{id:10766,name:"Soap"},{id:10767,name:"Talk"},
-    {id:10768,name:"War & Politics"},{id:37,name:"Western"}
+    {id:10759,name:"Action & Adventure",id_name:"Aksi & Petualangan"},{id:16,name:"Animation",id_name:"Animasi"},{id:35,name:"Comedy",id_name:"Komedi"},
+    {id:80,name:"Crime",id_name:"Kejahatan"},{id:99,name:"Documentary",id_name:"Dokumenter"},{id:18,name:"Drama",id_name:"Drama"},{id:10751,name:"Family",id_name:"Keluarga"},
+    {id:10762,name:"Kids",id_name:"Anak"},{id:9648,name:"Mystery",id_name:"Misteri"},{id:10763,name:"News",id_name:"Berita"},{id:10764,name:"Reality",id_name:"Reality"},
+    {id:10765,name:"Sci-Fi & Fantasy",id_name:"Sci-Fi & Fantasi"},{id:10766,name:"Soap",id_name:"Soap Opera"},{id:10767,name:"Talk",id_name:"Talk Show"},
+    {id:10768,name:"War & Politics",id_name:"Perang & Politik"},{id:37,name:"Western",id_name:"Barat"}
 ];
+function genreName(g) { return _lang === 'id' ? (g.id_name || g.name) : g.name; }
 
 // NETWORKS (for TV filter)
 const NETWORKS = [
@@ -229,7 +230,6 @@ function createCard(item, type) {
     const isTv = mediaType === 'tv';
     const div = document.createElement('div');
     div.className = 'card';
-    const genreName = item.genre_ids?.[0] ? (type==='movie'?MOVIE_GENRES:TV_GENRES).find(g=>g.id===item.genre_ids[0])?.name : null;
     div.innerHTML = `
         <img class="card-poster" src="${posterUrl(item.poster_path)}" alt="${title}" loading="lazy" decoding="async" onerror="this.src='${NO_POSTER}'">
         <div class="card-badges">
@@ -334,7 +334,7 @@ async function openDetail(id, type = 'movie') {
     const title = displayTitle(detail);
     const date = detail.release_date || detail.first_air_date;
     const runtime = detail.runtime || (detail.episode_run_time?.[0]) || 0;
-    const genres = detail.genres?.map(g => g.name).join(', ') || '';
+    const genres = detail.genres?.map(g => { const gg = (type==='movie'?MOVIE_GENRES:TV_GENRES).find(x=>x.id===g.id); return gg ? genreName(gg) : g.name; }).join(', ') || '';
 
     el('#modalHero').style.backgroundImage = `url(${backdropUrl(detail.backdrop_path)})`;
     el('#modalTitle').textContent = title;
@@ -668,7 +668,7 @@ function renderHeroSlide(idx) {
     const gnames = item.genre_ids?.slice(0,3).map(id => {
         const list = type==='movie' ? MOVIE_GENRES : TV_GENRES;
         const g = list.find(g=>g.id===id);
-        return g ? g.name : null;
+        return g ? genreName(g) : null;
     }).filter(Boolean) || [];
     let genreHtml = gnames.length ? `<div class="hero-genres">${gnames.map(n => `<span class="hero-genre">${n}</span>`).join('')}</div>` : '';
     if (el('#heroMeta')) el('#heroMeta').innerHTML = genreHtml + `<span class="rating-badge">★ ${rating(item.vote_average)}</span><span>${year(item.release_date||item.first_air_date)}</span><span>${type==='movie'?t('nav_movies'):t('nav_tv')}</span>`;
@@ -943,7 +943,7 @@ function initMoviesPage() {
     if (genreSel) {
         genreSel.innerHTML = '<option value="">' + t('all_genre') + '</option>';
         MOVIE_GENRES.forEach(g => {
-            genreSel.innerHTML += `<option value="${g.id}">${g.name}</option>`;
+            genreSel.innerHTML += `<option value="${g.id}">${genreName(g)}</option>`;
         });
         if (urlGenre) { genreSel.value = urlGenre; currentGenreId = urlGenre; }
         genreSel.onchange = () => { currentGenreId = genreSel.value||null; currentPage=1; loadMovies(); updateURL(); };
@@ -1025,7 +1025,7 @@ function initTvPage() {
     if (genreSel) {
         genreSel.innerHTML = '<option value="">' + t('all_genre') + '</option>';
         TV_GENRES.forEach(g => {
-            genreSel.innerHTML += `<option value="${g.id}">${g.name}</option>`;
+            genreSel.innerHTML += `<option value="${g.id}">${genreName(g)}</option>`;
         });
         if (urlGenre) { genreSel.value = urlGenre; currentGenreId = urlGenre; }
         genreSel.onchange = () => { currentGenreId = genreSel.value||null; currentPage=1; loadTvShows(); updateURL(); };
@@ -1072,7 +1072,7 @@ function initGenrePage() {
             const card = document.createElement('div');
             card.className = 'genre-card';
             card.style.background = '';
-            card.innerHTML = `<span class="genre-name">${g.name}</span>`;
+            card.innerHTML = `<span class="genre-name">${genreName(g)}</span>`;
             card.onclick = () => {
                 const base = type === 'tv' ? 'tv.html' : 'movies.html';
                 window.location.href = `${base}?genre=${g.id}`;
@@ -1103,7 +1103,7 @@ function initGenrePage() {
         for (let y = now; y >= 1950; y--) yearSel.innerHTML += `<option value="${y}">${y}</option>`;
         yearSel.onchange = () => {
             currentYear = yearSel.value;
-            if(activeGenre) loadGenreResults(activeType, activeGenre.id, activeGenre.name, 1);
+            if(activeGenre) loadGenreResults(activeType, activeGenre.id, genreName(activeGenre), 1);
             updateURL();
         };
     }
@@ -1112,7 +1112,7 @@ function initGenrePage() {
     if (sortSel) {
         sortSel.onchange = () => {
             currentSort = sortSel.value;
-            if(activeGenre) loadGenreResults(activeType, activeGenre.id, activeGenre.name, 1);
+            if(activeGenre) loadGenreResults(activeType, activeGenre.id, genreName(activeGenre), 1);
             updateURL();
         };
     }
@@ -1132,7 +1132,7 @@ function initGenrePage() {
             activeGenre = g;
             activeType = mediaType;
             currentGenreId = g.id;
-            currentGenreName = g.name;
+            currentGenreName = genreName(g);
             currentSort = urlP.sort;
             currentYear = urlP.year;
             const yearSel = el('#yearFilter');
@@ -1143,7 +1143,7 @@ function initGenrePage() {
             all('.genre-type-btn').forEach(b => b.classList.remove('active'));
             const activeBtn = el(`.genre-type-btn[data-type="${mediaType}"]`);
             if (activeBtn) activeBtn.classList.add('active');
-            loadGenreResults(mediaType, g.id, g.name, urlP.page);
+            loadGenreResults(mediaType, g.id, genreName(g), urlP.page);
         }
     }
 }
@@ -1319,7 +1319,7 @@ function initNavDropdowns() {
     const yearDD = el('#yearDropdown');
     if (genreDD) {
         let html = '<a href="movies.html">' + t('all_genre') + '</a>';
-        MOVIE_GENRES.forEach(g => { html += '<a href="movies.html?genre='+g.id+'">'+g.name+'</a>'; });
+        MOVIE_GENRES.forEach(g => { html += '<a href="movies.html?genre='+g.id+'">'+genreName(g)+'</a>'; });
         genreDD.innerHTML = html;
     }
     if (countryDD) {
@@ -1579,7 +1579,7 @@ async function loadDetailPage(id, type) {
     const title = displayTitle(detail);
     const date = detail.release_date || detail.first_air_date;
     const runtime = detail.runtime || (detail.episode_run_time?.[0]) || 0;
-    const genres = detail.genres?.map(g => g.name).join(', ') || '';
+    const genres = detail.genres?.map(g => { const gg = (type==='movie'?MOVIE_GENRES:TV_GENRES).find(x=>x.id===g.id); return gg ? genreName(gg) : g.name; }).join(', ') || '';
 
     document.title = `${title} - BerMovie`;
 
@@ -1595,7 +1595,7 @@ async function loadDetailPage(id, type) {
         <span>${type === 'movie' ? t('nav_movies') : t('nav_tv')}</span>
         ${detail.number_of_seasons ? `<span>${detail.number_of_seasons} ${t('seasons_title')}</span>` : ''}
         ${detail.runtime ? `<span>${detail.runtime} min</span>` : detail.episode_run_time?.[0] ? `<span>${detail.episode_run_time[0]} min</span>` : ''}
-        ${detail.genres?.map(g => g.name).join(', ')}
+        ${detail.genres?.map(g => { const gg = (type==='movie'?MOVIE_GENRES:TV_GENRES).find(x=>x.id===g.id); return gg ? genreName(gg) : g.name; }).join(', ')}
     `;
     document.getElementById('detailOverview').textContent = detail.overview || t('no_desc');
 
