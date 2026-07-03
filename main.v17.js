@@ -30,6 +30,8 @@ const I18N = {
         all_genre: 'Semua Genre', all_year: 'Semua Tahun', all_country: 'Semua Negara', all_network: 'Semua Network',
         explore_genre: 'Jelajahi Genre', back_btn: '← Kembali',
         genre_movies: 'Film', genre_tv: 'Series',
+        popular_movies: 'Film Populer', popular_tv: 'Series Populer', see_all: 'Lihat Semua →',
+        best_movies: 'Film Terbaik', best_tv: 'Series Terbaik',
         lang_label: 'Bahasa', lang_id: 'Indonesia', lang_en: 'English'
     },
     en: {
@@ -46,6 +48,8 @@ const I18N = {
         all_genre: 'All Genres', all_year: 'All Years', all_country: 'All Countries', all_network: 'All Networks',
         explore_genre: 'Explore Genres', back_btn: '← Back',
         genre_movies: 'Movies', genre_tv: 'TV Shows',
+        popular_movies: 'Popular Movies', popular_tv: 'Popular TV', see_all: 'See All →',
+        best_movies: 'Best Movies', best_tv: 'Best TV',
         lang_label: 'Language', lang_id: 'Indonesian', lang_en: 'English'
     }
 };
@@ -60,7 +64,7 @@ function applyLang() {
     document.documentElement.lang = _lang;
     // Update toggle labels
     const toggleBtns = document.querySelectorAll('#langToggle, #langToggleMobile');
-    toggleBtns.forEach(btn => btn.textContent = _lang === 'id' ? 'EN' : 'ID');
+    toggleBtns.forEach(btn => btn.textContent = _lang === 'id' ? 'ID' : 'EN');
 }
 function toggleLanguage() {
     _lang = _lang === 'id' ? 'en' : 'id';
