@@ -877,7 +877,10 @@ function initHomePage() {
     loadHomeCarousel('/discover/movie?with_origin_country=ID', 'indoMoviesCarousel', 'movie');
     loadHomeCarousel('/discover/tv?with_origin_country=ID', 'indoSeriesCarousel', 'tv');
     // Check for watchlist
-    if (window.location.search.includes('watchlist')) renderWatchlist();
+    if (window.location.search.includes('watchlist')) {
+        renderWatchlist();
+        document.querySelectorAll('.nav-fav').forEach(el => el.classList.add('active'));
+    }
 }
 
 // MOVIES PAGE
