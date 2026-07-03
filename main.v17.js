@@ -1544,8 +1544,7 @@ async function loadDetailPage(id, type) {
         const setActive = () => {
             const active = isInWatchlist(id, type);
             favBtn.classList.toggle('active', active);
-            favBtn.querySelector('.fav-icon').textContent = active ? '♥' : '♡';
-            favBtn.querySelector('.fav-txt').textContent = active ? 'Difavoritkan' : 'Favorit';
+            favBtn.querySelector('.fav-txt').textContent = active ? 'Difavoritkan' : 'Tambah ke Favorit';
         };
         setActive();
         favBtn.onclick = () => {
