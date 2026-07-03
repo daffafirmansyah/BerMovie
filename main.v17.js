@@ -69,7 +69,14 @@ function applyLang() {
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
         const val = t(key);
-        if (el.tagName === 'INPUT') el.placeholder = val; else el.textContent = val;
+        if (el.tagName === 'INPUT') el.placeholder = val;
+        else if (el.classList.contains('nav-dropdown-trigger')) {
+            // Preserve SVG chevron icon — only update text node
+            const svg = el.querySelector('svg');
+            el.textContent = val;
+            if (svg) el.appendChild(svg);
+        }
+        else el.textContent = val;
     });
     document.documentElement.lang = _lang;
     // Update toggle labels
