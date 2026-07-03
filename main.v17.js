@@ -105,7 +105,7 @@ const TV_GENRES = [
     {id:10759,name:"Action & Adventure",id_name:"Aksi & Petualangan"},{id:16,name:"Animation",id_name:"Animasi"},{id:35,name:"Comedy",id_name:"Komedi"},
     {id:80,name:"Crime",id_name:"Kejahatan"},{id:99,name:"Documentary",id_name:"Dokumenter"},{id:18,name:"Drama",id_name:"Drama"},{id:10751,name:"Family",id_name:"Keluarga"},
     {id:10762,name:"Kids",id_name:"Anak"},{id:9648,name:"Mystery",id_name:"Misteri"},{id:10763,name:"News",id_name:"Berita"},{id:10764,name:"Reality",id_name:"Reality"},
-    {id:10764,name:"Reality",id_name:"Reality"},{id:10766,name:"Soap",id_name:"Sinetron"},{id:10767,name:"Talk",id_name:"Talk Show"},
+    {id:10764,name:"Reality",id_name:"Reality"},{id:10765,name:"Sci-Fi & Fantasy",id_name:"Sci-Fi & Fantasi"},{id:10766,name:"Soap",id_name:"Sinetron"},{id:10767,name:"Talk",id_name:"Talk Show"},
     {id:10768,name:"War & Politics",id_name:"Perang & Politik"},{id:37,name:"Western",id_name:"Barat"}
 ];
 function genreName(g) { return _lang === 'id' ? (g.id_name || g.name) : g.name; }
