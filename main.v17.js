@@ -1538,6 +1538,21 @@ async function loadDetailPage(id, type) {
     });
 
     document.getElementById('detailWatchBtn').onclick = () => openPlayer(id, type, title);
+    // Favorite button
+    const favBtn = document.getElementById('detailFavBtn');
+    if (favBtn) {
+        const setActive = () => {
+            const active = isInWatchlist(id, type);
+            favBtn.classList.toggle('active', active);
+            favBtn.querySelector('.fav-icon').textContent = active ? '♥' : '♡';
+            favBtn.querySelector('.fav-txt').textContent = active ? 'Difavoritkan' : 'Favorit';
+        };
+        setActive();
+        favBtn.onclick = () => {
+            toggleWatchlist(detail, type);
+            setActive();
+        };
+    }
     // Pre-create trailer elements so YouTube starts loading immediately
     const trailerWrap = document.createElement('div');
     trailerWrap.id = 'trailerWrap';
