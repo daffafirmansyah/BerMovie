@@ -125,8 +125,8 @@
 
     <div class="lb-page">
         <div class="lb-header">
-            <h1>Peringkat</h1>
-            <p>Film dan series terbaik berdasarkan rating dan popularitas</p>
+            <h1 data-i18n="leaderboard_title">Peringkat</h1>
+            <p data-i18n="leaderboard_desc">Film dan series terbaik berdasarkan rating dan popularitas</p>
         </div>
 
         <div class="lb-tabs" id="lbTabs">
@@ -176,7 +176,7 @@
             <div class="episode-sheet hidden" id="episodeSheet">
                 <div class="ep-sheet-handle"></div>
                 <div class="ep-sheet-header">
-                    <h4>Episode</h4>
+                    <h4 data-i18n="episode_title">Episode</h4>
                     <button class="ep-sheet-close" id="epSheetClose">&times;</button>
                 </div>
                 <select id="seasonSelect" class="ep-season-select"></select>
@@ -188,7 +188,7 @@
 <button class="back-top" id="backTop">&uarr;</button>
 <div class="toast" id="toast"></div>
     <footer class="site-footer">
-        <p>BerMovie — Streaming Film & Series Sub Indo</p>
+        <p data-i18n="footer_tagline">BerMovie — Streaming Film & Series Sub Indo</p>
     </footer>
 
     <script defer src="main.v17.js?v=18"></script>
@@ -234,7 +234,7 @@
                     <img class="lb-poster" src="${posterUrl(item.poster_path)}" alt="" loading="lazy" onerror="this.src='${NO_POSTER}'">
                     <div class="lb-info">
                         <strong>${title}</strong>
-                        <small>${year(date)} · ${type === 'movie' ? 'Film' : 'Series'}</small>
+                        <small>${year(date)} · ${type === 'movie' ? t('nav_movies') : t('nav_tv')}</small>
                     </div>
                     <span class="lb-rating">★ ${rating(item.vote_average)}</span>
                 `;

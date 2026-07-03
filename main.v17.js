@@ -32,6 +32,11 @@ const I18N = {
         genre_movies: 'Film', genre_tv: 'Series',
         popular_movies: 'Film Populer', popular_tv: 'Series Populer', see_all: 'Lihat Semua →',
         best_movies: 'Film Terbaik', best_tv: 'Series Terbaik',
+        filter_all: 'All', filter_movies: 'Movies', filter_tv: 'TV Series',
+        sort_popular: 'Populer',
+        footer_tagline: 'BerMovie — Streaming Film & Series Sub Indo',
+        footer_disclaimer: 'Kami tidak menyimpan file video di server kami. Semua konten disediakan oleh pihak ketiga.',
+        leaderboard_title: 'Peringkat', leaderboard_desc: 'Film dan series terbaik berdasarkan rating dan popularitas',
         lang_label: 'Bahasa', lang_id: 'Indonesia', lang_en: 'English'
     },
     en: {
@@ -50,6 +55,11 @@ const I18N = {
         genre_movies: 'Movies', genre_tv: 'TV Shows',
         popular_movies: 'Popular Movies', popular_tv: 'Popular TV', see_all: 'See All →',
         best_movies: 'Best Movies', best_tv: 'Best TV',
+        filter_all: 'All', filter_movies: 'Movies', filter_tv: 'TV Series',
+        sort_popular: 'Popular',
+        footer_tagline: 'BerMovie — Stream Movies & Series with Subtitles',
+        footer_disclaimer: 'We do not host any video files on our servers. All content is provided by third parties.',
+        leaderboard_title: 'Rankings', leaderboard_desc: 'Best movies and series by rating and popularity',
         lang_label: 'Language', lang_id: 'Indonesian', lang_en: 'English'
     }
 };

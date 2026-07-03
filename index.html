@@ -32,7 +32,7 @@
                 <a href="movies.html" data-nav="movies" data-i18n="nav_movies">Film</a>
                 <a href="tv.html" data-nav="tv" data-i18n="nav_tv">Series</a>
                 <div class="nav-dropdown">
-                    <span class="nav-dropdown-trigger" data-nav="genre">Genre ▾</span>
+                    <span class="nav-dropdown-trigger" data-nav="genre" data-i18n="nav_genre">Genre ▾</span>
                     <div class="dropdown-menu" id="genreDropdown"></div>
                 </div>
                 <div class="nav-dropdown">
@@ -97,9 +97,9 @@
                 <h2 class="section-title" data-i18n="trending">Trending Hari Ini</h2>
             </div>
             <div class="trending-filters">
-                <button class="trending-filter active" data-filter="all">All</button>
-                <button class="trending-filter" data-filter="movie">Movies</button>
-                <button class="trending-filter" data-filter="tv">TV Series</button>
+                <button class="trending-filter active" data-filter="all" data-i18n="filter_all">All</button>
+                <button class="trending-filter" data-filter="movie" data-i18n="filter_movies">Movies</button>
+                <button class="trending-filter" data-filter="tv" data-i18n="filter_tv">TV Series</button>
             </div>
             <div class="trending-list" id="trendingList"></div>
         </section>
@@ -192,11 +192,11 @@
                     <button class="btn-secondary trailer-btn" id="modalTrailerBtn"><span class="t-il"></span><span class="t-txt">Trailer</span><span class="t-ir"></span></button>
                 </div>
                 <div class="seasons-section hidden" id="seasonsSection">
-                    <h3>Seasons</h3>
+                    <h3 data-i18n="seasons_title">Seasons</h3>
                     <div class="seasons-list" id="seasonsList"></div>
                 </div>
                 <div class="similar-section">
-                    <h3>Rekomendasi</h3>
+                    <h3 data-i18n="recommend_title">Rekomendasi</h3>
                     <div class="carousel" id="similarCarousel"></div>
                 </div>
             </div>
@@ -233,7 +233,7 @@
             <div class="episode-sheet hidden" id="episodeSheet">
                 <div class="ep-sheet-handle"></div>
                 <div class="ep-sheet-header">
-                    <h4>Episode</h4>
+                    <h4 data-i18n="episode_title">Episode</h4>
                     <button class="ep-sheet-close" id="epSheetClose">&times;</button>
                 </div>
                 <select id="seasonSelect" class="ep-season-select"></select>
@@ -246,8 +246,8 @@
 <button class="back-top" id="backTop">&uarr;</button>
 <div class="toast" id="toast"></div>
     <footer class="site-footer">
-        <p>BerMovie — Streaming Film & Series Sub Indo</p>
-        <p class="disclaimer">Kami tidak menyimpan file video di server kami. Semua konten disediakan oleh pihak ketiga.</p>
+        <p data-i18n="footer_tagline">BerMovie — Streaming Film & Series Sub Indo</p>
+        <p class="disclaimer" data-i18n="footer_disclaimer">Kami tidak menyimpan file video di server kami. Semua konten disediakan oleh pihak ketiga.</p>
     </footer>
 
     <script defer src="main.v17.js?v=18"></script>
