@@ -1371,7 +1371,11 @@ function initGenrePills() {
     const pills = el('#genrePills');
     if (!pills) return;
     const genres = ['Action','Comedy','Drama','Horror','Sci-Fi','Romance','Crime','Thriller','Animation','Documentary'];
-    pills.innerHTML = genres.map(g => `<span class="pill" data-genre="${g}">${g}</span>`).join('');
+    pills.innerHTML = genres.map(g => {
+        const mg = MOVIE_GENRES.find(x => x.name === g);
+        const label = mg ? genreName(mg) : g;
+        return `<span class="pill" data-genre="${g}">${label}</span>`;
+    }).join('');
     pills.querySelectorAll('.pill').forEach(p => {
         p.onclick = () => { window.location.href = `movies.html?genre=${MOVIE_GENRES.find(x=>x.name===p.dataset.genre)?.id||''}`; };
     });
