@@ -17,27 +17,27 @@ const APIPLAYER = 'https://apiplayer.ru/embed';
 // i18n
 const I18N = {
     id: {
-        nav_home: 'Home', nav_movies: 'Film', nav_tv: 'Series', nav_genre: 'Genre', nav_country: 'Country', nav_tahun: 'Tahun', nav_favorit: 'Favorit', nav_leaderboard: 'Peringkat',
-        search: 'Cari film atau series...', search_movies: 'Cari film...', search_tv: 'Cari series...', search_btn: 'Cari',
-        trending: 'Trending Hari Ini', top_rated: 'Rating Tertinggi', now_playing: 'Sedang Tayang', indo_movies: 'Film Indonesia', indo_series: 'Series Indonesia',
-        watch_btn: 'Tonton', watch_now: 'Tonton Sekarang', trailer_btn: 'Trailer', close_trailer: 'Tutup Trailer', fav_add: 'Tambah ke Favorit', fav_active: 'Difavoritkan',
-        cast_title: 'Pemain', seasons_title: 'Seasons', recommend_title: 'Rekomendasi', episode_title: 'Episode',
-        loading: 'Memuat...', load_fail: 'Gagal memuat detail. Coba lagi.', no_desc: 'No description available.', id_not_found: 'ID tidak ditemukan',
-        trailer_unavailable: 'Trailer tidak tersedia', subtitle_unavailable: 'Subtitle belum tersedia.',
+        nav_home: 'Home', nav_movies: 'Film', nav_tv: 'Serial', nav_genre: 'Genre', nav_country: 'Negara', nav_tahun: 'Tahun', nav_favorit: 'Favorit', nav_leaderboard: 'Peringkat',
+        search: 'Cari film atau serial...', search_movies: 'Cari film...', search_tv: 'Cari serial...', search_btn: 'Cari',
+        trending: 'Trending Hari Ini', top_rated: 'Rating Tertinggi', now_playing: 'Tayang Sekarang', indo_movies: 'Film Indonesia', indo_series: 'Serial Indonesia',
+        watch_btn: 'Tonton', watch_now: 'Tonton Sekarang', trailer_btn: 'Trailer', close_trailer: 'Tutup Trailer', fav_add: 'Tambah ke Favorit', fav_active: 'Favorit',
+        cast_title: 'Pemain', seasons_title: 'Musim', recommend_title: 'Rekomendasi', episode_title: 'Episode',
+        loading: 'Memuat...', load_fail: 'Gagal memuat detail. Coba lagi.', no_desc: 'Tidak ada deskripsi tersedia.', id_not_found: 'ID tidak ditemukan',
+        trailer_unavailable: 'Trailer tidak tersedia', subtitle_unavailable: 'Subtitel belum tersedia.',
         removed_fav: 'Dihapus dari favorit', added_fav: 'Ditambahkan ke favorit',
         watchlist_title: 'Favorit', watchlist_empty: 'Belum ada film favorit',
         search_result: 'Hasil Pencarian', no_result: 'Film tidak ditemukan untuk', sort_rating: 'Rating Tertinggi',
-        all_genre: 'Semua Genre', all_year: 'Semua Tahun', all_country: 'Semua Negara', all_network: 'Semua Network',
+        all_genre: 'Semua Genre', all_year: 'Semua Tahun', all_country: 'Semua Negara', all_network: 'Semua Jaringan',
         explore_genre: 'Jelajahi Genre', back_btn: '← Kembali',
-        genre_movies: 'Film', genre_tv: 'Series',
-        popular_movies: 'Film Populer', popular_tv: 'Series Populer', see_all: 'Lihat Semua →',
-        best_movies: 'Film Terbaik', best_tv: 'Series Terbaik',
-        filter_all: 'Semua', filter_movies: 'Film', filter_tv: 'Series',
+        genre_movies: 'Film', genre_tv: 'Serial',
+        popular_movies: 'Film Populer', popular_tv: 'Serial Populer', see_all: 'Lihat Semua →',
+        best_movies: 'Film Terbaik', best_tv: 'Serial Terbaik',
+        filter_all: 'Semua', filter_movies: 'Film', filter_tv: 'Serial',
         sort_popular: 'Populer',
-        footer_tagline: 'BerMovie — Streaming Film & Series Sub Indo',
+        footer_tagline: 'BerMovie — Streaming Film & Serial Sub Indo',
         footer_disclaimer: 'Kami tidak menyimpan file video di server kami. Semua konten disediakan oleh pihak ketiga.',
-        leaderboard_title: 'Peringkat', leaderboard_desc: 'Film dan series terbaik berdasarkan rating dan popularitas',
-        lang_label: 'Bahasa', lang_id: 'Indonesia', lang_en: 'English'
+        leaderboard_title: 'Peringkat', leaderboard_desc: 'Film dan serial terbaik berdasarkan rating dan popularitas',
+        lang_label: 'Bahasa', lang_id: 'Indonesia', lang_en: 'Inggris'
     },
     en: {
         nav_home: 'Home', nav_movies: 'Movies', nav_tv: 'TV Shows', nav_genre: 'Genre', nav_country: 'Country', nav_tahun: 'Year', nav_favorit: 'Favorites', nav_leaderboard: 'Rankings',
@@ -98,14 +98,14 @@ const MOVIE_GENRES = [
     {id:28,name:"Action",id_name:"Aksi"},{id:12,name:"Adventure",id_name:"Petualangan"},{id:16,name:"Animation",id_name:"Animasi"},{id:35,name:"Comedy",id_name:"Komedi"},
     {id:80,name:"Crime",id_name:"Kejahatan"},{id:99,name:"Documentary",id_name:"Dokumenter"},{id:18,name:"Drama",id_name:"Drama"},{id:10751,name:"Family",id_name:"Keluarga"},
     {id:14,name:"Fantasy",id_name:"Fantasi"},{id:36,name:"History",id_name:"Sejarah"},{id:27,name:"Horror",id_name:"Horor"},{id:10402,name:"Music",id_name:"Musikal"},
-    {id:9648,name:"Mystery",id_name:"Misteri"},{id:10749,name:"Romance",id_name:"Romansa"},{id:878,name:"Sci-Fi",id_name:"Sci-Fi"},{id:10770,name:"TV Movie",id_name:"TV Movie"},
+    {id:9648,name:"Mystery",id_name:"Misteri"},{id:10749,name:"Romance",id_name:"Romansa"},{id:878,name:"Sci-Fi",id_name:"Sci-Fi"},{id:10770,name:"TV Movie",id_name:"Film TV"},
     {id:53,name:"Thriller",id_name:"Thriller"},{id:10752,name:"War",id_name:"Perang"},{id:37,name:"Western",id_name:"Barat"}
 ];
 const TV_GENRES = [
     {id:10759,name:"Action & Adventure",id_name:"Aksi & Petualangan"},{id:16,name:"Animation",id_name:"Animasi"},{id:35,name:"Comedy",id_name:"Komedi"},
     {id:80,name:"Crime",id_name:"Kejahatan"},{id:99,name:"Documentary",id_name:"Dokumenter"},{id:18,name:"Drama",id_name:"Drama"},{id:10751,name:"Family",id_name:"Keluarga"},
     {id:10762,name:"Kids",id_name:"Anak"},{id:9648,name:"Mystery",id_name:"Misteri"},{id:10763,name:"News",id_name:"Berita"},{id:10764,name:"Reality",id_name:"Reality"},
-    {id:10765,name:"Sci-Fi & Fantasy",id_name:"Sci-Fi & Fantasi"},{id:10766,name:"Soap",id_name:"Soap Opera"},{id:10767,name:"Talk",id_name:"Talk Show"},
+    {id:10764,name:"Reality",id_name:"Reality"},{id:10766,name:"Soap",id_name:"Sinetron"},{id:10767,name:"Talk",id_name:"Talk Show"},
     {id:10768,name:"War & Politics",id_name:"Perang & Politik"},{id:37,name:"Western",id_name:"Barat"}
 ];
 function genreName(g) { return _lang === 'id' ? (g.id_name || g.name) : g.name; }
