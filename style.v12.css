@@ -183,7 +183,7 @@ input{font-family:inherit;outline:none}
 .detail-actions .btn-secondary{padding:14px 30px;font-size:1rem;background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.1);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:space-between;gap:0}.trailer-btn .t-il,.trailer-btn .t-ir{width:20px;text-align:center;font-size:.85rem;opacity:1;transition:opacity .2s}.trailer-btn .t-il{opacity:0}.trailer-btn .t-txt{flex:1;text-align:center;white-space:nowrap}
 
 .detail-actions .btn-secondary:hover{background:rgba(249,115,22,.15);border-color:var(--accent);color:var(--accent);box-shadow:0 0 24px rgba(249,115,22,.15)}
-.detail-actions .fav-btn{display:inline-flex;align-items:center;gap:8px}
+.detail-actions .fav-btn{display:inline-flex;align-items:center;gap:14px}
 .detail-actions .fav-btn .fav-icon{font-size:1.1rem;line-height:1}
 .detail-actions .fav-btn.active{background:rgba(239,68,68,.15);border-color:rgba(239,68,68,.4);color:#ef4444}
 .detail-actions .fav-btn.active:hover{background:rgba(239,68,68,.2);border-color:#ef4444;color:#ef4444;box-shadow:0 0 24px rgba(239,68,68,.2)}
