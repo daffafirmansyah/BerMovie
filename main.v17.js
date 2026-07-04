@@ -2057,3 +2057,26 @@ function skipForward90() {
         iframe.contentWindow.postMessage(JSON.stringify({event:'command',func:'seekTo',args:[90,true]}),'*');
     } catch(e) {}
 }
+
+// Inline player fullscreen (detail page)
+function toggleInlineFullscreen() {
+    const iframe = document.getElementById('inlinePlayerFrame');
+    if (!iframe || !iframe.src) return;
+    try {
+        if (iframe.requestFullscreen) {
+            iframe.requestFullscreen();
+        } else if (iframe.webkitRequestFullscreen) {
+            iframe.webkitRequestFullscreen();
+        } else {
+            throw new Error('no fs');
+        }
+    } catch(e) {
+        // Telegram WebView: open in external browser
+        const tg = window.Telegram?.WebApp;
+        if (tg && tg.openLink) {
+            tg.openLink(iframe.src);
+        } else {
+            window.open(iframe.src, '_blank');
+        }
+    }
+}
