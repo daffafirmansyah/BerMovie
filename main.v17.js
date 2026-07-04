@@ -609,11 +609,14 @@ el('#playerCloseBtn') && (el('#playerCloseBtn').onclick = closeAllModals);
 // Fullscreen button
 el('#playerFsBtn') && (el('#playerFsBtn').onclick = () => {
     const iframe = el('#playerFrame');
+    const container = el('.iframe-container');
     if (!iframe) return;
-    if (document.fullscreenElement) {
-        document.exitFullscreen?.();
+    if (document.fullscreenElement || document.webkitFullscreenElement) {
+        (document.exitFullscreen || document.webkitExitFullscreen).call(document);
     } else {
-        iframe.requestFullscreen?.() || iframe.webkitRequestFullscreen?.();
+        // Try iframe first, then container, then webkit fallback
+        const fs = iframe.requestFullscreen?.() || iframe.webkitRequestFullscreen?.() 
+                   || container?.requestFullscreen?.() || container?.webkitRequestFullscreen?.();
     }
 });
 
