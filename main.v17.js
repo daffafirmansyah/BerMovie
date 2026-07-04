@@ -1682,7 +1682,15 @@ async function loadDetailPage(id, type) {
     // Telegram Mini App: use native BackButton
     if (isTgMiniApp && tg.BackButton) {
         tg.BackButton.show();
-        tg.BackButton.onClick(() => { location.href = goBack; });
+        tg.BackButton.onClick(() => {
+            // If player is open, close it first
+            const playerModal = document.getElementById('playerModal');
+            if (playerModal && !playerModal.classList.contains('hidden')) {
+                closeAllModals();
+                return;
+            }
+            location.href = goBack;
+        });
     }
     // Always set up custom back button as fallback
     if (backBtn && !backBtn._hasHandler) {
@@ -1690,6 +1698,12 @@ async function loadDetailPage(id, type) {
         backBtn.onclick = function(e) {
             e.preventDefault();
             e.stopPropagation();
+            // If player is open, close it first
+            const playerModal = document.getElementById('playerModal');
+            if (playerModal && !playerModal.classList.contains('hidden')) {
+                closeAllModals();
+                return;
+            }
             location.href = goBack;
         };
     }
