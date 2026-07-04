@@ -1801,6 +1801,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const id = params.get('id');
         const type = params.get('type') || 'movie';
         if (id) loadDetailPage(parseInt(id), type);
+        // Back button - use addEventListener for reliable click detection
+        const backBtn = document.getElementById('detailBackBtn');
+        if (backBtn) {
+            backBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (document.referrer && document.referrer.indexOf(location.origin) === 0) {
+                    history.back();
+                } else {
+                    location.href = './';
+                }
+            });
+        }
     } else if (path.includes('movies.html')) {
         if (window._moviesInit) return; window._moviesInit = 1;
         initMoviesPage();
