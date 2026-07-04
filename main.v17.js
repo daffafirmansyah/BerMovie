@@ -19,7 +19,7 @@ const I18N = {
     id: {
         nav_home: 'Home', nav_movies: 'Film', nav_tv: 'Serial', nav_genre: 'Genre', nav_country: 'Negara', nav_tahun: 'Tahun', nav_favorit: 'Favorit', nav_leaderboard: 'Peringkat',
         search: 'Cari film atau serial...', search_movies: 'Cari film...', search_tv: 'Cari serial...', search_btn: 'Cari',
-        trending: 'Trending Hari Ini', top_rated: 'Rating Tertinggi', now_playing: 'Tayang Sekarang', indo_movies: 'Film Indonesia', indo_series: 'Serial Indonesia',
+        trending: 'Trending Hari Ini', top_rated: 'Rating Tertinggi', now_playing: 'Tayang Sekarang', indo_movies: 'Film Indonesia', indo_series: 'Serial Indonesia', drakor: 'Drakor',
         watch_btn: 'Tonton', watch_now: 'Tonton Sekarang', trailer_btn: 'Trailer', close_trailer: 'Tutup Trailer', fav_add: 'Tambah ke Favorit', fav_active: 'Favorit',
         cast_title: 'Pemain', seasons_title: 'Musim', recommend_title: 'Rekomendasi', episode_title: 'Episode',
         loading: 'Memuat...', load_fail: 'Gagal memuat detail. Coba lagi.', no_desc: 'Tidak ada deskripsi tersedia.', id_not_found: 'ID tidak ditemukan',
@@ -42,7 +42,7 @@ const I18N = {
     en: {
         nav_home: 'Home', nav_movies: 'Movies', nav_tv: 'TV Shows', nav_genre: 'Genre', nav_country: 'Country', nav_tahun: 'Year', nav_favorit: 'Favorites', nav_leaderboard: 'Rankings',
         search: 'Search movies or series...', search_movies: 'Search movies...', search_tv: 'Search series...', search_btn: 'Search',
-        trending: 'Trending Today', top_rated: 'Top Rated', now_playing: 'Now Playing', indo_movies: 'Indonesian Movies', indo_series: 'Indonesian Series',
+        trending: 'Trending Today', top_rated: 'Top Rated', now_playing: 'Now Playing', indo_movies: 'Indonesian Movies', indo_series: 'Indonesian Series', drakor: 'K-Drama',
         watch_btn: 'Watch', watch_now: 'Watch Now', trailer_btn: 'Trailer', close_trailer: 'Close Trailer', fav_add: 'Add to Favorites', fav_active: 'Favorited',
         cast_title: 'Cast', seasons_title: 'Seasons', recommend_title: 'Recommended', episode_title: 'Episodes',
         loading: 'Loading...', load_fail: 'Failed to load details. Try again.', no_desc: 'No description available.', id_not_found: 'ID not found',
@@ -874,6 +874,7 @@ function initHomePage() {
     showSkeleton(el('#nowPlayingCarousel'), 10);
     showSkeleton(el('#indoMoviesCarousel'), 10);
     showSkeleton(el('#indoSeriesCarousel'), 10);
+    showSkeleton(el('#drakorCarousel'), 10);
     loadHero();
     loadTrending('all');
     loadHomeCarousel('/movie/popular', 'moviesCarousel', 'movie');
@@ -883,6 +884,8 @@ function initHomePage() {
     // Indonesian content
     loadHomeCarousel('/discover/movie?with_origin_country=ID', 'indoMoviesCarousel', 'movie');
     loadHomeCarousel('/discover/tv?with_origin_country=ID', 'indoSeriesCarousel', 'tv');
+    // Korean Drama (Drakor)
+    loadHomeCarousel('/discover/tv?with_origin_country=KR&sort_by=popularity.desc', 'drakorCarousel', 'tv');
     // Check for watchlist
     if (window.location.search.includes('watchlist')) {
         renderWatchlist();
