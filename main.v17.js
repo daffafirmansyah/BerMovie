@@ -1578,6 +1578,19 @@ async function loadDetailPage(id, type) {
     const page = document.getElementById('detailPage');
     if (!page) return;
 
+    // Back button handler - set here so it works regardless of init path
+    const backBtn = document.getElementById('detailBackBtn');
+    if (backBtn && !backBtn._hasHandler) {
+        backBtn._hasHandler = true;
+        backBtn.onclick = function() {
+            if (document.referrer && document.referrer.indexOf(location.origin) === 0) {
+                history.back();
+            } else {
+                location.href = './';
+            }
+        };
+    }
+
     const [detail, credits, similar, videosData] = await Promise.all([
         tmdb(`/${type}/${id}`),
         tmdb(`/${type}/${id}/credits`),
@@ -1801,17 +1814,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const id = params.get('id');
         const type = params.get('type') || 'movie';
         if (id) loadDetailPage(parseInt(id), type);
-        // Back button handler - in JS to avoid HTML cache issues
-        const backBtn = document.getElementById('detailBackBtn');
-        if (backBtn) {
-            backBtn.onclick = function() {
-                if (document.referrer && document.referrer.indexOf(location.origin) === 0) {
-                    history.back();
-                } else {
-                    location.href = './';
-                }
-            };
-        }
     } else if (path.includes('movies.html')) {
         if (window._moviesInit) return; window._moviesInit = 1;
         initMoviesPage();
