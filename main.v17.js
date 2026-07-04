@@ -624,8 +624,13 @@ el('#playerFsBtn') && (el('#playerFsBtn').onclick = () => {
             throw new Error('no fullscreen api');
         }
     } catch(e) {
-        // Fallback: open video in external browser (Telegram WebView blocks fullscreen)
-        window.open(iframe.src, '_blank');
+        // Fallback: Telegram Mini App → openLink (external browser)
+        // Normal browser → window.open
+        if (tg && tg.openLink) {
+            tg.openLink(iframe.src);
+        } else {
+            window.open(iframe.src, '_blank');
+        }
     }
 });
 
