@@ -1801,6 +1801,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const id = params.get('id');
         const type = params.get('type') || 'movie';
         if (id) loadDetailPage(parseInt(id), type);
+        // Back button handler - in JS to avoid HTML cache issues
+        const backBtn = document.getElementById('detailBackBtn');
+        if (backBtn) {
+            backBtn.onclick = function() {
+                if (document.referrer && document.referrer.indexOf(location.origin) === 0) {
+                    history.back();
+                } else {
+                    location.href = './';
+                }
+            };
+        }
     } else if (path.includes('movies.html')) {
         if (window._moviesInit) return; window._moviesInit = 1;
         initMoviesPage();
