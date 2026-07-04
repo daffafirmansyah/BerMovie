@@ -844,15 +844,20 @@ function addCarouselArrows(carousel) {
     if (carousel.dataset.arrows) return;
     carousel.dataset.arrows = '1';
     
-    // Mouse drag scrolling (IDLIX-style)
-    let isDown = false, hasDragged = false, startX, scrollLeft;
+    // Mouse drag scrolling with momentum (IDLIX-style)
+    let isDown = false, hasDragged = false, startX, scrollLeft, lastX, lastTime, velX = 0;
+    let rafId = null;
     
     carousel.addEventListener('mousedown', (e) => {
-        if (e.button !== 0) return; // left click only
+        if (e.button !== 0) return;
         isDown = true;
         hasDragged = false;
-        startX = e.pageX;
+        startX = lastX = e.pageX;
         scrollLeft = carousel.scrollLeft;
+        lastTime = Date.now();
+        velX = 0;
+        if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+        carousel.style.scrollBehavior = 'auto';
         carousel.style.cursor = 'grabbing';
     });
     
@@ -860,9 +865,21 @@ function addCarouselArrows(carousel) {
         if (!isDown) return;
         isDown = false;
         carousel.style.cursor = 'grab';
-        // Prevent click on cards if we dragged
+        // Apply momentum
+        if (hasDragged && Math.abs(velX) > 0.5) {
+            let vel = velX;
+            const decel = 0.95;
+            const step = () => {
+                vel *= decel;
+                carousel.scrollLeft -= vel;
+                if (Math.abs(vel) > 0.5) {
+                    rafId = requestAnimationFrame(step);
+                }
+            };
+            rafId = requestAnimationFrame(step);
+        }
         if (hasDragged) {
-            setTimeout(() => { hasDragged = false; }, 50);
+            setTimeout(() => { hasDragged = false; }, 100);
         }
     });
     
@@ -871,8 +888,16 @@ function addCarouselArrows(carousel) {
         e.preventDefault();
         const x = e.pageX;
         const walk = x - startX;
-        if (Math.abs(walk) > 5) hasDragged = true;
+        if (Math.abs(walk) > 3) hasDragged = true;
         carousel.scrollLeft = scrollLeft - walk;
+        // Track velocity
+        const now = Date.now();
+        const dt = now - lastTime;
+        if (dt > 0) {
+            velX = (x - lastX) / dt * 16; // normalize to ~60fps
+        }
+        lastX = x;
+        lastTime = now;
     });
     
     // Prevent card clicks when dragging
@@ -883,7 +908,6 @@ function addCarouselArrows(carousel) {
         }
     }, true);
     
-    // Prevent native drag on images/links
     carousel.addEventListener('dragstart', (e) => e.preventDefault());
     
     carousel.style.cursor = 'grab';
