@@ -844,10 +844,31 @@ function addCarouselArrows(carousel) {
     if (carousel.dataset.arrows) return;
     carousel.dataset.arrows = '1';
     
-    // Disable native drag-to-scroll on click, but keep wheel + buttons
-    carousel.addEventListener('mousedown', () => { carousel.style.overflowX = 'hidden'; });
-    carousel.addEventListener('mouseup', () => { carousel.style.overflowX = 'auto'; });
-    carousel.addEventListener('mouseleave', () => { carousel.style.overflowX = 'auto'; });
+    // Mouse drag scrolling
+    let isDown = false, startX, scrollLeft;
+    carousel.addEventListener('mousedown', (e) => {
+        isDown = true;
+        startX = e.pageX - carousel.offsetLeft;
+        scrollLeft = carousel.scrollLeft;
+        carousel.style.cursor = 'grabbing';
+        carousel.style.userSelect = 'none';
+    });
+    carousel.addEventListener('mouseleave', () => {
+        isDown = false;
+        carousel.style.cursor = 'grab';
+    });
+    carousel.addEventListener('mouseup', () => {
+        isDown = false;
+        carousel.style.cursor = 'grab';
+    });
+    carousel.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - carousel.offsetLeft;
+        const walk = (x - startX) * 1.5;
+        carousel.scrollLeft = scrollLeft - walk;
+    });
+    carousel.style.cursor = 'grab';
     
     const wrap = carousel.parentElement;
     if (!wrap || wrap.classList.contains('carousel-wrap')) return;
