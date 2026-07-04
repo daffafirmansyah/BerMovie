@@ -120,7 +120,7 @@ input{font-family:inherit;outline:none}
 .carousel{display:flex;gap:14px;overflow-x:auto;padding:4px 0 16px}
 .carousel::-webkit-scrollbar{height:2px}
 .carousel::-webkit-scrollbar-thumb{background:rgba(255,255,255,.06);border-radius:3px}
-.card{flex:0 0 165px;border-radius:var(--radius-lg);overflow:hidden;background:var(--bg2);cursor:pointer;position:relative;border:1px solid var(--border);transition:var(--transition)}
+.card{flex:0 0 165px;border-radius:var(--radius-lg);overflow:hidden;background:var(--bg2);cursor:pointer;position:relative;border:1px solid var(--border);transition:var(--transition);text-decoration:none;color:inherit;display:block}
 @media(min-width:640px){.card{flex:0 0 175px}}
 @media(min-width:1024px){.card{flex:0 0 190px}}
 .card:hover{transform:translateY(-8px) scale(1.03);border-color:var(--accent);box-shadow:0 0 30px rgba(249,115,22,.15),0 12px 48px rgba(249,115,22,.12)}
@@ -310,7 +310,7 @@ to{transform:translateY(0)}}
 .trending-filter.active{background:var(--accent);color:#fff;border-color:transparent}
 .trending-filter:hover{background:var(--bg3)}
 .trending-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;max-width:var(--max-w);margin:0 auto;padding:0 24px}
-.trending-card{position:relative;border-radius:var(--radius-lg);overflow:hidden;cursor:pointer;aspect-ratio:2/3;background:var(--bg2);border:1px solid var(--border);transition:var(--transition)}
+.trending-card{position:relative;border-radius:var(--radius-lg);overflow:hidden;cursor:pointer;aspect-ratio:2/3;background:var(--bg2);border:1px solid var(--border);transition:var(--transition);text-decoration:none;color:inherit;display:block}
 .trending-card:hover{transform:translateY(-4px);border-color:rgba(249,115,22,.3)}
 .trending-card img{width:100%;height:100%;object-fit:cover}
 .trending-rank{position:absolute;top:6px;left:6px;width:32px;height:32px;border-radius:50%;background:var(--accent);color:#fff;font-size:.9rem;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.4);z-index:2}

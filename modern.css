@@ -9,6 +9,9 @@
   border: 1px solid rgba(255,255,255,.04);
   border-radius: 18px;
   overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  display: block;
 }
 .card:hover {
   box-shadow: 0 0 60px rgba(249,115,22,.15), 0 30px 80px rgba(0,0,0,.6);

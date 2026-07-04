@@ -235,8 +235,9 @@ function createCard(item, type) {
     const title = displayTitle(item);
     const date = item.release_date || item.first_air_date;
     const isTv = mediaType === 'tv';
-    const div = document.createElement('div');
+    const div = document.createElement('a');
     div.className = 'card';
+    div.href = `detail.html?id=${item.id}&type=${mediaType}`;
     div.innerHTML = `
         <img class="card-poster" src="${posterUrl(item.poster_path)}" alt="${title}" loading="lazy" decoding="async" onerror="this.src='${NO_POSTER}'">
         <div class="card-badges">
@@ -251,7 +252,7 @@ function createCard(item, type) {
             </div>
         </div>
     `;
-    div.onclick = () => { window.location.href = `detail.html?id=${item.id}&type=${mediaType}`; };
+
     // Watchlist heart
     const heart = document.createElement('div');
     heart.className = 'card-heart' + (isInWatchlist(item.id, mediaType) ? ' active' : '');
@@ -806,10 +807,11 @@ async function loadTrending(filter) {
         const y = d ? d.substring(0,4) : '';
         const rate = rating(item.vote_average);
         const mt = item.media_type||'movie';
-        const card = document.createElement('div');
+        const card = document.createElement('a');
         card.className = 'trending-card';
+        card.href = 'detail.html?id='+item.id+'&type='+mt;
         card.innerHTML = '<span class="trending-rank">'+(i+1)+'</span><img src="'+posterUrl(item.poster_path)+'" alt="'+t+'" loading="lazy"><div class="trending-info"><div class="title">'+t+'</div><div class="meta">'+y+' ~ '+rate+'</div></div>';
-        card.onclick = () => { window.location.href = 'detail.html?id='+item.id+'&type='+mt; };
+
         list.appendChild(card);
     });
     // Update filter buttons
@@ -1288,12 +1290,13 @@ function renderWatchlist() {
     grid.innerHTML = '';
     list.forEach(item => {
         // Create card from saved data (use TMDB image URL)
-        const div = document.createElement('div');
+        const div = document.createElement('a');
         div.className = 'card';
+        div.href = `detail.html?id=${item.id}&type=${item.type}`;
         div.innerHTML = `<img class="card-poster" src="https://image.tmdb.org/t/p/w500${item.poster}" alt="${item.title}" loading="lazy" onerror="this.src='${NO_POSTER}'">
             <div class="card-info"><div class="card-title">${item.title}</div><div class="card-meta"><span>${item.year}</span><span class="card-rating">★ ${rating(item.rating)}</span></div></div>
         `;
-        div.onclick = () => { window.location.href = `detail.html?id=${item.id}&type=${item.type}`; };
+
         // Heart to remove
         const heart = document.createElement('div');
         heart.className = 'card-heart active';
