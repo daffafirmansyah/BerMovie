@@ -621,9 +621,9 @@ el('#playerFsBtn') && (el('#playerFsBtn').onclick = () => {
 });
 
 // Mobile touch: tap iframe area to toggle controls
-document.addEventListener('DOMContentLoaded', () => {
+(function initPlayerTouch() {
     const container = el('.iframe-container');
-    if (!container) return;
+    if (!container) { setTimeout(initPlayerTouch, 500); return; }
     container.addEventListener('click', (e) => {
         // Don't toggle if tapping server buttons
         if (e.target.closest('.player-servers') || e.target.closest('.svr-btn')) return;
@@ -643,7 +643,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 4000);
         }
     });
-});
+})();
 
 // Episode sheet toggle
 el('#playerEpsBtn') && (el('#playerEpsBtn').onclick = () => {
