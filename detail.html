@@ -12,7 +12,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎬</text></svg>">
-    <link rel="stylesheet" href="style.v12.css?v=30">
+    <link rel="stylesheet" href="style.v12.css?v=31">
 <link rel="stylesheet" href="modern.css?v=15">
 <style>
 
@@ -155,9 +155,12 @@
                 <div class="server-indicator">Server: <span id="serverName">Vesy</span></div>
                 <div class="inline-player-wrap">
                     <iframe id="inlinePlayerFrame" src="" frameborder="0" allowfullscreen></iframe>
-                    <button class="inline-fs-btn" id="inlineFsBtn" onclick="toggleInlineFullscreen()">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
-                    </button>
+                    <div class="player-overlay-bar">
+                        <button class="overlay-back-btn" onclick="document.getElementById('inlinePlayerFrame').src=''">← Ganti Server</button>
+                        <button class="overlay-fs-btn" onclick="toggleInlineFullscreen()">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -225,7 +228,7 @@
         </div>
     </div>
 
-    <script defer src="main.v17.js?v=36"></script>
+    <script defer src="main.v17.js?v=37"></script>
     <script>
         // Parse URL params
         const urlParams = new URLSearchParams(window.location.search);
