@@ -606,6 +606,42 @@ document.addEventListener('mousemove', () => {
 el('#playerBackBtn') && (el('#playerBackBtn').onclick = closeAllModals);
 el('#playerCloseBtn') && (el('#playerCloseBtn').onclick = closeAllModals);
 
+// Fullscreen button
+el('#playerFsBtn') && (el('#playerFsBtn').onclick = () => {
+    const iframe = el('#playerFrame');
+    if (!iframe) return;
+    if (document.fullscreenElement) {
+        document.exitFullscreen?.();
+    } else {
+        iframe.requestFullscreen?.() || iframe.webkitRequestFullscreen?.();
+    }
+});
+
+// Mobile touch: tap iframe area to toggle controls
+document.addEventListener('DOMContentLoaded', () => {
+    const container = el('.iframe-container');
+    if (!container) return;
+    container.addEventListener('click', (e) => {
+        // Don't toggle if tapping server buttons
+        if (e.target.closest('.player-servers') || e.target.closest('.svr-btn')) return;
+        const top = el('.player-top');
+        const ctrl = el('.player-controls');
+        const isShowing = ctrl?.classList.contains('show');
+        if (isShowing) {
+            if(top) top.classList.remove('show');
+            if(ctrl) ctrl.classList.remove('show');
+        } else {
+            if(top) top.classList.add('show');
+            if(ctrl) ctrl.classList.add('show');
+            clearTimeout(window._playerHideTimer);
+            window._playerHideTimer = setTimeout(() => {
+                if(top) top.classList.remove('show');
+                if(ctrl) ctrl.classList.remove('show');
+            }, 4000);
+        }
+    });
+});
+
 // Episode sheet toggle
 el('#playerEpsBtn') && (el('#playerEpsBtn').onclick = () => {
     const sheet = el('#episodeSheet');
