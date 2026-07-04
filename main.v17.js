@@ -844,30 +844,48 @@ function addCarouselArrows(carousel) {
     if (carousel.dataset.arrows) return;
     carousel.dataset.arrows = '1';
     
-    // Mouse drag scrolling
-    let isDown = false, startX, scrollLeft;
+    // Mouse drag scrolling (IDLIX-style)
+    let isDown = false, hasDragged = false, startX, scrollLeft;
+    
     carousel.addEventListener('mousedown', (e) => {
+        if (e.button !== 0) return; // left click only
         isDown = true;
-        startX = e.pageX - carousel.offsetLeft;
+        hasDragged = false;
+        startX = e.pageX;
         scrollLeft = carousel.scrollLeft;
         carousel.style.cursor = 'grabbing';
-        carousel.style.userSelect = 'none';
     });
-    carousel.addEventListener('mouseleave', () => {
+    
+    document.addEventListener('mouseup', () => {
+        if (!isDown) return;
         isDown = false;
         carousel.style.cursor = 'grab';
+        // Prevent click on cards if we dragged
+        if (hasDragged) {
+            setTimeout(() => { hasDragged = false; }, 50);
+        }
     });
-    carousel.addEventListener('mouseup', () => {
-        isDown = false;
-        carousel.style.cursor = 'grab';
-    });
+    
     carousel.addEventListener('mousemove', (e) => {
         if (!isDown) return;
         e.preventDefault();
-        const x = e.pageX - carousel.offsetLeft;
-        const walk = (x - startX) * 1.5;
+        const x = e.pageX;
+        const walk = x - startX;
+        if (Math.abs(walk) > 5) hasDragged = true;
         carousel.scrollLeft = scrollLeft - walk;
     });
+    
+    // Prevent card clicks when dragging
+    carousel.addEventListener('click', (e) => {
+        if (hasDragged) {
+            e.stopPropagation();
+            e.preventDefault();
+        }
+    }, true);
+    
+    // Prevent native drag on images/links
+    carousel.addEventListener('dragstart', (e) => e.preventDefault());
+    
     carousel.style.cursor = 'grab';
     
     const wrap = carousel.parentElement;
