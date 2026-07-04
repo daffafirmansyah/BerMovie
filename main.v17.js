@@ -14,6 +14,21 @@ const VIDSRV5 = 'https://vixsrc.to/movie';
 const VIDSRV5_TV = 'https://vixsrc.to/tv';
 const APIPLAYER = 'https://apiplayer.ru/embed';
 
+// TELEGRAM MINI APP
+const tg = window.Telegram?.WebApp;
+const isTgMiniApp = !!tg?.initData;
+if (isTgMiniApp) {
+    tg.expand();
+    tg.ready();
+    document.documentElement.style.setProperty('--bg', tg.backgroundColor || '#0f0f13');
+    document.documentElement.style.setProperty('--accent', tg.themeParams?.button_color || '#f97316');
+    let _tgScrollTimer;
+    window.addEventListener('scroll', () => {
+        clearTimeout(_tgScrollTimer);
+        _tgScrollTimer = setTimeout(() => { document.activeElement?.blur(); }, 500);
+    }, { passive: true });
+}
+
 // i18n
 const I18N = {
     id: {
@@ -1589,21 +1604,25 @@ async function loadDetailPage(id, type) {
 
     // Back button handler - direct navigation (history.back unreliable on mobile WebView after iframe)
     const backBtn = document.getElementById('detailBackBtn');
-    if (backBtn && !backBtn._hasHandler) {
+    // Capture referrer: try document.referrer, then sessionStorage, then fallback
+    let goBack = '';
+    if (document.referrer && document.referrer.indexOf(location.origin) === 0) {
+        goBack = document.referrer;
+        sessionStorage.setItem('bermovie_referrer', goBack);
+    } else {
+        goBack = sessionStorage.getItem('bermovie_referrer') || '';
+    }
+    if (!goBack) {
+        const fromParam = new URLSearchParams(location.search).get('from');
+        goBack = (fromParam && fromParam.indexOf(location.origin) === 0) ? fromParam : './';
+    }
+    // Telegram Mini App: use native BackButton
+    if (isTgMiniApp && tg.BackButton) {
+        tg.BackButton.show();
+        tg.BackButton.onClick(() => { location.href = goBack; });
+        if (backBtn) backBtn.style.display = 'none';
+    } else if (backBtn && !backBtn._hasHandler) {
         backBtn._hasHandler = true;
-        // Capture referrer: try document.referrer, then sessionStorage, then fallback
-        let goBack = '';
-        if (document.referrer && document.referrer.indexOf(location.origin) === 0) {
-            goBack = document.referrer;
-            sessionStorage.setItem('bermovie_referrer', goBack);
-        } else {
-            goBack = sessionStorage.getItem('bermovie_referrer') || '';
-        }
-        // Last resort: parse 'from' param or default to home
-        if (!goBack) {
-            const fromParam = new URLSearchParams(location.search).get('from');
-            goBack = (fromParam && fromParam.indexOf(location.origin) === 0) ? fromParam : './';
-        }
         backBtn.onclick = function(e) {
             e.preventDefault();
             e.stopPropagation();
@@ -1828,6 +1847,9 @@ document.addEventListener('DOMContentLoaded', () => {
         el('#searchInput').value = searchQ;
         // Will init home page, then trigger search
     }
+
+    // Telegram: hide back button on non-detail pages
+    if (isTgMiniApp && tg.BackButton) tg.BackButton.hide();
 
     if (path.includes('detail.html')) {
         const params = new URLSearchParams(window.location.search);
