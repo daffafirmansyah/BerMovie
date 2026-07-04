@@ -1683,8 +1683,9 @@ async function loadDetailPage(id, type) {
     if (isTgMiniApp && tg.BackButton) {
         tg.BackButton.show();
         tg.BackButton.onClick(() => { location.href = goBack; });
-        if (backBtn) backBtn.style.display = 'none';
-    } else if (backBtn && !backBtn._hasHandler) {
+    }
+    // Always set up custom back button as fallback
+    if (backBtn && !backBtn._hasHandler) {
         backBtn._hasHandler = true;
         backBtn.onclick = function(e) {
             e.preventDefault();
