@@ -126,10 +126,12 @@
 .detail-hero::after {
   background: linear-gradient(to top, var(--bg) 0%, rgba(10,10,15,.5) 45%, transparent 100%);
   height: 300px;
+  pointer-events: none;
 }
 .detail-hero::before {
   background: linear-gradient(90deg, rgba(10,10,15,.8) 0, rgba(10,10,15,.25) 45%, transparent 70%),
               linear-gradient(180deg, transparent 30%, rgba(10,10,15,.6) 100%);
+  pointer-events: none;
 }
 .detail-body {
   margin-top: -100px;
