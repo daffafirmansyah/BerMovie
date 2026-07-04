@@ -1864,20 +1864,22 @@ window.addEventListener('scroll', () => {
     nav.classList.toggle('compact', window.scrollY > 80);
 }, { passive: true });
 
-// 2. Card 3D tilt
-document.querySelectorAll('.card').forEach(card => {
-    card.addEventListener('mousemove', e => {
-        const rect = card.getBoundingClientRect();
-        const x = (e.clientX - rect.left) / rect.width - 0.5;
-        const y = (e.clientY - rect.top) / rect.height - 0.5;
-        card.style.setProperty('--mx', `${(e.clientX - rect.left) / rect.width * 100}%`);
-        card.style.setProperty('--my', `${(e.clientY - rect.top) / rect.height * 100}%`);
-        card.style.transform = `perspective(800px) rotateY(${x * 8}deg) rotateX(${-y * 8}deg) translateY(-6px)`;
+// 2. Card 3D tilt (desktop only - kills mobile perf)
+if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    document.querySelectorAll('.card').forEach(card => {
+        card.addEventListener('mousemove', e => {
+            const rect = card.getBoundingClientRect();
+            const x = (e.clientX - rect.left) / rect.width - 0.5;
+            const y = (e.clientY - rect.top) / rect.height - 0.5;
+            card.style.setProperty('--mx', `${(e.clientX - rect.left) / rect.width * 100}%`);
+            card.style.setProperty('--my', `${(e.clientY - rect.top) / rect.height * 100}%`);
+            card.style.transform = `perspective(800px) rotateY(${x * 8}deg) rotateX(${-y * 8}deg) translateY(-6px)`;
+        });
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = 'perspective(800px) rotateY(0deg) rotateX(0deg) translateY(0px)';
+        });
     });
-    card.addEventListener('mouseleave', () => {
-        card.style.transform = 'perspective(800px) rotateY(0deg) rotateX(0deg) translateY(0px)';
-    });
-});
+}
 
 // 3. Scroll animations (IntersectionObserver)
 const observer = new IntersectionObserver((entries) => {
