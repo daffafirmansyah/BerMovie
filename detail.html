@@ -143,6 +143,32 @@
                     <iframe id="trailerIframe" allowfullscreen></iframe>
                 </div>
             </div>
+
+            <!-- INLINE PLAYER (no modal) -->
+            <div class="inline-player-section" id="inlinePlayerSection">
+                <h2 class="watch-heading">▶ Watch Now</h2>
+                <div class="player-servers-bar" id="playerServersBar">
+                    <div class="player-servers" id="playerServers">
+                        <button class="svr-btn active" data-server="vesy">Vesy</button>
+                        <button class="svr-btn" data-server="videasy">Videasy</button>
+                        <button class="svr-btn" data-server="vidnest">VidNest</button>
+                        <button class="svr-btn" data-server="vnest">VNest</button>
+                        <button class="svr-btn" data-server="vidsrcsu">VidSrc</button>
+                        <button class="svr-btn" data-server="apiplayer">ApiPlayer</button>
+                        <button class="svr-btn" data-server="2embed">2Embed</button>
+                        <button class="svr-btn" data-server="vixsrc">VixSrc</button>
+                    </div>
+                </div>
+                <div class="server-indicator">Server: <span id="serverName">Vesy</span></div>
+                <div class="inline-player-wrap">
+                    <iframe id="inlinePlayerFrame" src="" frameborder="0" allowfullscreen sandbox="allow-scripts allow-same-origin allow-presentation allow-forms allow-fullscreen"></iframe>
+                </div>
+                <div class="player-extra-controls">
+                    <button onclick="togglePiP()" class="extra-btn">📺 Picture-in-Picture</button>
+                    <button onclick="skipForward90()" class="extra-btn">⏩ Skip +90s</button>
+                </div>
+            </div>
+
             <h3 class="section-title-sm" data-i18n="cast_title">Pemain</h3>
             <div class="detail-cast" id="detailCast"></div>
             <div class="seasons-section hidden" id="detailSeasons">
@@ -203,7 +229,7 @@
         </div>
     </div>
 
-    <script defer src="main.v17.js?v=35"></script>
+    <script defer src="main.v17.js?v=36"></script>
     <script>
         // Parse URL params
         const urlParams = new URLSearchParams(window.location.search);

@@ -1768,7 +1768,39 @@ async function loadDetailPage(id, type) {
         castEl.innerHTML += `<div class="detail-cast-item"><img src="${c.profile_path ? IMG_CAST + c.profile_path : NO_POSTER}" alt="${c.name}" onerror="this.src='${NO_POSTER}'"><p>${c.name}</p></div>`;
     });
 
-    document.getElementById('detailWatchBtn').onclick = () => openPlayer(id, type, title);
+    document.getElementById('detailWatchBtn').onclick = () => {
+        // Scroll to inline player and load video
+        const section = document.getElementById('inlinePlayerSection');
+        if (section) {
+            section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            const iframe = document.getElementById('inlinePlayerFrame');
+            if (iframe && !iframe.src) {
+                iframe.src = getPlayerUrl(id, type, 1, 1);
+            }
+        }
+    };
+
+    // Setup inline player server buttons
+    const inlineServers = document.querySelectorAll('#inlinePlayerSection .svr-btn');
+    let inlineCurrentServer = currentServer;
+    inlineServers.forEach(btn => {
+        if (!btn.dataset.server) return;
+        btn.classList.toggle('active', btn.dataset.server === inlineCurrentServer);
+        btn.onclick = () => {
+            inlineCurrentServer = btn.dataset.server;
+            currentServer = btn.dataset.server; // sync global
+            inlineServers.forEach(b => b.classList.toggle('active', b === btn));
+            const sn = document.querySelector('#inlinePlayerSection #serverName');
+            if (sn) sn.textContent = btn.textContent.trim();
+            const iframe = document.getElementById('inlinePlayerFrame');
+            if (iframe) iframe.src = getPlayerUrl(id, type, 1, 1);
+        };
+    });
+    // Set initial server name
+    const initSvrInline = document.querySelector('#inlinePlayerSection .svr-btn.active');
+    const snInline = document.querySelector('#inlinePlayerSection #serverName');
+    if (initSvrInline && snInline) snInline.textContent = initSvrInline.textContent.trim();
+
     // Favorite button
     const favBtn = document.getElementById('detailFavBtn');
     if (favBtn) {
@@ -1996,7 +2028,7 @@ setTimeout(() => {
 
 // Picture-in-Picture
 function togglePiP() {
-    const iframe = document.getElementById('playerFrame');
+    const iframe = document.getElementById('inlinePlayerFrame') || document.getElementById('playerFrame');
     if (!iframe) return;
     if (document.pictureInPictureElement) {
         document.exitPictureInPicture().catch(() => {});
@@ -2007,7 +2039,7 @@ function togglePiP() {
 
 // Skip forward 90s
 function skipForward90() {
-    const iframe = document.getElementById('playerFrame');
+    const iframe = document.getElementById('inlinePlayerFrame') || document.getElementById('playerFrame');
     if (!iframe || !iframe.contentWindow) return;
     try {
         iframe.contentWindow.postMessage(JSON.stringify({event:'command',func:'seekTo',args:[90,true]}),'*');
