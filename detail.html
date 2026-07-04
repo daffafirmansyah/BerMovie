@@ -167,7 +167,9 @@
                     <button class="player-close" id="playerCloseBtn">&times;</button>
                 </div>
             </div>
-            <div class="player-servers-bar" id="playerServersBar">
+            <div class="player-watch-section">
+                <h2 class="watch-heading">▶ Watch Now</h2>
+                <div class="player-servers-bar" id="playerServersBar">
                 <div class="player-servers" id="playerServers">
                     <button class="svr-btn active" data-server="vesy">Vesy</button>
                     <button class="svr-btn" data-server="videasy">Videasy</button>
@@ -179,9 +181,15 @@
                     <button class="svr-btn" data-server="vixsrc">VixSrc</button>
                 </div>
             </div>
+                <div class="server-indicator">Server: <span id="serverName">Vesy</span></div>
+            </div>
             <div class="iframe-container">
                 <iframe id="playerFrame" src="" frameborder="0" allowfullscreen></iframe>
                 
+            </div>
+            <div class="player-extra-controls">
+                <button onclick="togglePiP()" class="extra-btn">📺 Picture-in-Picture</button>
+                <button onclick="skipForward90()" class="extra-btn">⏩ Skip +90s</button>
             </div>
             <div class="episode-sheet hidden" id="episodeSheet">
                 <div class="ep-sheet-handle"></div>
@@ -195,7 +203,7 @@
         </div>
     </div>
 
-    <script defer src="main.v17.js?v=34"></script>
+    <script defer src="main.v17.js?v=35"></script>
     <script>
         // Parse URL params
         const urlParams = new URLSearchParams(window.location.search);

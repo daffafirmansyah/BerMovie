@@ -503,12 +503,19 @@ async function openPlayer(id, type, title, season=1, episode=1) {
         btn.onclick = () => {
             currentServer = btn.dataset.server;
             all('.svr-btn').forEach(b=>b.classList.toggle('active', b===btn));
+            // Update server name indicator
+            const sn = el('#serverName');
+            if(sn) sn.textContent = btn.textContent.trim();
             const s = type==='tv'?parseInt(el('#seasonSelect')?.value||1):1;
             const ae = document.querySelector('.ep-btn.active');
             const ep = ae?parseInt(ae.dataset.ep):1;
             el('#playerFrame').src = getPlayerUrl(id, type, s, ep);
         };
     });
+    // Set initial server name
+    const initSvr = document.querySelector('.svr-btn.active');
+    const sn = el('#serverName');
+    if(initSvr && sn) sn.textContent = initSvr.textContent.trim();
 }
 
 async function loadEpisodes(id, season, type, activeEp=1) {
@@ -1986,3 +1993,23 @@ setTimeout(() => {
         if (id) loadDetailPage(parseInt(id), type);
     } else if (!p.includes('detail.html') && !window._homeInit && document.getElementById('hero')?.children.length === 0) { window._homeInit = 1; initHomePage(); }
 }, 100);
+
+// Picture-in-Picture
+function togglePiP() {
+    const iframe = document.getElementById('playerFrame');
+    if (!iframe) return;
+    if (document.pictureInPictureElement) {
+        document.exitPictureInPicture().catch(() => {});
+    } else if (iframe.requestPictureInPicture) {
+        iframe.requestPictureInPicture().catch(() => {});
+    }
+}
+
+// Skip forward 90s
+function skipForward90() {
+    const iframe = document.getElementById('playerFrame');
+    if (!iframe || !iframe.contentWindow) return;
+    try {
+        iframe.contentWindow.postMessage(JSON.stringify({event:'command',func:'seekTo',args:[90,true]}),'*');
+    } catch(e) {}
+}
