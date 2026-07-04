@@ -2080,3 +2080,63 @@ function toggleInlineFullscreen() {
         }
     }
 }
+
+// === FULLSCREEN FOR TELEGRAM MINI APP ===
+// 1. Telegram WebApp.requestFullscreen() (native)
+// 2. CSS fullscreen fallback (make iframe fill viewport)
+
+function goFullscreen(iframe) {
+    if (!iframe) return;
+    
+    // Try Telegram WebApp native fullscreen
+    if (tg && tg.requestFullscreen) {
+        tg.requestFullscreen();
+        return;
+    }
+    
+    // Try standard fullscreen API
+    try {
+        if (iframe.requestFullscreen) { iframe.requestFullscreen(); return; }
+        if (iframe.webkitRequestFullscreen) { iframe.webkitRequestFullscreen(); return; }
+    } catch(e) {}
+    
+    // CSS fallback — make iframe fill entire viewport
+    const wrap = iframe.closest('.inline-player-wrap') || iframe.parentElement;
+    if (wrap) {
+        wrap.classList.add('css-fullscreen');
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function exitCssFullscreen() {
+    document.querySelectorAll('.css-fullscreen').forEach(el => {
+        el.classList.remove('css-fullscreen');
+    });
+    document.body.style.overflow = '';
+    // Exit Telegram fullscreen
+    if (tg && tg.exitFullscreen) tg.exitFullscreen();
+}
+
+// Listen for fullscreen requests from embed iframe
+window.addEventListener('message', (e) => {
+    if (typeof e.data === 'string') {
+        try {
+            const d = JSON.parse(e.data);
+            if (d.event === 'fullscreen' || d.event === 'fullscreenchange' || 
+                d.type === 'fullscreen' || d.action === 'fullscreen') {
+                const iframe = document.getElementById('inlinePlayerFrame');
+                goFullscreen(iframe);
+            }
+        } catch(err) {}
+    }
+    // Some embeds use simple string messages
+    if (e.data === 'fullscreen' || e.data === 'enterFullscreen') {
+        const iframe = document.getElementById('inlinePlayerFrame');
+        goFullscreen(iframe);
+    }
+});
+
+// CSS fullscreen exit on click outside or Escape
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') exitCssFullscreen();
+});
