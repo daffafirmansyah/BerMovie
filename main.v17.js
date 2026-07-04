@@ -238,6 +238,10 @@ function createCard(item, type) {
     const div = document.createElement('a');
     div.className = 'card';
     div.href = `detail.html?id=${item.id}&type=${mediaType}`;
+    // Store current page as referrer before navigating to detail
+    div.addEventListener('click', () => {
+        sessionStorage.setItem('bermovie_referrer', location.href);
+    });
     div.innerHTML = `
         <img class="card-poster" src="${posterUrl(item.poster_path)}" alt="${title}" loading="lazy" decoding="async" onerror="this.src='${NO_POSTER}'">
         <div class="card-badges">
@@ -680,7 +684,7 @@ function renderHeroSlide(idx) {
     }).filter(Boolean) || [];
     let genreHtml = gnames.length ? `<div class="hero-genres">${gnames.map(n => `<span class="hero-genre">${n}</span>`).join('')}</div>` : '';
     if (el('#heroMeta')) el('#heroMeta').innerHTML = genreHtml + `<span class="rating-badge">★ ${rating(item.vote_average)}</span><span>${year(item.release_date||item.first_air_date)}</span><span>${type==='movie'?t('nav_movies'):t('nav_tv')}</span>`;
-    if (el('#heroBtn')) el('#heroBtn').onclick = () => { window.location.href = `detail.html?id=${item.id}&type=${type}`; };
+    if (el('#heroBtn')) el('#heroBtn').onclick = () => { sessionStorage.setItem('bermovie_referrer', location.href); window.location.href = `detail.html?id=${item.id}&type=${type}`; };
     // Update dots
     document.querySelectorAll('.hero-dot').forEach((d, i) => d.classList.toggle('active', i === idx));
 }
@@ -810,6 +814,7 @@ async function loadTrending(filter) {
         const card = document.createElement('a');
         card.className = 'trending-card';
         card.href = 'detail.html?id='+item.id+'&type='+mt;
+        card.addEventListener('click', () => sessionStorage.setItem('bermovie_referrer', location.href));
         card.innerHTML = '<span class="trending-rank">'+(i+1)+'</span><img src="'+posterUrl(item.poster_path)+'" alt="'+t+'" loading="lazy"><div class="trending-info"><div class="title">'+t+'</div><div class="meta">'+y+' ~ '+rate+'</div></div>';
 
         list.appendChild(card);
@@ -1293,6 +1298,7 @@ function renderWatchlist() {
         const div = document.createElement('a');
         div.className = 'card';
         div.href = `detail.html?id=${item.id}&type=${item.type}`;
+        div.addEventListener('click', () => sessionStorage.setItem('bermovie_referrer', location.href));
         div.innerHTML = `<img class="card-poster" src="https://image.tmdb.org/t/p/w500${item.poster}" alt="${item.title}" loading="lazy" onerror="this.src='${NO_POSTER}'">
             <div class="card-info"><div class="card-title">${item.title}</div><div class="card-meta"><span>${item.year}</span><span class="card-rating">★ ${rating(item.rating)}</span></div></div>
         `;
@@ -1578,16 +1584,27 @@ async function loadDetailPage(id, type) {
     const page = document.getElementById('detailPage');
     if (!page) return;
 
-    // Back button handler - set here so it works regardless of init path
+    // Back button handler - direct navigation (history.back unreliable on mobile WebView after iframe)
     const backBtn = document.getElementById('detailBackBtn');
     if (backBtn && !backBtn._hasHandler) {
         backBtn._hasHandler = true;
-        backBtn.onclick = function() {
-            if (document.referrer && document.referrer.indexOf(location.origin) === 0) {
-                history.back();
-            } else {
-                location.href = './';
-            }
+        // Capture referrer: try document.referrer, then sessionStorage, then fallback
+        let goBack = '';
+        if (document.referrer && document.referrer.indexOf(location.origin) === 0) {
+            goBack = document.referrer;
+            sessionStorage.setItem('bermovie_referrer', goBack);
+        } else {
+            goBack = sessionStorage.getItem('bermovie_referrer') || '';
+        }
+        // Last resort: parse 'from' param or default to home
+        if (!goBack) {
+            const fromParam = new URLSearchParams(location.search).get('from');
+            goBack = (fromParam && fromParam.indexOf(location.origin) === 0) ? fromParam : './';
+        }
+        backBtn.onclick = function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            location.href = goBack;
         };
     }
 
