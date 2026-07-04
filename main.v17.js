@@ -611,14 +611,21 @@ el('#playerCloseBtn') && (el('#playerCloseBtn').onclick = closeAllModals);
 // Fullscreen button
 el('#playerFsBtn') && (el('#playerFsBtn').onclick = () => {
     const iframe = el('#playerFrame');
-    const container = el('.iframe-container');
-    if (!iframe) return;
-    if (document.fullscreenElement || document.webkitFullscreenElement) {
-        (document.exitFullscreen || document.webkitExitFullscreen).call(document);
-    } else {
-        // Try iframe first, then container, then webkit fallback
-        const fs = iframe.requestFullscreen?.() || iframe.webkitRequestFullscreen?.() 
-                   || container?.requestFullscreen?.() || container?.webkitRequestFullscreen?.();
+    if (!iframe || !iframe.src) return;
+    // Try fullscreen API first
+    try {
+        if (document.fullscreenElement || document.webkitFullscreenElement) {
+            (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+        } else if (iframe.requestFullscreen) {
+            iframe.requestFullscreen();
+        } else if (iframe.webkitRequestFullscreen) {
+            iframe.webkitRequestFullscreen();
+        } else {
+            throw new Error('no fullscreen api');
+        }
+    } catch(e) {
+        // Fallback: open video in external browser (Telegram WebView blocks fullscreen)
+        window.open(iframe.src, '_blank');
     }
 });
 
