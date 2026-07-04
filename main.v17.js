@@ -471,12 +471,10 @@ async function openPlayer(id, type, title, season=1, episode=1) {
     const backBtn = document.getElementById('detailBackBtn');
     if (backBtn) backBtn.style.display = 'none';
 
-    // Show top bar + controls briefly
+    // Show top bar briefly
     const top = el('.player-top');
-    const ctrl = el('.player-controls');
     if(top) top.classList.add('show');
-    if(ctrl) ctrl.classList.add('show');
-    setTimeout(() => { if(top) top.classList.remove('show'); if(ctrl) ctrl.classList.remove('show'); }, 3000);
+    setTimeout(() => { if(top) top.classList.remove('show'); }, 3000);
 
     // Episode sheet for TV
     const epSheet = el('#episodeSheet');
@@ -587,18 +585,15 @@ function closeAllModals() {
     if (backBtn) backBtn.style.display = '';
 }
 
-// Player controls: mousemove shows top bar + controls
+// Player controls: mousemove shows top bar (controls always visible now)
 document.addEventListener('mousemove', () => {
     const modal = el('#playerModal');
     if (!modal || modal.classList.contains('hidden')) return;
     const top = el('.player-top');
-    const ctrl = el('.player-controls');
     if(top) top.classList.add('show');
-    if(ctrl) ctrl.classList.add('show');
     clearTimeout(window._playerHideTimer);
     window._playerHideTimer = setTimeout(() => {
         if(top) top.classList.remove('show');
-        if(ctrl) ctrl.classList.remove('show');
     }, 2500);
 });
 
@@ -619,31 +614,6 @@ el('#playerFsBtn') && (el('#playerFsBtn').onclick = () => {
                    || container?.requestFullscreen?.() || container?.webkitRequestFullscreen?.();
     }
 });
-
-// Mobile touch: tap iframe area to toggle controls
-(function initPlayerTouch() {
-    const container = el('.iframe-container');
-    if (!container) { setTimeout(initPlayerTouch, 500); return; }
-    container.addEventListener('click', (e) => {
-        // Don't toggle if tapping server buttons
-        if (e.target.closest('.player-servers') || e.target.closest('.svr-btn')) return;
-        const top = el('.player-top');
-        const ctrl = el('.player-controls');
-        const isShowing = ctrl?.classList.contains('show');
-        if (isShowing) {
-            if(top) top.classList.remove('show');
-            if(ctrl) ctrl.classList.remove('show');
-        } else {
-            if(top) top.classList.add('show');
-            if(ctrl) ctrl.classList.add('show');
-            clearTimeout(window._playerHideTimer);
-            window._playerHideTimer = setTimeout(() => {
-                if(top) top.classList.remove('show');
-                if(ctrl) ctrl.classList.remove('show');
-            }, 4000);
-        }
-    });
-})();
 
 // Episode sheet toggle
 el('#playerEpsBtn') && (el('#playerEpsBtn').onclick = () => {
