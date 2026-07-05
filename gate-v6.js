@@ -68,6 +68,16 @@
     },600);
   },WAIT);
 
+  // Capture first touch on gate → focus input
+  var firstTouch=true;
+  gate.addEventListener('touchstart',function(e){
+    if(firstTouch && e.target.id!=='bmInp' && e.target.id!=='bmBtn'){
+      firstTouch=false;
+      var inp=document.getElementById('bmInp');
+      if(inp){inp.focus();e.preventDefault()}
+    }
+  },{passive:false});
+
   // Gate logic
   function go(){
     var inp=document.getElementById('bmInp');
