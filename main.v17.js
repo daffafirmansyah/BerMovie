@@ -2140,3 +2140,11 @@ window.addEventListener('message', (e) => {
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') exitCssFullscreen();
 });
+
+// Force orange accent color (override Telegram theme)
+(function forceAccent() {
+    const root = document.documentElement;
+    root.style.setProperty('--accent', '#f97316', 'important');
+    root.style.setProperty('--accent2', '#ea580c', 'important');
+    root.style.setProperty('--accent-glow', 'rgba(249,115,22,.2)', 'important');
+})();
