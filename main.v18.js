@@ -1981,6 +1981,12 @@ async function loadDetailPage(id, type) {
     const snInline = document.querySelector('#inlinePlayerSection #serverName');
     if (initSvrInline && snInline) snInline.textContent = initSvrInline.textContent.trim();
 
+    // Auto-load video on detail page
+    const autoIframe = document.getElementById('inlinePlayerFrame');
+    if (autoIframe && !autoIframe.src) {
+        autoIframe.src = getPlayerUrl(id, type, 1, 1);
+    }
+
     // Favorite button
     const favBtn = document.getElementById('detailFavBtn');
     if (favBtn) {
