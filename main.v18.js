@@ -2163,7 +2163,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Telegram: hide back button on non-detail pages
-    if (isTgMiniApp && tg.BackButton) tg.BackButton.hide();
+    if (isTgMiniApp && tg.BackButton) {
+        tg.BackButton.hide();
+        // Re-hide after gate passes (gate removal may trigger BackButton)
+        if (path.includes('index.html') || path.endsWith('/') || path === '') {
+            const observer = new MutationObserver(() => {
+                const gate = document.getElementById('bmGate');
+                if (!gate) { tg.BackButton.hide(); observer.disconnect(); }
+            });
+            observer.observe(document.body, { childList: true });
+            // Also hide after a delay
+            setTimeout(() => { tg.BackButton.hide(); }, 5000);
+        }
+    }
 
     if (path.includes('detail.html')) {
         const params = new URLSearchParams(window.location.search);
