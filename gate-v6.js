@@ -54,7 +54,17 @@
     splash.style.opacity='0';
     gate.style.opacity='1';
     gate.style.pointerEvents='auto';
-    setTimeout(function(){splash.remove();var inp=document.getElementById('bmInp');if(inp)inp.focus()},600);
+    setTimeout(function(){
+      splash.remove();
+      // mobile needs multiple focus attempts
+      var inp=document.getElementById('bmInp');
+      if(inp){
+        inp.focus();
+        inp.setAttribute('readonly','');
+        inp.focus();
+        setTimeout(function(){inp.removeAttribute('readonly')},100);
+      }
+    },600);
   },WAIT);
 
   // Gate logic
