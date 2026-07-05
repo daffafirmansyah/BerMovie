@@ -443,3 +443,11 @@ to{transform:translateY(0)}}
   border-color: rgba(249,115,22,.25);
   color: var(--accent);
 }
+
+/* === MOBILE PERFORMANCE FIX === */
+@media(max-width:768px) {
+  * { transition-duration: 0s !important; animation-duration: 0s !important; }
+  .card:hover { transform: none !important; }
+  .backdrop-filter, .overlay-back-btn, .overlay-fs-btn { backdrop-filter: none !important; }
+  .fade-in { opacity: 1 !important; transform: none !important; }
+}

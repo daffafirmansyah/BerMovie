@@ -2173,3 +2173,25 @@ if (tg) {
 window.addEventListener('pageshow', () => {
     document.body.style.overflow = '';
 });
+
+// === MOBILE PERFORMANCE FIX ===
+// Throttle all scroll listeners
+(function() {
+    let ticking = false;
+    const origAdd = EventTarget.prototype.addEventListener;
+    EventTarget.prototype.addEventListener = function(type, fn, opts) {
+        if (type === 'scroll' && this === window) {
+            const throttled = function(e) {
+                if (!ticking) {
+                    ticking = true;
+                    requestAnimationFrame(() => {
+                        fn(e);
+                        ticking = false;
+                    });
+                }
+            };
+            return origAdd.call(this, type, throttled, typeof opts === 'object' ? {...opts, passive: true} : {passive: true});
+        }
+        return origAdd.call(this, type, fn, opts);
+    };
+})();
