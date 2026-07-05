@@ -1859,6 +1859,54 @@ async function loadDetailPage(id, type) {
     // Setup server scroll arrows on detail page
     setTimeout(setupServerScroll, 200);
 
+    // Add fullscreen button to inline player
+    setTimeout(function() {
+        var wrap = document.querySelector('.inline-player-wrap');
+        var iframe = document.getElementById('inlinePlayerFrame');
+        if(!wrap || !iframe || wrap._fsBtnAdded) return;
+        wrap._fsBtnAdded = true;
+        wrap.style.position = 'relative';
+        var btn = document.createElement('button');
+        btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>';
+        btn.style.cssText = 'position:absolute;bottom:12px;right:12px;z-index:10;width:36px;height:36px;border-radius:8px;background:rgba(0,0,0,.6);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)';
+        btn.onclick = function() {
+            var section = wrap.closest('.inline-player-section') || wrap.parentElement;
+            if(!wrap._cssFs) {
+                wrap._cssFs = true;
+                section.style.position = 'fixed';
+                section.style.inset = '0';
+                section.style.zIndex = '99999';
+                section.style.background = '#000';
+                section.style.borderRadius = '0';
+                section.style.padding = '0';
+                section.style.margin = '0';
+                wrap.style.height = '100vh';
+                wrap.style.paddingBottom = '0';
+                iframe.style.height = '100vh';
+                iframe.style.borderRadius = '0';
+                // Hide siblings
+                Array.from(section.children).forEach(function(c) { if(c !== wrap) c.style.display = 'none'; });
+                btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/></svg>';
+            } else {
+                wrap._cssFs = false;
+                section.style.position = '';
+                section.style.inset = '';
+                section.style.zIndex = '';
+                section.style.background = '';
+                section.style.borderRadius = '';
+                section.style.padding = '';
+                section.style.margin = '';
+                wrap.style.height = '';
+                wrap.style.paddingBottom = '';
+                iframe.style.height = '';
+                iframe.style.borderRadius = '';
+                Array.from(section.children).forEach(function(c) { c.style.display = ''; });
+                btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>';
+            }
+        };
+        wrap.appendChild(btn);
+    }, 300);
+
     const title = displayTitle(detail);
     const date = detail.release_date || detail.first_air_date;
     const runtime = detail.runtime || (detail.episode_run_time?.[0]) || 0;
