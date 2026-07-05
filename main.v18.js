@@ -1874,11 +1874,12 @@ async function loadDetailPage(id, type) {
         var _fsResize = null;
 
         function enterFs() {
-            // Try Telegram native fullscreen first
-            if (tg && tg.requestFullscreen) {
-                try { tg.requestFullscreen(); } catch(e) {}
+            // Try Telegram native fullscreen
+            if (tg) {
+                try { tg.expand(); } catch(e) {}
+                try { tg.requestFullscreen && tg.requestFullscreen(); } catch(e) {}
+                try { tg.lockOrientation && tg.lockOrientation('landscape'); } catch(e) {}
             }
-            // Also try screen orientation lock
             try { screen.orientation && screen.orientation.lock && screen.orientation.lock('landscape'); } catch(e) {}
 
             var h = window.innerHeight + 'px';
@@ -1895,14 +1896,17 @@ async function loadDetailPage(id, type) {
                 section.style.height = nh;
                 wrap.style.height = nh;
                 iframe.style.height = nh;
+                // Re-try Telegram fullscreen on rotation
+                if (tg && tg.requestFullscreen) {
+                    try { tg.requestFullscreen(); } catch(e) {}
+                }
             };
             window.addEventListener('resize', _fsResize);
         }
 
         function exitFs() {
-            // Exit Telegram native fullscreen
-            if (tg && tg.exitFullscreen) {
-                try { tg.exitFullscreen(); } catch(e) {}
+            if (tg) {
+                try { tg.exitFullscreen && tg.exitFullscreen(); } catch(e) {}
             }
             try { screen.orientation && screen.orientation.unlock && screen.orientation.unlock(); } catch(e) {}
 
