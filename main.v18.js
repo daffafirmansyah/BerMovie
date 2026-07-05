@@ -1983,7 +1983,7 @@ async function loadDetailPage(id, type) {
 
     // Auto-load video on detail page
     const autoIframe = document.getElementById('inlinePlayerFrame');
-    if (autoIframe && !autoIframe.src) {
+    if (autoIframe && !autoIframe.getAttribute('src')) {
         autoIframe.src = getPlayerUrl(id, type, 1, 1);
     }
 
