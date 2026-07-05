@@ -821,7 +821,8 @@ async function loadHomeCarousel(path, containerId, type) {
     const c = el(`#${containerId}`);
     if (!c||!data?.results) return;
     c.innerHTML = '';
-    data.results.forEach(i => c.appendChild(createCard(i, type)));
+    // Limit to 12 items for performance
+    data.results.slice(0, 12).forEach(i => c.appendChild(createCard(i, type)));
     addCarouselArrows(c);
 }
 
@@ -872,7 +873,8 @@ function addCarouselArrows(carousel) {
     if (carousel.dataset.arrows) return;
     carousel.dataset.arrows = '1';
     
-    // Mouse drag scrolling with momentum (IDLIX-style)
+    // Mouse drag scrolling — DESKTOP ONLY (blocks mobile scroll)
+    if (!('ontouchstart' in window)) {
     let isDown = false, hasDragged = false, startX, scrollLeft, lastX, lastTime, velX = 0;
     let rafId = null;
     
@@ -937,6 +939,7 @@ function addCarouselArrows(carousel) {
     }, true);
     
     carousel.addEventListener('dragstart', (e) => e.preventDefault());
+    } // end desktop-only drag
     
     carousel.style.cursor = 'grab';
     
