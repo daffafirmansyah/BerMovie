@@ -117,7 +117,7 @@ input{font-family:inherit;outline:none}
 .section .grid{padding:0;margin-top:16px}
 
 /* === CARDS === */
-.carousel{display:flex;gap:14px;overflow-x:auto;padding:4px 0 16px;-webkit-overflow-scrolling:touch;scrollbar-width:thin;touch-action:pan-x;cursor:grab;-webkit-user-select:none;user-select:none}
+.carousel{display:flex;gap:14px;overflow-x:auto;padding:4px 0 16px;-webkit-overflow-scrolling:touch;scrollbar-width:thin;touch-action:pan-y pinch-zoom;cursor:grab;-webkit-user-select:none;user-select:none}
 .carousel::-webkit-scrollbar{height:2px}
 .carousel::-webkit-scrollbar-thumb{background:rgba(255,255,255,.06);border-radius:3px}
 .card{flex:0 0 165px;border-radius:var(--radius-lg);overflow:hidden;background:var(--bg2);cursor:pointer;position:relative;border:1px solid var(--border);transition:transform .25s,box-shadow .25s,border-color .25s;text-decoration:none;color:inherit;display:block;scroll-snap-align:start;contain:content}
