@@ -21,7 +21,7 @@ if (isTgMiniApp) {
     tg.expand();
     tg.ready();
     document.documentElement.style.setProperty('--bg', tg.backgroundColor || '#0f0f13');
-    document.documentElement.style.setProperty('--accent', tg.themeParams?.button_color || '#f97316');
+    // Don't override accent — keep our orange
     let _tgScrollTimer;
     window.addEventListener('scroll', () => {
         clearTimeout(_tgScrollTimer);
