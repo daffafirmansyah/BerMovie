@@ -6,6 +6,9 @@
 
   const isAuth=sessionStorage.getItem('bermovie_auth')==='1';
 
+  // Hide main content immediately (prevents flash)
+  document.body.classList.add('gate-active');
+
   // Inject CSS
   const link=document.createElement('link');
   link.rel='stylesheet';link.href='gate.css?v=3';
@@ -63,6 +66,7 @@
       splash.remove();
       if(isAuth){
         gate.remove();
+        document.body.classList.remove('gate-active');
       }else{
         gate.classList.add('active');
       }
@@ -83,7 +87,7 @@
     if(code===ACCESS_CODE){
       sessionStorage.setItem('bermovie_auth','1');
       gate.classList.add('fade-out');
-      setTimeout(()=>gate.remove(),600);
+      setTimeout(()=>{gate.remove();document.body.classList.remove('gate-active');},600);
     }else{
       input.classList.add('error');
       err.textContent='Kode salah, coba lagi';
