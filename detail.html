@@ -1,235 +1,237 @@
- <!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-    <title>Detail - BerMovie</title>
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎬</text></svg>">
-    <link rel="stylesheet" href="style.v12.css?v=39">
-<link rel="stylesheet" href="modern.css?v=15">
-<style>
-
-</style>
-    <style>
-        .detail-page { padding-top: var(--nav-height); }
-        .detail-hero {
-            width: 100%; height: 50vh; min-height: 350px;
-            background-size: cover; background-position: center 20%;
-            position: relative;
-        }
-        .detail-cast::-webkit-scrollbar { height: 2px; }
-        .detail-cast-item { flex: 0 0 70px; text-align: center; }
-        .detail-cast-item img {
-            width: 56px; height: 56px; border-radius: 50%; object-fit: cover;
-            margin-bottom: 6px; background: #1a1a2e;
-            border: 2px solid rgba(255,255,255,0.06);
-        }
-        .detail-cast-item p {
-            font-size: 0.7rem; color: var(--text3);
-            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-        }
-        .detail-loading {
-            padding-top: calc(var(--nav-height) + 80px);
-            text-align: center; color: var(--text3);
-        }
-        .back-btn {
-            position: absolute; top: 20px; left: 20px; z-index: 10;
-            width: 44px; height: 44px; border-radius: 50%;
-            background: rgba(0,0,0,0.6); color: white; font-size: 1.3rem;
-            display: flex; align-items: center; justify-content: center;
-            border: 1px solid rgba(255,255,255,0.1);
-            cursor: pointer; transition: all 0.2s;
-            pointer-events: auto;
-        }
-        .back-btn:hover { background: var(--accent); }
-        @media (max-width: 768px) {
-            .detail-hero { height: 35vh; min-height: 250px; }
-            .detail-body { padding: 0 12px 40px; margin-top: -40px; }
-            .back-btn { top: 12px; left: 12px; width: 36px; height: 36px; font-size: 1rem; }
-        }
-        .seasons-list {
-            display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;
-        }
-        .season-card {
-            display: flex; align-items: center; gap: 10px; padding: 10px 14px;
-            background: rgba(255,255,255,0.04); border-radius: 10px;
-            cursor: pointer; transition: all 0.2s;
-            border: 1px solid rgba(255,255,255,0.06);
-        }
-        .season-card:hover { border-color: var(--accent); background: rgba(255,255,255,0.08); }
-        .season-card img { width: 36px; height: 54px; border-radius: 4px; object-fit: cover; }
-        .season-card .info { font-size: 0.82rem; }
-        .season-card .info strong { display: block; }
-        .season-card .info small { color: var(--text3); }
-        .section-title-sm { font-size: 1.1rem; font-weight: 700; margin-bottom: 14px; margin-top: 24px; }
-    </style>
-</head>
-<body>
-<div class="scroll-progress" id="scrollProgress"></div>
-
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="./" class="logo">BerMovie</a>
-            <div class="nav-search">
-                <input type="text" id="searchInput" data-i18n="search" placeholder="Cari film atau series..." autocomplete="off">
-                <button id="searchBtn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></button>
-            </div>
-            <div class="nav-links">
-                <a href="./" class="active" data-nav="home">Home</a>
-                <a href="movies.html" data-nav="movies" data-i18n="nav_movies">Film</a>
-                <a href="tv.html" data-nav="tv" data-i18n="nav_tv">Serial</a>
-                <div class="nav-dropdown">
-                    <span class="nav-dropdown-trigger" data-nav="genre" data-i18n="nav_genre">Genre<svg class="nav-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:inline-block;vertical-align:middle;margin-left:2px"><polyline points="6 9 12 15 18 9"/></svg></span>
-                    <div class="dropdown-menu" id="genreDropdown"></div>
-                </div>
-                <div class="nav-dropdown">
-                    <span class="nav-dropdown-trigger" data-nav="country" data-i18n="nav_country">Negara<svg class="nav-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:inline-block;vertical-align:middle;margin-left:2px"><polyline points="6 9 12 15 18 9"/></svg></span>
-                    <div class="dropdown-menu" id="countryDropdown"></div>
-                </div>
-                <div class="nav-dropdown">
-                    <span class="nav-dropdown-trigger" data-nav="tahun" data-i18n="nav_tahun">Tahun<svg class="nav-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:inline-block;vertical-align:middle;margin-left:2px"><polyline points="6 9 12 15 18 9"/></svg></span>
-                    <div class="dropdown-menu" id="yearDropdown"></div>
-                </div>
-                <a href="./?watchlist" class="nav-fav" data-i18n="nav_favorit">Favorit</a>
-                <button class="nav-lang-btn" id="langToggle" title="Switch language" onclick="toggleLanguage()">EN</button>
-            </div>
-            <button class="mobile-menu-btn" id="mobileMenuBtn" style="cursor:pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="pointer-events:none"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
-        </div>
-        <!-- Mobile Menu -->
-        <div class="mobile-menu" id="mobileMenu">
-            <div class="mobile-search">
-                <input type="text" id="mobileSearchInput" data-i18n="search" placeholder="Cari film atau series..." autocomplete="off">
-                <button id="mobileSearchBtn" data-i18n="search_btn">Cari</button>
-            </div>
-            <a href="./" data-nav="home"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span data-i18n="nav_home">Home</span></a>
-            <a href="movies.html" data-nav="movies" data-i18n="nav_movies">Film</a>
-            <a href="tv.html" data-nav="tv" data-i18n="nav_tv">Serial</a>
-            <a href="genre.html" data-nav="genre"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg><span data-i18n="nav_genre">Genre</span></a>
-            <a href="leaderboard.html" data-nav="leaderboard" data-i18n="nav_leaderboard">Peringkat</a>
-            <a href="movies.html" data-nav="tahun"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span data-i18n="nav_tahun">Tahun</span></a>
-            <a href="movies.html" data-nav="country"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg><span data-i18n="nav_country">Negara</span></a>
-            <a href="./?watchlist" data-nav="watchlist" data-i18n="nav_favorit">Favorit</a>
-            <button class="nav-lang-btn" id="langToggleMobile" onclick="toggleLanguage()">EN</button>
-        </div>
-    </nav>
-
-
-    <div class="detail-loading" id="detailLoading">Memuat...</div>
-
-    <div class="detail-page hidden" id="detailPage">
-        <div class="detail-hero" id="detailHero">
-            <button class="back-btn" id="detailBackBtn">←</button>
-        </div>
-        <div class="detail-body">
-            <h1 id="detailTitle"></h1>
-            <div class="detail-meta" id="detailMeta"></div>
-            <p class="detail-overview" id="detailOverview"></p>
-            <div class="detail-actions">
-                <button class="btn-watch" id="detailWatchBtn" data-i18n="watch_btn">Tonton</button>
-                <button class="btn-secondary trailer-btn" id="detailTrailerBtn"><span class="t-il"></span><span class="t-txt" data-i18n="trailer_btn">Trailer</span><span class="t-ir"></span></button>
-                <button class="btn-secondary fav-btn" id="detailFavBtn" title="Tambahkan ke favorit"><span class="fav-txt" data-i18n="fav_add">Tambah ke Favorit</span></button>
-
-            </div>
-            <!-- INLINE PLAYER (no modal) -->
-            <div class="inline-player-section" id="inlinePlayerSection">
-                <h2 class="watch-heading">▶ Watch Now</h2>
-                <div class="player-servers-bar" id="playerServersBar">
-                    <div class="player-servers" id="playerServers">
-                        <button class="svr-btn active" data-server="vesy">Vesy</button>
-                        <button class="svr-btn" data-server="videasy">Videasy</button>
-                        <button class="svr-btn" data-server="vidnest">VidNest</button>
-                        <button class="svr-btn" data-server="vnest">VNest</button>
-                        <button class="svr-btn" data-server="vidsrcsu">VidSrc</button>
-                        <button class="svr-btn" data-server="apiplayer">ApiPlayer</button>
-                        <button class="svr-btn" data-server="2embed">2Embed</button>
-                        <button class="svr-btn" data-server="vixsrc">VixSrc</button>
-                    </div>
-                </div>
-                <div class="server-indicator">Server: <span id="serverName">Vesy</span></div>
-                <div class="inline-player-wrap">
-                    <iframe id="inlinePlayerFrame" src="" frameborder="0" allowfullscreen allow="fullscreen; autoplay; encrypted-media"></iframe>
-                </div>
-            </div>
-
-            <!-- TRAILER SECTION -->
-            <div class="trailer-section hidden" id="trailerSection">
-                <div class="trailer-embed">
-                    <iframe id="trailerIframe" allowfullscreen allow="fullscreen; autoplay; encrypted-media"></iframe>
-                </div>
-            </div>
-
-            <h3 class="section-title-sm" data-i18n="cast_title">Pemain</h3>
-            <div class="detail-cast" id="detailCast"></div>
-            <div class="seasons-section hidden" id="detailSeasons">
-                <h3 class="section-title-sm" data-i18n="seasons_title">Musim</h3>
-                <div class="seasons-list" id="detailSeasonsList"></div>
-            </div>
-            <h3 class="section-title-sm" data-i18n="recommend_title">Rekomendasi</h3>
-            <div class="carousel" id="detailSimilar"></div>
-        </div>
-    </div>
-
-    <!-- PLAYER MODAL -->
-    <div class="player-modal hidden" id="playerModal">
-        <div class="player-backdrop"></div>
-        <div class="player-content">
-            <div class="player-top">
-                <button class="player-back" id="playerBackBtn">&larr;</button>
-                <span class="player-title" id="playerTitle"></span>
-                <div class="player-top-right">
-                    <button class="player-eps-btn hidden" id="playerEpsBtn">&#9776;</button>
-                    <button class="player-fs-btn" id="playerFsBtn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg></button>
-                    <button class="player-close" id="playerCloseBtn">&times;</button>
-                </div>
-            </div>
-            <div class="player-watch-section">
-                <h2 class="watch-heading">▶ Watch Now</h2>
-                <div class="player-servers-bar" id="playerServersBar">
-                <div class="player-servers" id="playerServers">
-                    <button class="svr-btn active" data-server="vesy">Vesy</button>
-                    <button class="svr-btn" data-server="videasy">Videasy</button>
-                    <button class="svr-btn" data-server="vidnest">VidNest</button>
-                    <button class="svr-btn" data-server="vnest">VNest</button>
-                    <button class="svr-btn" data-server="vidsrcsu">VidSrc</button>
-                    <button class="svr-btn" data-server="apiplayer">ApiPlayer</button>
-                    <button class="svr-btn" data-server="2embed">2Embed</button>
-                    <button class="svr-btn" data-server="vixsrc">VixSrc</button>
-                </div>
-            </div>
-                <div class="server-indicator">Server: <span id="serverName">Vesy</span></div>
-            </div>
-            <div class="iframe-container">
-                <iframe id="playerFrame" src="" frameborder="0" allowfullscreen allow="fullscreen; autoplay; encrypted-media"></iframe>
-                
-            </div>
-            
-            <div class="episode-sheet hidden" id="episodeSheet">
-                <div class="ep-sheet-handle"></div>
-                <div class="ep-sheet-header">
-                    <h4 data-i18n="episode_title">Episode</h4>
-                    <button class="ep-sheet-close" id="epSheetClose">&times;</button>
-                </div>
-                <select id="seasonSelect" class="ep-season-select"></select>
-                <div class="episodes-grid" id="episodesGrid"></div>
-            </div>
-        </div>
-    </div>
-
-    <script defer src="main.v17.js?v=44"></script>
-    <script>
-        // Parse URL params
-        const urlParams = new URLSearchParams(window.location.search);
-        const id = urlParams.get('id');
-        const type = urlParams.get('type') || 'movie';
-        if (id) loadDetailPage(parseInt(id), type);
-        else document.getElementById('detailLoading').textContent = (typeof t === 'function' ? t('id_not_found') : 'ID tidak ditemukan');
-    </script>
-</body>
-</html>
+1| <!DOCTYPE html>
+2|<html lang="id">
+3|<head>
+4|    <meta charset="UTF-8">
+5|    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+6|    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+7|    <meta http-equiv="Pragma" content="no-cache">
+8|    <meta http-equiv="Expires" content="0">
+9|    <title>Detail - BerMovie</title>
+10|    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+11|    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+12|    <link rel="preconnect" href="https://fonts.googleapis.com">
+13|    <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+14|    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎬</text></svg>">
+15|    <link rel="stylesheet" href="style.v12.css?v=39">
+16|<link rel="stylesheet" href="modern.css?v=15">
+17|<style>
+18|
+19|</style>
+20|    <style>
+21|        .detail-page { padding-top: var(--nav-height); }
+22|        .detail-hero {
+23|            width: 100%; height: 50vh; min-height: 350px;
+24|            background-size: cover; background-position: center 20%;
+25|            position: relative;
+26|        }
+27|        .detail-cast::-webkit-scrollbar { height: 2px; }
+28|        .detail-cast-item { flex: 0 0 70px; text-align: center; }
+29|        .detail-cast-item img {
+30|            width: 56px; height: 56px; border-radius: 50%; object-fit: cover;
+31|            margin-bottom: 6px; background: #1a1a2e;
+32|            border: 2px solid rgba(255,255,255,0.06);
+33|        }
+34|        .detail-cast-item p {
+35|            font-size: 0.7rem; color: var(--text3);
+36|            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+37|        }
+38|        .detail-loading {
+39|            padding-top: calc(var(--nav-height) + 80px);
+40|            text-align: center; color: var(--text3);
+41|        }
+42|        .back-btn {
+43|            position: absolute; top: 20px; left: 20px; z-index: 10;
+44|            width: 44px; height: 44px; border-radius: 50%;
+45|            background: rgba(0,0,0,0.6); color: white; font-size: 1.3rem;
+46|            display: flex; align-items: center; justify-content: center;
+47|            border: 1px solid rgba(255,255,255,0.1);
+48|            cursor: pointer; transition: all 0.2s;
+49|            pointer-events: auto;
+50|        }
+51|        .back-btn:hover { background: var(--accent); }
+52|        @media (max-width: 768px) {
+53|            .detail-hero { height: 35vh; min-height: 250px; }
+54|            .detail-body { padding: 0 12px 40px; margin-top: -40px; }
+55|            .back-btn { top: 12px; left: 12px; width: 36px; height: 36px; font-size: 1rem; }
+56|        }
+57|        .seasons-list {
+58|            display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;
+59|        }
+60|        .season-card {
+61|            display: flex; align-items: center; gap: 10px; padding: 10px 14px;
+62|            background: rgba(255,255,255,0.04); border-radius: 10px;
+63|            cursor: pointer; transition: all 0.2s;
+64|            border: 1px solid rgba(255,255,255,0.06);
+65|        }
+66|        .season-card:hover { border-color: var(--accent); background: rgba(255,255,255,0.08); }
+67|        .season-card img { width: 36px; height: 54px; border-radius: 4px; object-fit: cover; }
+68|        .season-card .info { font-size: 0.82rem; }
+69|        .season-card .info strong { display: block; }
+70|        .season-card .info small { color: var(--text3); }
+71|        .section-title-sm { font-size: 1.1rem; font-weight: 700; margin-bottom: 14px; margin-top: 24px; }
+72|    </style>
+73|</head>
+74|<body>
+<script src="gate.js?v=1"></script>
+75|<div class="scroll-progress" id="scrollProgress"></div>
+76|
+77|    <nav class="navbar">
+78|        <div class="nav-container">
+79|            <a href="./" class="logo">BerMovie</a>
+80|            <div class="nav-search">
+81|                <input type="text" id="searchInput" data-i18n="search" placeholder="Cari film atau series..." autocomplete="off">
+82|                <button id="searchBtn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></button>
+83|            </div>
+84|            <div class="nav-links">
+85|                <a href="./" class="active" data-nav="home">Home</a>
+86|                <a href="movies.html" data-nav="movies" data-i18n="nav_movies">Film</a>
+87|                <a href="tv.html" data-nav="tv" data-i18n="nav_tv">Serial</a>
+88|                <div class="nav-dropdown">
+89|                    <span class="nav-dropdown-trigger" data-nav="genre" data-i18n="nav_genre">Genre<svg class="nav-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:inline-block;vertical-align:middle;margin-left:2px"><polyline points="6 9 12 15 18 9"/></svg></span>
+90|                    <div class="dropdown-menu" id="genreDropdown"></div>
+91|                </div>
+92|                <div class="nav-dropdown">
+93|                    <span class="nav-dropdown-trigger" data-nav="country" data-i18n="nav_country">Negara<svg class="nav-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:inline-block;vertical-align:middle;margin-left:2px"><polyline points="6 9 12 15 18 9"/></svg></span>
+94|                    <div class="dropdown-menu" id="countryDropdown"></div>
+95|                </div>
+96|                <div class="nav-dropdown">
+97|                    <span class="nav-dropdown-trigger" data-nav="tahun" data-i18n="nav_tahun">Tahun<svg class="nav-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:inline-block;vertical-align:middle;margin-left:2px"><polyline points="6 9 12 15 18 9"/></svg></span>
+98|                    <div class="dropdown-menu" id="yearDropdown"></div>
+99|                </div>
+100|                <a href="./?watchlist" class="nav-fav" data-i18n="nav_favorit">Favorit</a>
+101|                <button class="nav-lang-btn" id="langToggle" title="Switch language" onclick="toggleLanguage()">EN</button>
+102|            </div>
+103|            <button class="mobile-menu-btn" id="mobileMenuBtn" style="cursor:pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="pointer-events:none"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
+104|        </div>
+105|        <!-- Mobile Menu -->
+106|        <div class="mobile-menu" id="mobileMenu">
+107|            <div class="mobile-search">
+108|                <input type="text" id="mobileSearchInput" data-i18n="search" placeholder="Cari film atau series..." autocomplete="off">
+109|                <button id="mobileSearchBtn" data-i18n="search_btn">Cari</button>
+110|            </div>
+111|            <a href="./" data-nav="home"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span data-i18n="nav_home">Home</span></a>
+112|            <a href="movies.html" data-nav="movies" data-i18n="nav_movies">Film</a>
+113|            <a href="tv.html" data-nav="tv" data-i18n="nav_tv">Serial</a>
+114|            <a href="genre.html" data-nav="genre"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg><span data-i18n="nav_genre">Genre</span></a>
+115|            <a href="leaderboard.html" data-nav="leaderboard" data-i18n="nav_leaderboard">Peringkat</a>
+116|            <a href="movies.html" data-nav="tahun"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span data-i18n="nav_tahun">Tahun</span></a>
+117|            <a href="movies.html" data-nav="country"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg><span data-i18n="nav_country">Negara</span></a>
+118|            <a href="./?watchlist" data-nav="watchlist" data-i18n="nav_favorit">Favorit</a>
+119|            <button class="nav-lang-btn" id="langToggleMobile" onclick="toggleLanguage()">EN</button>
+120|        </div>
+121|    </nav>
+122|
+123|
+124|    <div class="detail-loading" id="detailLoading">Memuat...</div>
+125|
+126|    <div class="detail-page hidden" id="detailPage">
+127|        <div class="detail-hero" id="detailHero">
+128|            <button class="back-btn" id="detailBackBtn">←</button>
+129|        </div>
+130|        <div class="detail-body">
+131|            <h1 id="detailTitle"></h1>
+132|            <div class="detail-meta" id="detailMeta"></div>
+133|            <p class="detail-overview" id="detailOverview"></p>
+134|            <div class="detail-actions">
+135|                <button class="btn-watch" id="detailWatchBtn" data-i18n="watch_btn">Tonton</button>
+136|                <button class="btn-secondary trailer-btn" id="detailTrailerBtn"><span class="t-il"></span><span class="t-txt" data-i18n="trailer_btn">Trailer</span><span class="t-ir"></span></button>
+137|                <button class="btn-secondary fav-btn" id="detailFavBtn" title="Tambahkan ke favorit"><span class="fav-txt" data-i18n="fav_add">Tambah ke Favorit</span></button>
+138|
+139|            </div>
+140|            <!-- INLINE PLAYER (no modal) -->
+141|            <div class="inline-player-section" id="inlinePlayerSection">
+142|                <h2 class="watch-heading">▶ Watch Now</h2>
+143|                <div class="player-servers-bar" id="playerServersBar">
+144|                    <div class="player-servers" id="playerServers">
+145|                        <button class="svr-btn active" data-server="vesy">Vesy</button>
+146|                        <button class="svr-btn" data-server="videasy">Videasy</button>
+147|                        <button class="svr-btn" data-server="vidnest">VidNest</button>
+148|                        <button class="svr-btn" data-server="vnest">VNest</button>
+149|                        <button class="svr-btn" data-server="vidsrcsu">VidSrc</button>
+150|                        <button class="svr-btn" data-server="apiplayer">ApiPlayer</button>
+151|                        <button class="svr-btn" data-server="2embed">2Embed</button>
+152|                        <button class="svr-btn" data-server="vixsrc">VixSrc</button>
+153|                    </div>
+154|                </div>
+155|                <div class="server-indicator">Server: <span id="serverName">Vesy</span></div>
+156|                <div class="inline-player-wrap">
+157|                    <iframe id="inlinePlayerFrame" src="" frameborder="0" allowfullscreen allow="fullscreen; autoplay; encrypted-media"></iframe>
+158|                </div>
+159|            </div>
+160|
+161|            <!-- TRAILER SECTION -->
+162|            <div class="trailer-section hidden" id="trailerSection">
+163|                <div class="trailer-embed">
+164|                    <iframe id="trailerIframe" allowfullscreen allow="fullscreen; autoplay; encrypted-media"></iframe>
+165|                </div>
+166|            </div>
+167|
+168|            <h3 class="section-title-sm" data-i18n="cast_title">Pemain</h3>
+169|            <div class="detail-cast" id="detailCast"></div>
+170|            <div class="seasons-section hidden" id="detailSeasons">
+171|                <h3 class="section-title-sm" data-i18n="seasons_title">Musim</h3>
+172|                <div class="seasons-list" id="detailSeasonsList"></div>
+173|            </div>
+174|            <h3 class="section-title-sm" data-i18n="recommend_title">Rekomendasi</h3>
+175|            <div class="carousel" id="detailSimilar"></div>
+176|        </div>
+177|    </div>
+178|
+179|    <!-- PLAYER MODAL -->
+180|    <div class="player-modal hidden" id="playerModal">
+181|        <div class="player-backdrop"></div>
+182|        <div class="player-content">
+183|            <div class="player-top">
+184|                <button class="player-back" id="playerBackBtn">&larr;</button>
+185|                <span class="player-title" id="playerTitle"></span>
+186|                <div class="player-top-right">
+187|                    <button class="player-eps-btn hidden" id="playerEpsBtn">&#9776;</button>
+188|                    <button class="player-fs-btn" id="playerFsBtn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg></button>
+189|                    <button class="player-close" id="playerCloseBtn">&times;</button>
+190|                </div>
+191|            </div>
+192|            <div class="player-watch-section">
+193|                <h2 class="watch-heading">▶ Watch Now</h2>
+194|                <div class="player-servers-bar" id="playerServersBar">
+195|                <div class="player-servers" id="playerServers">
+196|                    <button class="svr-btn active" data-server="vesy">Vesy</button>
+197|                    <button class="svr-btn" data-server="videasy">Videasy</button>
+198|                    <button class="svr-btn" data-server="vidnest">VidNest</button>
+199|                    <button class="svr-btn" data-server="vnest">VNest</button>
+200|                    <button class="svr-btn" data-server="vidsrcsu">VidSrc</button>
+201|                    <button class="svr-btn" data-server="apiplayer">ApiPlayer</button>
+202|                    <button class="svr-btn" data-server="2embed">2Embed</button>
+203|                    <button class="svr-btn" data-server="vixsrc">VixSrc</button>
+204|                </div>
+205|            </div>
+206|                <div class="server-indicator">Server: <span id="serverName">Vesy</span></div>
+207|            </div>
+208|            <div class="iframe-container">
+209|                <iframe id="playerFrame" src="" frameborder="0" allowfullscreen allow="fullscreen; autoplay; encrypted-media"></iframe>
+210|                
+211|            </div>
+212|            
+213|            <div class="episode-sheet hidden" id="episodeSheet">
+214|                <div class="ep-sheet-handle"></div>
+215|                <div class="ep-sheet-header">
+216|                    <h4 data-i18n="episode_title">Episode</h4>
+217|                    <button class="ep-sheet-close" id="epSheetClose">&times;</button>
+218|                </div>
+219|                <select id="seasonSelect" class="ep-season-select"></select>
+220|                <div class="episodes-grid" id="episodesGrid"></div>
+221|            </div>
+222|        </div>
+223|    </div>
+224|
+225|    <script defer src="main.v17.js?v=44"></script>
+226|    <script>
+227|        // Parse URL params
+228|        const urlParams = new URLSearchParams(window.location.search);
+229|        const id = urlParams.get('id');
+230|        const type = urlParams.get('type') || 'movie';
+231|        if (id) loadDetailPage(parseInt(id), type);
+232|        else document.getElementById('detailLoading').textContent = (typeof t === 'function' ? t('id_not_found') : 'ID tidak ditemukan');
+233|    </script>
+234|</body>
+235|</html>
+236|
