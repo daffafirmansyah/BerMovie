@@ -5,8 +5,7 @@
   const SPLASH_MS=2800;
   const ADMIN_HANDLE='daffafirmansyah';
 
-  // Already authorized → skip everything
-  if(localStorage.getItem(STORAGE_KEY)===ACCESS_CODE) return;
+  const isAuth=localStorage.getItem(STORAGE_KEY)===ACCESS_CODE;
 
   // Inject gate CSS
   const link=document.createElement('link');
@@ -52,13 +51,17 @@
   document.body.prepend(gate);
   document.body.prepend(splash);
 
-  // Splash → gate transition
+  // Splash → gate/site transition
   setTimeout(()=>{
     splash.classList.add('fade-out');
     setTimeout(()=>{
       splash.remove();
-      gate.classList.add('active');
-      document.getElementById('gateInput').focus();
+      if(isAuth){
+        gate.remove();
+      }else{
+        gate.classList.add('active');
+        document.getElementById('gateInput').focus();
+      }
     },800);
   },SPLASH_MS);
 
