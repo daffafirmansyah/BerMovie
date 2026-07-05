@@ -517,59 +517,65 @@ async function openPlayer(id, type, title, season=1, episode=1) {
     const sn = el('#serverName');
     if(initSvr && sn) sn.textContent = initSvr.textContent.trim();
 
+    setupServerScroll();
+}
+
+function setupServerScroll() {
     // Server buttons scroll arrows
     const serversBar = document.querySelector('.player-servers');
-    if(serversBar) {
-        // Create arrow buttons
-        const bar = serversBar.parentElement;
-        bar.style.position = 'relative';
-        bar.style.display = 'flex';
-        bar.style.alignItems = 'center';
-        bar.style.gap = '4px';
+    if(!serversBar || serversBar._scrollSetup) return;
+    serversBar._scrollSetup = true;
 
-        const mkArrow = (dir, symbol) => {
-            const btn = document.createElement('button');
-            btn.innerHTML = symbol;
-            btn.style.cssText = 'flex-shrink:0;width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.1);border:none;color:#fff;font-size:14px;cursor:pointer;display:none;align-items:center;justify-content:center;padding:0;line-height:1';
-            btn.onclick = () => serversBar.scrollBy({left: dir * 120, behavior: 'smooth'});
-            return btn;
-        };
-        const leftArr = mkArrow(-1, '&#8249;');
-        const rightArr = mkArrow(1, '&#8250;');
-        bar.insertBefore(leftArr, serversBar);
-        bar.appendChild(rightArr);
+    // Create arrow buttons
+    const bar = serversBar.parentElement;
+    bar.style.position = 'relative';
+    bar.style.display = 'flex';
+    bar.style.alignItems = 'center';
+    bar.style.gap = '4px';
 
-        const updateArrows = () => {
-            const hasOverflow = serversBar.scrollWidth > serversBar.clientWidth + 4;
-            leftArr.style.display = hasOverflow && serversBar.scrollLeft > 5 ? 'flex' : 'none';
-            rightArr.style.display = hasOverflow && serversBar.scrollLeft + serversBar.clientWidth < serversBar.scrollWidth - 5 ? 'flex' : 'none';
-        };
-        serversBar.addEventListener('scroll', updateArrows);
-        window.addEventListener('resize', updateArrows);
-        setTimeout(updateArrows, 100);
+    const mkArrow = (dir, symbol) => {
+        const btn = document.createElement('button');
+        btn.innerHTML = symbol;
+        btn.style.cssText = 'flex-shrink:0;width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.1);border:none;color:#fff;font-size:14px;cursor:pointer;display:none;align-items:center;justify-content:center;padding:0;line-height:1';
+        btn.onclick = () => serversBar.scrollBy({left: dir * 120, behavior: 'smooth'});
+        return btn;
+    };
+    const leftArr = mkArrow(-1, '&#8249;');
+    const rightArr = mkArrow(1, '&#8250;');
+    bar.insertBefore(leftArr, serversBar);
+    bar.appendChild(rightArr);
 
-        // Mouse wheel
-        serversBar.addEventListener('wheel', function(e) {
-            if(serversBar.scrollWidth > serversBar.clientWidth) {
-                e.preventDefault();
-                serversBar.scrollLeft += e.deltaY;
-            }
-        }, {passive: false});
+    const updateArrows = () => {
+        const hasOverflow = serversBar.scrollWidth > serversBar.clientWidth + 4;
+        leftArr.style.display = hasOverflow && serversBar.scrollLeft > 5 ? 'flex' : 'none';
+        rightArr.style.display = hasOverflow && serversBar.scrollLeft + serversBar.clientWidth < serversBar.scrollWidth - 5 ? 'flex' : 'none';
+    };
+    serversBar.addEventListener('scroll', updateArrows);
+    window.addEventListener('resize', updateArrows);
+    setTimeout(updateArrows, 100);
+    setTimeout(updateArrows, 500);
 
-        // Drag to scroll
-        let srvDown=false, srvStartX, srvScrollL;
-        serversBar.addEventListener('mousedown', function(e) {
-            srvDown=true; srvStartX=e.pageX; srvScrollL=serversBar.scrollLeft;
-            serversBar.style.cursor='grabbing';
-        });
-        document.addEventListener('mousemove', function(e) {
-            if(!srvDown)return; e.preventDefault();
-            serversBar.scrollLeft=srvScrollL-(e.pageX-srvStartX);
-        });
-        document.addEventListener('mouseup', function() {
-            srvDown=false; if(serversBar)serversBar.style.cursor='grab';
-        });
-    }
+    // Mouse wheel
+    serversBar.addEventListener('wheel', function(e) {
+        if(serversBar.scrollWidth > serversBar.clientWidth) {
+            e.preventDefault();
+            serversBar.scrollLeft += e.deltaY;
+        }
+    }, {passive: false});
+
+    // Drag to scroll
+    let srvDown=false, srvStartX, srvScrollL;
+    serversBar.addEventListener('mousedown', function(e) {
+        srvDown=true; srvStartX=e.pageX; srvScrollL=serversBar.scrollLeft;
+        serversBar.style.cursor='grabbing';
+    });
+    document.addEventListener('mousemove', function(e) {
+        if(!srvDown)return; e.preventDefault();
+        serversBar.scrollLeft=srvScrollL-(e.pageX-srvStartX);
+    });
+    document.addEventListener('mouseup', function() {
+        srvDown=false; if(serversBar)serversBar.style.cursor='grab';
+    });
 }
 
 async function loadEpisodes(id, season, type, activeEp=1) {
@@ -1807,6 +1813,9 @@ async function loadDetailPage(id, type) {
 
     loading?.classList.add('hidden');
     page.classList.remove('hidden');
+
+    // Setup server scroll arrows on detail page
+    setTimeout(setupServerScroll, 200);
 
     const title = displayTitle(detail);
     const date = detail.release_date || detail.first_air_date;
