@@ -2175,23 +2175,11 @@ window.addEventListener('pageshow', () => {
 });
 
 // === MOBILE PERFORMANCE FIX ===
-// Throttle all scroll listeners
-(function() {
-    let ticking = false;
-    const origAdd = EventTarget.prototype.addEventListener;
-    EventTarget.prototype.addEventListener = function(type, fn, opts) {
-        if (type === 'scroll' && this === window) {
-            const throttled = function(e) {
-                if (!ticking) {
-                    ticking = true;
-                    requestAnimationFrame(() => {
-                        fn(e);
-                        ticking = false;
-                    });
-                }
-            };
-            return origAdd.call(this, type, throttled, typeof opts === 'object' ? {...opts, passive: true} : {passive: true});
-        }
-        return origAdd.call(this, type, fn, opts);
-    };
-})();
+// Disable IntersectionObserver animations on mobile
+if (window.matchMedia('(max-width: 768px)').matches) {
+    document.querySelectorAll('.fade-in').forEach(el => {
+        el.classList.add('visible');
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+    });
+}

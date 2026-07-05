@@ -370,10 +370,14 @@ to{transform:translateY(0)}}
   -webkit-transition: -webkit-transform .25s cubic-bezier(.4,0,.2,1);
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
+  visibility: hidden;
+  pointer-events: none;
 }
 .mobile-menu.open {
   transform: translateX(0);
   -webkit-transform: translateX(0);
+  visibility: visible;
+  pointer-events: auto;
 }
 .mobile-menu a {
   display: flex;
