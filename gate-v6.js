@@ -54,7 +54,7 @@
     splash.style.opacity='0';
     gate.style.opacity='1';
     gate.style.pointerEvents='auto';
-    setTimeout(function(){splash.remove()},600);
+    setTimeout(function(){splash.remove();var inp=document.getElementById('bmInp');if(inp)inp.focus()},600);
   },WAIT);
 
   // Gate logic
