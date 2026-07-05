@@ -670,9 +670,53 @@ el('#playerCloseBtn') && (el('#playerCloseBtn').onclick = closeAllModals);
 
 // Fullscreen button
 el('#playerFsBtn') && (el('#playerFsBtn').onclick = () => {
+    const modal = el('#playerModal');
+    const content = modal?.querySelector('.player-content');
     const iframe = el('#playerFrame');
     if (!iframe || !iframe.src) return;
-    // Try fullscreen API first
+
+    // CSS fullscreen (works in Telegram WebView)
+    if (modal && content && !modal._cssFs) {
+        modal._cssFs = true;
+        modal.style.position = 'fixed';
+        modal.style.inset = '0';
+        modal.style.zIndex = '99999';
+        modal.style.background = '#000';
+        content.style.height = '100vh';
+        content.style.maxHeight = '100vh';
+        content.style.overflow = 'hidden';
+        iframe.style.height = '100vh';
+        iframe.style.borderRadius = '0';
+        // Hide everything except iframe
+        var top = modal.querySelector('.player-top');
+        var watch = modal.querySelector('.player-watch-section');
+        var epSheet = modal.querySelector('#episodeSheet');
+        if(top) top.style.display = 'none';
+        if(watch) watch.style.display = 'none';
+        if(epSheet) epSheet.style.display = 'none';
+        // Change button to exit fullscreen
+        el('#playerFsBtn').innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/></svg>';
+        return;
+    }
+    // Exit CSS fullscreen
+    if (modal && modal._cssFs) {
+        modal._cssFs = false;
+        modal.style.position = '';
+        modal.style.inset = '';
+        modal.style.zIndex = '';
+        modal.style.background = '';
+        var content2 = modal.querySelector('.player-content');
+        if(content2) { content2.style.height = ''; content2.style.maxHeight = ''; content2.style.overflow = ''; }
+        iframe.style.height = '';
+        iframe.style.borderRadius = '';
+        var top2 = modal.querySelector('.player-top');
+        var watch2 = modal.querySelector('.player-watch-section');
+        if(top2) top2.style.display = '';
+        if(watch2) watch2.style.display = '';
+        el('#playerFsBtn').innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>';
+        return;
+    }
+    // Fallback: native fullscreen or open external
     try {
         if (document.fullscreenElement || document.webkitFullscreenElement) {
             (document.exitFullscreen || document.webkitExitFullscreen).call(document);
@@ -684,8 +728,6 @@ el('#playerFsBtn') && (el('#playerFsBtn').onclick = () => {
             throw new Error('no fullscreen api');
         }
     } catch(e) {
-        // Fallback: Telegram Mini App → openLink (external browser)
-        // Normal browser → window.open
         if (tg && tg.openLink) {
             tg.openLink(iframe.src);
         } else {
