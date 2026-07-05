@@ -455,3 +455,18 @@ to{transform:translateY(0)}}
   .backdrop-filter, .overlay-back-btn, .overlay-fs-btn { backdrop-filter: none !important; }
   .fade-in { opacity: 1 !important; transform: none !important; }
 }
+
+/* === MOBILE SCROLL PERFORMANCE — NUCLEAR === */
+@media(max-width: 768px) {
+  /* Kill ALL box shadows on mobile */
+  * { box-shadow: none !important; text-shadow: none !important; }
+  
+  /* Kill all transitions */
+  * { transition: none !important; animation: none !important; }
+  
+  /* Reduce repaints on fixed elements */
+  .navbar { will-change: auto; }
+  
+  /* Disable card hover effects */
+  .card:hover, .trending-card:hover { transform: none !important; }
+}
