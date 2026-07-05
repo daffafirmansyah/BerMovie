@@ -1878,13 +1878,12 @@ async function loadDetailPage(id, type) {
             if (tg) {
                 try { tg.expand(); } catch(e) {}
                 try { tg.requestFullscreen && tg.requestFullscreen(); } catch(e) {}
-                try { tg.lockOrientation && tg.lockOrientation('landscape'); } catch(e) {}
             }
-            try { screen.orientation && screen.orientation.lock && screen.orientation.lock('landscape'); } catch(e) {}
 
             var h = window.innerHeight + 'px';
+            var w = window.innerWidth + 'px';
             var section = wrap.closest('.inline-player-section') || wrap.parentElement;
-            section.style.cssText = 'position:fixed;inset:0;z-index:99999;background:#000;border-radius:0;padding:0;margin:0;width:100vw;height:' + h;
+            section.style.cssText = 'position:fixed;inset:0;z-index:99999;background:#000;border-radius:0;padding:0;margin:0;width:' + w + ';height:' + h;
             wrap.style.cssText = 'position:relative;width:100%;height:' + h + ';padding-bottom:0';
             iframe.style.cssText = 'width:100%;height:' + h + ';border:none;border-radius:0;display:block';
             Array.from(section.children).forEach(function(c) { if(c !== wrap) c.style.display = 'none'; });
@@ -1893,13 +1892,12 @@ async function loadDetailPage(id, type) {
             btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/></svg>';
             _fsResize = function() {
                 var nh = window.innerHeight + 'px';
+                var nw = window.innerWidth + 'px';
                 section.style.height = nh;
+                section.style.width = nw;
                 wrap.style.height = nh;
                 iframe.style.height = nh;
-                // Re-try Telegram fullscreen on rotation
-                if (tg && tg.requestFullscreen) {
-                    try { tg.requestFullscreen(); } catch(e) {}
-                }
+                if (tg && tg.requestFullscreen) { try { tg.requestFullscreen(); } catch(e) {} }
             };
             window.addEventListener('resize', _fsResize);
         }
