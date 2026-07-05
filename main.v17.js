@@ -516,6 +516,17 @@ async function openPlayer(id, type, title, season=1, episode=1) {
     const initSvr = document.querySelector('.svr-btn.active');
     const sn = el('#serverName');
     if(initSvr && sn) sn.textContent = initSvr.textContent.trim();
+
+    // Mouse wheel horizontal scroll on server buttons
+    const serversBar = document.querySelector('.player-servers');
+    if(serversBar) {
+        serversBar.addEventListener('wheel', function(e) {
+            if(serversBar.scrollWidth > serversBar.clientWidth) {
+                e.preventDefault();
+                serversBar.scrollLeft += e.deltaY;
+            }
+        }, {passive: false});
+    }
 }
 
 async function loadEpisodes(id, season, type, activeEp=1) {
