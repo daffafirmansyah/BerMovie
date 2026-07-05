@@ -2,7 +2,7 @@
 (function(){
   const ACCESS_CODE='BERMOVIE2026';
   const SPLASH_MS=2800;
-  const ADMIN_HANDLE='daffafirmansyah';
+  const ADMIN_HANDLE='Daffa14';
 
   const isAuth=sessionStorage.getItem('bermovie_auth')==='1';
 
