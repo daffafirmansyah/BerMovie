@@ -2148,3 +2148,28 @@ document.addEventListener('keydown', (e) => {
     root.style.setProperty('--accent2', '#ea580c', 'important');
     root.style.setProperty('--accent-glow', 'rgba(249,115,22,.2)', 'important');
 })();
+
+// === TELEGRAM MINI APP SCROLL FIX ===
+// Ensure vertical swipes are enabled
+if (tg) {
+    // Enable vertical swipes (allows page scrolling in Mini App)
+    if (tg.isVerticalSwipesEnabled !== undefined) {
+        tg.isVerticalSwipesEnabled = true;
+    }
+    // Safety: restore scroll on visibility change
+    document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) {
+            const modal = document.getElementById('playerModal');
+            const detailModal = document.getElementById('detailModal');
+            if ((!modal || modal.classList.contains('hidden')) && 
+                (!detailModal || detailModal.classList.contains('hidden'))) {
+                document.body.style.overflow = '';
+            }
+        }
+    });
+}
+
+// Safety: restore scroll on page show (back navigation)
+window.addEventListener('pageshow', () => {
+    document.body.style.overflow = '';
+});
