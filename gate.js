@@ -1,7 +1,7 @@
 /* === BerMovie Splash + Access Gate === */
 (function(){
   const ACCESS_CODE='BERMOVIE2026';
-  const SPLASH_MS=4000;
+  const SPLASH_MS=10000;
   const ADMIN_HANDLE='Daffa14';
 
   const isAuth=sessionStorage.getItem('bermovie_auth')==='1';
