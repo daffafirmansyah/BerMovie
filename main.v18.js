@@ -1874,18 +1874,22 @@ async function loadDetailPage(id, type) {
         var _fsResize = null;
 
         function enterFs() {
+            // Try Telegram native fullscreen first
+            if (tg && tg.requestFullscreen) {
+                try { tg.requestFullscreen(); } catch(e) {}
+            }
+            // Also try screen orientation lock
+            try { screen.orientation && screen.orientation.lock && screen.orientation.lock('landscape'); } catch(e) {}
+
             var h = window.innerHeight + 'px';
             var section = wrap.closest('.inline-player-section') || wrap.parentElement;
             section.style.cssText = 'position:fixed;inset:0;z-index:99999;background:#000;border-radius:0;padding:0;margin:0;width:100vw;height:' + h;
             wrap.style.cssText = 'position:relative;width:100%;height:' + h + ';padding-bottom:0';
             iframe.style.cssText = 'width:100%;height:' + h + ';border:none;border-radius:0;display:block';
             Array.from(section.children).forEach(function(c) { if(c !== wrap) c.style.display = 'none'; });
-            // Hide navbar
             var nav = document.querySelector('.navbar'); if(nav) nav.style.display = 'none';
-            // Hide back-to-top
             var bt = document.getElementById('backTop'); if(bt) bt.style.display = 'none';
             btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/></svg>';
-            // Update on resize (rotation)
             _fsResize = function() {
                 var nh = window.innerHeight + 'px';
                 section.style.height = nh;
@@ -1893,11 +1897,15 @@ async function loadDetailPage(id, type) {
                 iframe.style.height = nh;
             };
             window.addEventListener('resize', _fsResize);
-            // Try landscape lock
-            try { screen.orientation && screen.orientation.lock && screen.orientation.lock('landscape'); } catch(e) {}
         }
 
         function exitFs() {
+            // Exit Telegram native fullscreen
+            if (tg && tg.exitFullscreen) {
+                try { tg.exitFullscreen(); } catch(e) {}
+            }
+            try { screen.orientation && screen.orientation.unlock && screen.orientation.unlock(); } catch(e) {}
+
             var section = wrap.closest('.inline-player-section') || wrap.parentElement;
             section.style.cssText = '';
             wrap.style.cssText = 'position:relative';
@@ -1907,7 +1915,6 @@ async function loadDetailPage(id, type) {
             var bt = document.getElementById('backTop'); if(bt) bt.style.display = '';
             btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>';
             if(_fsResize) { window.removeEventListener('resize', _fsResize); _fsResize = null; }
-            try { screen.orientation && screen.orientation.unlock && screen.orientation.unlock(); } catch(e) {}
         }
 
         btn.onclick = function() { wrap._cssFs ? (exitFs(), wrap._cssFs = false) : (enterFs(), wrap._cssFs = true); };
