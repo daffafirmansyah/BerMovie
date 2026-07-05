@@ -1,275 +1,274 @@
-1|<!DOCTYPE html>
-2|<html lang="id">
-3|<head>
-4|    <meta charset="UTF-8">
-5|    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-6|    <title>Peringkat - BerMovie</title>
-7|    <meta name="description" content="Peringkat film dan series terbaik.">
-8|    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-9|    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-10|    <link rel="preconnect" href="https://fonts.googleapis.com">
-11|    <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-12|    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎬</text></svg>">
-13|    <link rel="stylesheet" href="style.v12.css?v=39">
-14|<link rel="stylesheet" href="modern.css?v=15">
-15|<style>
-16|
-17|</style>
-18|    <style>
-19|        .lb-page { padding-top: var(--nav-height); }
-20|        .lb-header {
-21|            max-width: var(--max-w); margin: 0 auto;
-22|            padding: 32px 20px 8px;
-23|        }
-24|        .lb-header h1 { font-size: 1.5rem; font-weight: 800; }
-25|        .lb-header p { color: var(--text3); font-size: 0.85rem; margin-top: 4px; }
-26|        .lb-tabs {
-27|            display: flex; gap: 6px; flex-wrap: wrap;
-28|            max-width: var(--max-w); margin: 0 auto;
-29|            padding: 16px 20px 8px;
-30|        }
-31|        .lb-tab {
-32|            padding: 8px 18px; border-radius: 20px;
-33|            font-size: 0.82rem; font-weight: 600;
-34|            background: var(--bg-card); border: 1px solid var(--border);
-35|            color: var(--text2); cursor: pointer; transition: var(--transition);
-36|        }
-37|        .lb-tab:hover { background: var(--bg-hover); color: var(--text); }
-38|        .lb-tab.active { background: var(--accent); color: #fff; border-color: var(--accent); }
-39|        .lb-section { display: none; }
-40|        .lb-section.active { display: block; }
-41|        .lb-list {
-42|            max-width: var(--max-w); margin: 0 auto;
-43|            padding: 8px 20px 40px;
-44|            display: flex; flex-direction: column; gap: 8px;
-45|        }
-46|        .lb-item {
-47|            display: flex; align-items: center; gap: 14px;
-48|            padding: 10px 14px;
-49|            background: var(--bg-card); border: 1px solid var(--border);
-50|            border-radius: var(--radius);
-51|            cursor: pointer; transition: var(--transition);
-52|        }
-53|        .lb-item:hover { background: var(--bg-hover); border-color: rgba(255,255,255,0.1); }
-54|        .lb-rank {
-55|            width: 32px; height: 32px; border-radius: 50%;
-56|            display: flex; align-items: center; justify-content: center;
-57|            font-size: 0.8rem; font-weight: 800; flex-shrink: 0;
-58|            background: var(--bg-elevated); color: var(--text3);
-59|        }
-60|        .lb-item:nth-child(1) .lb-rank { background: #f5a623; color: #000; }
-61|        .lb-item:nth-child(2) .lb-rank { background: #b0b0b8; color: #000; }
-62|        .lb-item:nth-child(3) .lb-rank { background: #cd7f32; color: #000; }
-63|        .lb-item:nth-child(n+4) .lb-rank { background: var(--bg-elevated); color: var(--text3); }
-64|        .lb-poster {
-65|            width: 40px; height: 60px; border-radius: 6px;
-66|            object-fit: cover; flex-shrink: 0;
-67|            background: var(--bg-elevated);
-68|        }
-69|        .lb-info { flex: 1; min-width: 0; }
-70|        .lb-info strong { display: block; font-size: 0.88rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-71|        .lb-info small { color: var(--text3); font-size: 0.75rem; }
-72|        .lb-rating { font-size: 0.8rem; font-weight: 700; color: #f5a623; flex-shrink: 0; }
-73|        .lb-loading {
-74|            padding: 60px 20px; text-align: center; color: var(--text3);
-75|            max-width: var(--max-w); margin: 0 auto;
-76|        }
-77|    </style>
-78|</head>
-79|<body>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peringkat - BerMovie</title>
+    <meta name="description" content="Peringkat film dan series terbaik.">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎬</text></svg>">
+    <link rel="stylesheet" href="style.v12.css?v=39">
+<link rel="stylesheet" href="modern.css?v=15">
+<style>
+
+</style>
+    <style>
+        .lb-page { padding-top: var(--nav-height); }
+        .lb-header {
+            max-width: var(--max-w); margin: 0 auto;
+            padding: 32px 20px 8px;
+        }
+        .lb-header h1 { font-size: 1.5rem; font-weight: 800; }
+        .lb-header p { color: var(--text3); font-size: 0.85rem; margin-top: 4px; }
+        .lb-tabs {
+            display: flex; gap: 6px; flex-wrap: wrap;
+            max-width: var(--max-w); margin: 0 auto;
+            padding: 16px 20px 8px;
+        }
+        .lb-tab {
+            padding: 8px 18px; border-radius: 20px;
+            font-size: 0.82rem; font-weight: 600;
+            background: var(--bg-card); border: 1px solid var(--border);
+            color: var(--text2); cursor: pointer; transition: var(--transition);
+        }
+        .lb-tab:hover { background: var(--bg-hover); color: var(--text); }
+        .lb-tab.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+        .lb-section { display: none; }
+        .lb-section.active { display: block; }
+        .lb-list {
+            max-width: var(--max-w); margin: 0 auto;
+            padding: 8px 20px 40px;
+            display: flex; flex-direction: column; gap: 8px;
+        }
+        .lb-item {
+            display: flex; align-items: center; gap: 14px;
+            padding: 10px 14px;
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: var(--radius);
+            cursor: pointer; transition: var(--transition);
+        }
+        .lb-item:hover { background: var(--bg-hover); border-color: rgba(255,255,255,0.1); }
+        .lb-rank {
+            width: 32px; height: 32px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.8rem; font-weight: 800; flex-shrink: 0;
+            background: var(--bg-elevated); color: var(--text3);
+        }
+        .lb-item:nth-child(1) .lb-rank { background: #f5a623; color: #000; }
+        .lb-item:nth-child(2) .lb-rank { background: #b0b0b8; color: #000; }
+        .lb-item:nth-child(3) .lb-rank { background: #cd7f32; color: #000; }
+        .lb-item:nth-child(n+4) .lb-rank { background: var(--bg-elevated); color: var(--text3); }
+        .lb-poster {
+            width: 40px; height: 60px; border-radius: 6px;
+            object-fit: cover; flex-shrink: 0;
+            background: var(--bg-elevated);
+        }
+        .lb-info { flex: 1; min-width: 0; }
+        .lb-info strong { display: block; font-size: 0.88rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .lb-info small { color: var(--text3); font-size: 0.75rem; }
+        .lb-rating { font-size: 0.8rem; font-weight: 700; color: #f5a623; flex-shrink: 0; }
+        .lb-loading {
+            padding: 60px 20px; text-align: center; color: var(--text3);
+            max-width: var(--max-w); margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
 <script src="gate.js?v=1"></script>
-80|<div class="scroll-progress" id="scrollProgress"></div>
-81|
-82|    <nav class="navbar">
-83|        <div class="nav-container">
-84|            <a href="./" class="logo">BerMovie</a>
-85|            <div class="nav-search">
-86|                <input type="text" id="searchInput" data-i18n="search" placeholder="Cari film atau series..." autocomplete="off">
-87|                <button id="searchBtn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></button>
-88|            </div>
-89|            <div class="nav-links">
-90|                <a href="./" data-nav="home">Home</a>
-91|                <a href="movies.html" data-nav="movies" data-i18n="nav_movies">Film</a>
-92|                <a href="tv.html" data-nav="tv" data-i18n="nav_tv">Serial</a>
-93|                <div class="nav-dropdown">
-94|                    <span class="nav-dropdown-trigger" data-nav="genre" data-i18n="nav_genre">Genre<svg class="nav-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:inline-block;vertical-align:middle;margin-left:2px"><polyline points="6 9 12 15 18 9"/></svg></span>
-95|                    <div class="dropdown-menu" id="genreDropdown"></div>
-96|                </div>
-97|                <div class="nav-dropdown">
-98|                    <span class="nav-dropdown-trigger" data-nav="country" data-i18n="nav_country">Negara<svg class="nav-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:inline-block;vertical-align:middle;margin-left:2px"><polyline points="6 9 12 15 18 9"/></svg></span>
-99|                    <div class="dropdown-menu" id="countryDropdown"></div>
-100|                </div>
-101|                <div class="nav-dropdown">
-102|                    <span class="nav-dropdown-trigger" data-nav="tahun" data-i18n="nav_tahun">Tahun<svg class="nav-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:inline-block;vertical-align:middle;margin-left:2px"><polyline points="6 9 12 15 18 9"/></svg></span>
-103|                    <div class="dropdown-menu" id="yearDropdown"></div>
-104|                </div>
-105|                <a href="./?watchlist" class="nav-fav" data-i18n="nav_favorit">Favorit</a>
-106|                <button class="nav-lang-btn" id="langToggle" title="Switch language" onclick="toggleLanguage()">EN</button>
-107|            </div>
-108|            <button class="mobile-menu-btn" id="mobileMenuBtn" style="cursor:pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="pointer-events:none"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
-109|        </div>
-110|        <!-- Mobile Menu -->
-111|        <div class="mobile-menu" id="mobileMenu">
-112|            <div class="mobile-search">
-113|                <input type="text" id="mobileSearchInput" data-i18n="search" placeholder="Cari film atau series..." autocomplete="off">
-114|                <button id="mobileSearchBtn" data-i18n="search_btn">Cari</button>
-115|            </div>
-116|            <a href="./" data-nav="home"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span data-i18n="nav_home">Home</span></a>
-117|            <a href="movies.html" data-nav="movies" data-i18n="nav_movies">Film</a>
-118|            <a href="tv.html" data-nav="tv" data-i18n="nav_tv">Serial</a>
-119|            <a href="genre.html" data-nav="genre"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg><span data-i18n="nav_genre">Genre</span></a>
-120|            <a href="leaderboard.html" class="active" data-nav="leaderboard" data-i18n="nav_leaderboard">Peringkat</a>
-121|            <a href="movies.html" data-nav="tahun"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span data-i18n="nav_tahun">Tahun</span></a>
-122|            <a href="movies.html" data-nav="country"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg><span data-i18n="nav_country">Negara</span></a>
-123|            <a href="./?watchlist" data-nav="watchlist" data-i18n="nav_favorit">Favorit</a>
-124|            <button class="nav-lang-btn" id="langToggleMobile" onclick="toggleLanguage()">EN</button>
-125|        </div>
-126|    </nav>
-127|
-128|    <div class="lb-page">
-129|        <div class="lb-header">
-130|            <h1 data-i18n="leaderboard_title">Peringkat</h1>
-131|            <p data-i18n="leaderboard_desc">Film dan serial terbaik berdasarkan rating dan popularitas</p>
-132|        </div>
-133|
-134|        <div class="lb-tabs" id="lbTabs">
-135|            <button class="lb-tab active" data-section="trending" data-i18n="trending">Trending</button>
-136|            <button class="lb-tab" data-section="movieTop" data-i18n="best_movies">Film Terbaik</button>
-137|            <button class="lb-tab" data-section="tvTop" data-i18n="best_tv">Serial Terbaik</button>
-138|            <button class="lb-tab" data-section="moviePop" data-i18n="popular_movies">Film Populer</button>
-139|            <button class="lb-tab" data-section="tvPop" data-i18n="popular_tv">Serial Populer</button>
-140|        </div>
-141|
-142|        <div id="lbTrending" class="lb-section active"><div class="lb-list" id="trendingList"></div></div>
-143|        <div id="lbMovieTop" class="lb-section"><div class="lb-list" id="movieTopList"></div></div>
-144|        <div id="lbTvTop" class="lb-section"><div class="lb-list" id="tvTopList"></div></div>
-145|        <div id="lbMoviePop" class="lb-section"><div class="lb-list" id="moviePopList"></div></div>
-146|        <div id="lbTvPop" class="lb-section"><div class="lb-list" id="tvPopList"></div></div>
-147|
-148|        <div class="lb-loading hidden" id="lbLoading">Memuat...</div>
-149|    </div>
-150|
-151|    <!-- PLAYER MODAL -->
-152|    <div class="player-modal hidden" id="playerModal">
-153|        <div class="player-backdrop"></div>
-154|        <div class="player-content">
-155|            <div class="player-top">
-156|                <button class="player-back" id="playerBackBtn">&larr;</button>
-157|                <span class="player-title" id="playerTitle"></span>
-158|                <div class="player-top-right">
-159|                    <button class="player-eps-btn hidden" id="playerEpsBtn">&#9776;</button>
-160|                    <button class="player-fs-btn" id="playerFsBtn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg></button>
-161|                    <button class="player-close" id="playerCloseBtn">&times;</button>
-162|                </div>
-163|            </div>
-164|            <div class="player-watch-section">
-165|                <h2 class="watch-heading">▶ Watch Now</h2>
-166|                <div class="player-servers-bar" id="playerServersBar">
-167|                <div class="player-servers" id="playerServers">
-168|                    <button class="svr-btn active" data-server="vesy">Vesy</button>
-169|                    <button class="svr-btn" data-server="videasy">Videasy</button>
-170|                    <button class="svr-btn" data-server="vidnest">VidNest</button>
-171|                    <button class="svr-btn" data-server="vnest">VNest</button>
-172|                    <button class="svr-btn" data-server="vidsrcsu">VidSrc</button>
-173|                    <button class="svr-btn" data-server="apiplayer">ApiPlayer</button>
-174|                    <button class="svr-btn" data-server="2embed">2Embed</button>
-175|                    <button class="svr-btn" data-server="vixsrc">VixSrc</button>
-176|                </div>
-177|            </div>
-178|                <div class="server-indicator">Server: <span id="serverName">Vesy</span></div>
-179|            </div>
-180|            <div class="iframe-container">
-181|                <iframe id="playerFrame" src="" frameborder="0" allowfullscreen allow="fullscreen; autoplay; encrypted-media"></iframe>
-182|                
-183|            </div>
-184|            </div>
-185|            
-186|            <div class="episode-sheet hidden" id="episodeSheet">
-187|                <div class="ep-sheet-handle"></div>
-188|                <div class="ep-sheet-header">
-189|                    <h4 data-i18n="episode_title">Episode</h4>
-190|                    <button class="ep-sheet-close" id="epSheetClose">&times;</button>
-191|                </div>
-192|                <select id="seasonSelect" class="ep-season-select"></select>
-193|                <div class="episodes-grid" id="episodesGrid"></div>
-194|            </div>
-195|        </div>
-196|    </div>
-197|
-198|<button class="back-top" id="backTop">&uarr;</button>
-199|<div class="toast" id="toast"></div>
-200|    <footer class="site-footer">
-201|        <p data-i18n="footer_tagline">BerMovie — Streaming Film & Serial Sub Indo</p>
-202|    </footer>
-203|
-204|    <script defer src="main.v17.js?v=44"></script>
-205|    <script>
-206|        // LEADERBOARD
-207|        const LB_LISTS = ['trendingList','movieTopList','tvTopList','moviePopList','tvPopList'];
-208|
-209|        async function loadLB() {
-210|            const loading = document.getElementById('lbLoading');
-211|            loading?.classList.remove('hidden');
-212|
-213|            const [trending, movieTop, tvTop, moviePop, tvPop] = await Promise.all([
-214|                tmdb('/trending/all/day'),
-215|                tmdb('/movie/top_rated'),
-216|                tmdb('/tv/top_rated'),
-217|                tmdb('/movie/popular'),
-218|                tmdb('/tv/popular')
-219|            ]);
-220|
-221|            loading?.classList.add('hidden');
-222|
-223|            renderLBList('trendingList', trending?.results?.slice(0, 20));
-224|            renderLBList('movieTopList', movieTop?.results?.slice(0, 20), 'movie');
-225|            renderLBList('tvTopList', tvTop?.results?.slice(0, 20), 'tv');
-226|            renderLBList('moviePopList', moviePop?.results?.slice(0, 20), 'movie');
-227|            renderLBList('tvPopList', tvPop?.results?.slice(0, 20), 'tv');
-228|        }
-229|
-230|        function renderLBList(containerId, items, forceType) {
-231|            const list = document.getElementById(containerId);
-232|            if (!list) return;
-233|            list.innerHTML = '';
-234|            if (!items) return;
-235|
-236|            items.forEach((item, i) => {
-237|                const type = forceType || item.media_type || 'movie';
-238|                const title = item.title || item.name || 'Untitled';
-239|                const date = item.release_date || item.first_air_date;
-240|                const div = document.createElement('div');
-241|                div.className = 'lb-item';
-242|                div.innerHTML = `
-243|                    <div class="lb-rank">${i + 1}</div>
-244|                    <img class="lb-poster" src="${posterUrl(item.poster_path)}" alt="" loading="lazy" onerror="this.src='${NO_POSTER}'">
-245|                    <div class="lb-info">
-246|                        <strong>${title}</strong>
-247|                        <small>${year(date)} · ${type === 'movie' ? t('nav_movies') : t('nav_tv')}</small>
-248|                    </div>
-249|                    <span class="lb-rating">★ ${rating(item.vote_average)}</span>
-250|                `;
-251|                div.onclick = () => window.location.href = `detail.html?id=${item.id}&type=${type}`;
-252|                list.appendChild(div);
-253|            });
-254|        }
-255|
-256|        // Tab switching
-257|        document.querySelectorAll('.lb-tab').forEach(tab => {
-258|            tab.onclick = () => {
-259|                document.querySelectorAll('.lb-tab').forEach(t => t.classList.remove('active'));
-260|                tab.classList.add('active');
-261|                document.querySelectorAll('.lb-section').forEach(s => s.classList.remove('active'));
-262|                const section = document.getElementById('lb' + tab.dataset.section.charAt(0).toUpperCase() + tab.dataset.section.slice(1));
-263|                if (section) section.classList.add('active');
-264|            };
-265|        });
-266|
-267|        document.addEventListener('DOMContentLoaded', () => {
-268|            initGlobalEvents();
-269|            loadLB();
-270|        });
-271|    </script>
-272|</body>
-273|</html>
-274|
+<div class="scroll-progress" id="scrollProgress"></div>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="./" class="logo">BerMovie</a>
+            <div class="nav-search">
+                <input type="text" id="searchInput" data-i18n="search" placeholder="Cari film atau series..." autocomplete="off">
+                <button id="searchBtn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></button>
+            </div>
+            <div class="nav-links">
+                <a href="./" data-nav="home">Home</a>
+                <a href="movies.html" data-nav="movies" data-i18n="nav_movies">Film</a>
+                <a href="tv.html" data-nav="tv" data-i18n="nav_tv">Serial</a>
+                <div class="nav-dropdown">
+                    <span class="nav-dropdown-trigger" data-nav="genre" data-i18n="nav_genre">Genre<svg class="nav-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:inline-block;vertical-align:middle;margin-left:2px"><polyline points="6 9 12 15 18 9"/></svg></span>
+                    <div class="dropdown-menu" id="genreDropdown"></div>
+                </div>
+                <div class="nav-dropdown">
+                    <span class="nav-dropdown-trigger" data-nav="country" data-i18n="nav_country">Negara<svg class="nav-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:inline-block;vertical-align:middle;margin-left:2px"><polyline points="6 9 12 15 18 9"/></svg></span>
+                    <div class="dropdown-menu" id="countryDropdown"></div>
+                </div>
+                <div class="nav-dropdown">
+                    <span class="nav-dropdown-trigger" data-nav="tahun" data-i18n="nav_tahun">Tahun<svg class="nav-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:inline-block;vertical-align:middle;margin-left:2px"><polyline points="6 9 12 15 18 9"/></svg></span>
+                    <div class="dropdown-menu" id="yearDropdown"></div>
+                </div>
+                <a href="./?watchlist" class="nav-fav" data-i18n="nav_favorit">Favorit</a>
+                <button class="nav-lang-btn" id="langToggle" title="Switch language" onclick="toggleLanguage()">EN</button>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn" style="cursor:pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="pointer-events:none"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
+        </div>
+        <!-- Mobile Menu -->
+        <div class="mobile-menu" id="mobileMenu">
+            <div class="mobile-search">
+                <input type="text" id="mobileSearchInput" data-i18n="search" placeholder="Cari film atau series..." autocomplete="off">
+                <button id="mobileSearchBtn" data-i18n="search_btn">Cari</button>
+            </div>
+            <a href="./" data-nav="home"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span data-i18n="nav_home">Home</span></a>
+            <a href="movies.html" data-nav="movies" data-i18n="nav_movies">Film</a>
+            <a href="tv.html" data-nav="tv" data-i18n="nav_tv">Serial</a>
+            <a href="genre.html" data-nav="genre"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg><span data-i18n="nav_genre">Genre</span></a>
+            <a href="leaderboard.html" class="active" data-nav="leaderboard" data-i18n="nav_leaderboard">Peringkat</a>
+            <a href="movies.html" data-nav="tahun"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span data-i18n="nav_tahun">Tahun</span></a>
+            <a href="movies.html" data-nav="country"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg><span data-i18n="nav_country">Negara</span></a>
+            <a href="./?watchlist" data-nav="watchlist" data-i18n="nav_favorit">Favorit</a>
+            <button class="nav-lang-btn" id="langToggleMobile" onclick="toggleLanguage()">EN</button>
+        </div>
+    </nav>
+
+    <div class="lb-page">
+        <div class="lb-header">
+            <h1 data-i18n="leaderboard_title">Peringkat</h1>
+            <p data-i18n="leaderboard_desc">Film dan serial terbaik berdasarkan rating dan popularitas</p>
+        </div>
+
+        <div class="lb-tabs" id="lbTabs">
+            <button class="lb-tab active" data-section="trending" data-i18n="trending">Trending</button>
+            <button class="lb-tab" data-section="movieTop" data-i18n="best_movies">Film Terbaik</button>
+            <button class="lb-tab" data-section="tvTop" data-i18n="best_tv">Serial Terbaik</button>
+            <button class="lb-tab" data-section="moviePop" data-i18n="popular_movies">Film Populer</button>
+            <button class="lb-tab" data-section="tvPop" data-i18n="popular_tv">Serial Populer</button>
+        </div>
+
+        <div id="lbTrending" class="lb-section active"><div class="lb-list" id="trendingList"></div></div>
+        <div id="lbMovieTop" class="lb-section"><div class="lb-list" id="movieTopList"></div></div>
+        <div id="lbTvTop" class="lb-section"><div class="lb-list" id="tvTopList"></div></div>
+        <div id="lbMoviePop" class="lb-section"><div class="lb-list" id="moviePopList"></div></div>
+        <div id="lbTvPop" class="lb-section"><div class="lb-list" id="tvPopList"></div></div>
+
+        <div class="lb-loading hidden" id="lbLoading">Memuat...</div>
+    </div>
+
+    <!-- PLAYER MODAL -->
+    <div class="player-modal hidden" id="playerModal">
+        <div class="player-backdrop"></div>
+        <div class="player-content">
+            <div class="player-top">
+                <button class="player-back" id="playerBackBtn">&larr;</button>
+                <span class="player-title" id="playerTitle"></span>
+                <div class="player-top-right">
+                    <button class="player-eps-btn hidden" id="playerEpsBtn">&#9776;</button>
+                    <button class="player-fs-btn" id="playerFsBtn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg></button>
+                    <button class="player-close" id="playerCloseBtn">&times;</button>
+                </div>
+            </div>
+            <div class="player-watch-section">
+                <h2 class="watch-heading">▶ Watch Now</h2>
+                <div class="player-servers-bar" id="playerServersBar">
+                <div class="player-servers" id="playerServers">
+                    <button class="svr-btn active" data-server="vesy">Vesy</button>
+                    <button class="svr-btn" data-server="videasy">Videasy</button>
+                    <button class="svr-btn" data-server="vidnest">VidNest</button>
+                    <button class="svr-btn" data-server="vnest">VNest</button>
+                    <button class="svr-btn" data-server="vidsrcsu">VidSrc</button>
+                    <button class="svr-btn" data-server="apiplayer">ApiPlayer</button>
+                    <button class="svr-btn" data-server="2embed">2Embed</button>
+                    <button class="svr-btn" data-server="vixsrc">VixSrc</button>
+                </div>
+            </div>
+                <div class="server-indicator">Server: <span id="serverName">Vesy</span></div>
+            </div>
+            <div class="iframe-container">
+                <iframe id="playerFrame" src="" frameborder="0" allowfullscreen allow="fullscreen; autoplay; encrypted-media"></iframe>
+                
+            </div>
+            </div>
+            
+            <div class="episode-sheet hidden" id="episodeSheet">
+                <div class="ep-sheet-handle"></div>
+                <div class="ep-sheet-header">
+                    <h4 data-i18n="episode_title">Episode</h4>
+                    <button class="ep-sheet-close" id="epSheetClose">&times;</button>
+                </div>
+                <select id="seasonSelect" class="ep-season-select"></select>
+                <div class="episodes-grid" id="episodesGrid"></div>
+            </div>
+        </div>
+    </div>
+
+<button class="back-top" id="backTop">&uarr;</button>
+<div class="toast" id="toast"></div>
+    <footer class="site-footer">
+        <p data-i18n="footer_tagline">BerMovie — Streaming Film & Serial Sub Indo</p>
+    </footer>
+
+    <script defer src="main.v17.js?v=44"></script>
+    <script>
+        // LEADERBOARD
+        const LB_LISTS = ['trendingList','movieTopList','tvTopList','moviePopList','tvPopList'];
+
+        async function loadLB() {
+            const loading = document.getElementById('lbLoading');
+            loading?.classList.remove('hidden');
+
+            const [trending, movieTop, tvTop, moviePop, tvPop] = await Promise.all([
+                tmdb('/trending/all/day'),
+                tmdb('/movie/top_rated'),
+                tmdb('/tv/top_rated'),
+                tmdb('/movie/popular'),
+                tmdb('/tv/popular')
+            ]);
+
+            loading?.classList.add('hidden');
+
+            renderLBList('trendingList', trending?.results?.slice(0, 20));
+            renderLBList('movieTopList', movieTop?.results?.slice(0, 20), 'movie');
+            renderLBList('tvTopList', tvTop?.results?.slice(0, 20), 'tv');
+            renderLBList('moviePopList', moviePop?.results?.slice(0, 20), 'movie');
+            renderLBList('tvPopList', tvPop?.results?.slice(0, 20), 'tv');
+        }
+
+        function renderLBList(containerId, items, forceType) {
+            const list = document.getElementById(containerId);
+            if (!list) return;
+            list.innerHTML = '';
+            if (!items) return;
+
+            items.forEach((item, i) => {
+                const type = forceType || item.media_type || 'movie';
+                const title = item.title || item.name || 'Untitled';
+                const date = item.release_date || item.first_air_date;
+                const div = document.createElement('div');
+                div.className = 'lb-item';
+                div.innerHTML = `
+                    <div class="lb-rank">${i + 1}</div>
+                    <img class="lb-poster" src="${posterUrl(item.poster_path)}" alt="" loading="lazy" onerror="this.src='${NO_POSTER}'">
+                    <div class="lb-info">
+                        <strong>${title}</strong>
+                        <small>${year(date)} · ${type === 'movie' ? t('nav_movies') : t('nav_tv')}</small>
+                    </div>
+                    <span class="lb-rating">★ ${rating(item.vote_average)}</span>
+                `;
+                div.onclick = () => window.location.href = `detail.html?id=${item.id}&type=${type}`;
+                list.appendChild(div);
+            });
+        }
+
+        // Tab switching
+        document.querySelectorAll('.lb-tab').forEach(tab => {
+            tab.onclick = () => {
+                document.querySelectorAll('.lb-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                document.querySelectorAll('.lb-section').forEach(s => s.classList.remove('active'));
+                const section = document.getElementById('lb' + tab.dataset.section.charAt(0).toUpperCase() + tab.dataset.section.slice(1));
+                if (section) section.classList.add('active');
+            };
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initGlobalEvents();
+            loadLB();
+        });
+    </script>
+</body>
+</html>
