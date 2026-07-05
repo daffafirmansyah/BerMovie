@@ -1869,7 +1869,13 @@ async function loadDetailPage(id, type) {
 
         var btn = document.createElement('button');
         btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>';
-        btn.style.cssText = 'position:absolute;bottom:12px;right:12px;z-index:10;width:36px;height:36px;border-radius:8px;background:rgba(0,0,0,.6);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center';
+        btn.style.cssText = 'position:absolute;bottom:12px;right:12px;z-index:10;display:flex;gap:6px';
+        var fsBtn = document.createElement('button');
+        fsBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>';
+        fsBtn.style.cssText = 'width:36px;height:36px;border-radius:8px;background:rgba(0,0,0,.6);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center';
+        var extBtn = document.createElement('button');
+        extBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>';
+        extBtn.style.cssText = 'width:36px;height:36px;border-radius:8px;background:rgba(0,0,0,.6);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center';
 
         var _fsResize = null;
 
@@ -1919,7 +1925,16 @@ async function loadDetailPage(id, type) {
             if(_fsResize) { window.removeEventListener('resize', _fsResize); _fsResize = null; }
         }
 
-        btn.onclick = function() { wrap._cssFs ? (exitFs(), wrap._cssFs = false) : (enterFs(), wrap._cssFs = true); };
+        fsBtn.onclick = function() { wrap._cssFs ? (exitFs(), wrap._cssFs = false) : (enterFs(), wrap._cssFs = true); };
+        extBtn.onclick = function() {
+            var src = iframe.src;
+            if (src && src !== 'about:blank') {
+                if (tg && tg.openLink) { tg.openLink(src); }
+                else { window.open(src, '_blank'); }
+            }
+        };
+        btn.appendChild(fsBtn);
+        btn.appendChild(extBtn);
         wrap.appendChild(btn);
     }, 300);
 
