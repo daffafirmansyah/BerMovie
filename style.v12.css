@@ -470,3 +470,4 @@ to{transform:translateY(0)}}
   /* Disable card hover effects */
   .card:hover, .trending-card:hover { transform: none !important; }
 }
+ 
