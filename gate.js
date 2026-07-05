@@ -19,12 +19,18 @@
   splash.className='splash-overlay';
   splash.id='splashOverlay';
   splash.innerHTML=`
-    <div class="neon-sign">
-      <div class="neon-burst"><svg viewBox="0 0 28 28" fill="none"><path d="M14 2l3 8 8 3-8 3-3 8-3-8-8-3 8-3z" fill="#a5b4fc" opacity=".7"/><path d="M14 6l1.5 4 4 1.5-4 1.5L14 17l-1.5-4-4-1.5 4-1.5z" fill="#e0e7ff"/></svg></div>
-      <div class="neon-title"><span class="ber">Ber</span><span class="movie">Movie</span></div>
-      <div class="neon-sub">Nonton film & series subtitle Indonesia</div>
+    <div class="splash-brand">
+      <div class="splash-logo">BerMovie</div>
+      <div class="splash-tagline">Streaming Film & Series Sub Indo</div>
+      <div class="splash-line"></div>
     </div>
-    <div class="splash-spinner"></div>
+    <div class="splash-loader">
+      <div class="splash-dots">
+        <div class="splash-dot"></div>
+        <div class="splash-dot"></div>
+        <div class="splash-dot"></div>
+      </div>
+    </div>
   `;
 
   // === GATE ===
