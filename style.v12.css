@@ -448,26 +448,19 @@ to{transform:translateY(0)}}
   color: var(--accent);
 }
 
-/* === MOBILE PERFORMANCE FIX === */
-@media(max-width:768px) {
-  * { transition-duration: 0s !important; animation-duration: 0s !important; }
-  .card:hover { transform: none !important; }
-  .backdrop-filter, .overlay-back-btn, .overlay-fs-btn { backdrop-filter: none !important; }
-  .fade-in { opacity: 1 !important; transform: none !important; }
-}
+/* === SCROLL PERFORMANCE — UNIVERSAL === */
+/* Kill ALL box shadows — biggest paint bottleneck */
+* { box-shadow: none !important; text-shadow: none !important; }
 
-/* === MOBILE SCROLL PERFORMANCE — NUCLEAR === */
-@media(max-width: 768px) {
-  /* Kill ALL box shadows on mobile */
-  * { box-shadow: none !important; text-shadow: none !important; }
-  
-  /* Kill all transitions */
-  * { transition: none !important; animation: none !important; }
-  
-  /* Reduce repaints on fixed elements */
-  .navbar { will-change: auto; }
-  
-  /* Disable card hover effects */
-  .card:hover, .trending-card:hover { transform: none !important; }
-}
- 
+/* Kill all transitions — stop layout thrash */
+* { transition: none !important; animation: none !important; }
+
+/* Disable card hover effects */
+.card:hover, .trending-card:hover { transform: none !important; }
+
+/* Content visibility for off-screen sections */
+.section, .trending-list, .carousel { content-visibility: auto; contain-intrinsic-size: auto 400px; }
+
+/* Containment for cards */
+.card, .trending-card { contain: layout style paint; }
+
