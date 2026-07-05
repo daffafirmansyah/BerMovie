@@ -2172,11 +2172,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (!gate) { tg.BackButton.hide(); observer.disconnect(); }
             });
             observer.observe(document.body, { childList: true });
-            // Re-hide on back navigation (popstate) and pageshow
-            window.addEventListener('popstate', () => { tg.BackButton.hide(); });
-            window.addEventListener('pageshow', () => { tg.BackButton.hide(); });
-            // Safety: re-hide periodically on homepage
-            setInterval(() => { if (!document.getElementById('bmGate')) tg.BackButton.hide(); }, 3000);
+            // Re-hide on back navigation
+            window.addEventListener('popstate', () => {
+                setTimeout(() => { tg.BackButton.hide(); }, 100);
+                setTimeout(() => { tg.BackButton.hide(); }, 500);
+            });
+            window.addEventListener('pageshow', () => {
+                setTimeout(() => { tg.BackButton.hide(); }, 100);
+            });
+            // Poll: keep hiding BackButton on homepage
+            setInterval(() => {
+                if (!window.location.pathname.includes('detail')) tg.BackButton.hide();
+            }, 1000);
         }
     }
 
