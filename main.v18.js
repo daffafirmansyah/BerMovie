@@ -2165,25 +2165,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // Telegram: hide back button on non-detail pages
     if (isTgMiniApp && tg.BackButton) {
         tg.BackButton.hide();
-        // Re-hide after gate passes
         if (path.includes('index.html') || path.endsWith('/') || path === '') {
+            // On homepage: BackButton = close app
+            tg.BackButton.show();
+            tg.BackButton.onClick(() => { tg.close(); });
+            // After gate passes, re-set handler
             const observer = new MutationObserver(() => {
                 const gate = document.getElementById('bmGate');
-                if (!gate) { tg.BackButton.hide(); observer.disconnect(); }
+                if (!gate) { tg.BackButton.show(); tg.BackButton.onClick(() => { tg.close(); }); observer.disconnect(); }
             });
             observer.observe(document.body, { childList: true });
-            // Re-hide on back navigation
-            window.addEventListener('popstate', () => {
-                setTimeout(() => { tg.BackButton.hide(); }, 100);
-                setTimeout(() => { tg.BackButton.hide(); }, 500);
-            });
-            window.addEventListener('pageshow', () => {
-                setTimeout(() => { tg.BackButton.hide(); }, 100);
-            });
-            // Poll: keep hiding BackButton on homepage
-            setInterval(() => {
-                if (!window.location.pathname.includes('detail')) tg.BackButton.hide();
-            }, 1000);
         }
     }
 
