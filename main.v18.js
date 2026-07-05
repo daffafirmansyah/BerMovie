@@ -2162,19 +2162,16 @@ document.addEventListener('DOMContentLoaded', () => {
         // Will init home page, then trigger search
     }
 
-    // Telegram: hide back button on non-detail pages
+    // Telegram: back button behavior
     if (isTgMiniApp && tg.BackButton) {
-        tg.BackButton.hide();
-        if (path.includes('index.html') || path.endsWith('/') || path === '') {
-            // On homepage: BackButton = close app
+        if (path.includes('detail.html')) {
+            // Detail page: back = go to homepage
+            tg.BackButton.show();
+            tg.BackButton.onClick(() => { location.href = './'; });
+        } else {
+            // Homepage: close app on back
             tg.BackButton.show();
             tg.BackButton.onClick(() => { tg.close(); });
-            // After gate passes, re-set handler
-            const observer = new MutationObserver(() => {
-                const gate = document.getElementById('bmGate');
-                if (!gate) { tg.BackButton.show(); tg.BackButton.onClick(() => { tg.close(); }); observer.disconnect(); }
-            });
-            observer.observe(document.body, { childList: true });
         }
     }
 
