@@ -526,6 +526,24 @@ async function openPlayer(id, type, title, season=1, episode=1) {
                 serversBar.scrollLeft += e.deltaY;
             }
         }, {passive: false});
+
+        // Drag to scroll for server buttons
+        let srvDown=false, srvStartX, srvScrollL;
+        serversBar.addEventListener('mousedown', function(e) {
+            srvDown=true;
+            srvStartX=e.pageX;
+            srvScrollL=serversBar.scrollLeft;
+            serversBar.style.cursor='grabbing';
+        });
+        document.addEventListener('mousemove', function(e) {
+            if(!srvDown) return;
+            e.preventDefault();
+            serversBar.scrollLeft=srvScrollL-(e.pageX-srvStartX);
+        });
+        document.addEventListener('mouseup', function() {
+            srvDown=false;
+            if(serversBar) serversBar.style.cursor='grab';
+        });
     }
 }
 
