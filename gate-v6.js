@@ -87,7 +87,11 @@
     if(v===CODE){
       sessionStorage.setItem('bm_ok','1');
       gate.style.opacity='0';
-      setTimeout(function(){gate.remove()},600);
+      setTimeout(function(){
+        gate.remove();
+        // Force Telegram header back to X button
+        try{var tw=window.Telegram?.WebApp;if(tw&&tw.BackButton)tw.BackButton.hide()}catch(e){}
+      },600);
     }else{
       err.textContent='Kode salah, coba lagi';inp.value='';inp.style.borderColor='rgba(239,68,68,.6)';
       setTimeout(function(){inp.style.borderColor='rgba(255,255,255,.08)'},600);
