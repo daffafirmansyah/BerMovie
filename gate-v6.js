@@ -51,18 +51,19 @@
   setTimeout(function(){
     clearInterval(spinTimer);
     clearInterval(barTimer);
+    // focus BEFORE splash hides (some mobile browsers need this)
+    var inp=document.getElementById('bmInp');
+    if(inp)inp.focus();
     splash.style.opacity='0';
     gate.style.opacity='1';
     gate.style.pointerEvents='auto';
     setTimeout(function(){
       splash.remove();
-      // mobile needs multiple focus attempts
-      var inp=document.getElementById('bmInp');
       if(inp){
         inp.focus();
-        inp.setAttribute('readonly','');
-        inp.focus();
-        setTimeout(function(){inp.removeAttribute('readonly')},100);
+        inp.click();
+        // second attempt after repaint
+        requestAnimationFrame(function(){inp.focus()});
       }
     },600);
   },WAIT);
