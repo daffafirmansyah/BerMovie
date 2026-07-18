@@ -22,11 +22,7 @@ if (isTgMiniApp) {
     tg.ready();
     document.documentElement.style.setProperty('--bg', tg.backgroundColor || '#0f0f13');
     // Don't override accent — keep our orange
-    let _tgScrollTimer;
-    window.addEventListener('scroll', () => {
-        clearTimeout(_tgScrollTimer);
-        _tgScrollTimer = setTimeout(() => { document.activeElement?.blur(); }, 500);
-    }, { passive: true });
+    // Scroll blur is now handled by unified handler below
 }
 
 // i18n
@@ -1614,11 +1610,11 @@ function initGenrePills() {
     });
 }
 
-// SCROLL EVENTS (back to top + progress)
+// SCROLL EVENTS (back to top + progress + navbar compact)
 function initScrollEvents() {
     const btn = el('#backTop');
     const prog = el('#scrollProgress');
-    if (!btn && !prog) return;
+    const nav = document.querySelector('.navbar');
     let ticking = false;
     window.addEventListener('scroll', () => {
         if (!ticking) {
@@ -1627,6 +1623,9 @@ function initScrollEvents() {
                 const max = document.documentElement.scrollHeight - window.innerHeight;
                 if (prog) prog.style.width = `${(scroll / max) * 100}%`;
                 if (btn) btn.classList.toggle('show', scroll > 300);
+                if (nav) nav.classList.toggle('compact', scroll > 80);
+                // Blur active element on Telegram to dismiss keyboard
+                if (isTgMiniApp && scroll > 50) document.activeElement?.blur();
                 ticking = false;
             });
             ticking = true;
@@ -2091,12 +2090,7 @@ async function loadDetailPage(id, type) {
 
 // === FUTURISTIC JS ENHANCEMENTS ===
 
-// 1. Navbar compact on scroll
-window.addEventListener('scroll', () => {
-    const nav = document.querySelector('.navbar');
-    if (!nav) return;
-    nav.classList.toggle('compact', window.scrollY > 80);
-}, { passive: true });
+// 1. Navbar compact — merged into initScrollEvents() RAF handler
 
 // 2. Card 3D tilt (desktop only - kills mobile perf)
 if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
