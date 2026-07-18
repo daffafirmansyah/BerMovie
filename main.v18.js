@@ -254,7 +254,7 @@ function createCard(item, type) {
         sessionStorage.setItem('bermovie_referrer', location.href);
     });
     div.innerHTML = `
-        <img class="card-poster" src="${posterUrl(item.poster_path)}" alt="${title}" loading="lazy" decoding="async" onerror="this.src='${NO_POSTER}'">
+        <img class="card-poster" src="${posterUrl(item.poster_path)}" alt="${title}" loading="lazy" decoding="async" width="165" height="248" onerror="this.src='${NO_POSTER}'">
         <div class="card-badges">
             <span class="card-type ${isTv ? 'type-tv' : 'type-movie'}">${isTv ? 'TV' : 'MOVIE'}</span>
             ${item.vote_average >= 8 ? '<span class="card-badge">TOP</span>' : ''}
@@ -957,7 +957,7 @@ async function loadTrending(filter) {
         card.className = 'trending-card';
         card.href = 'detail.html?id='+item.id+'&type='+mt;
         card.addEventListener('click', () => sessionStorage.setItem('bermovie_referrer', location.href));
-        card.innerHTML = '<span class="trending-rank">'+(i+1)+'</span><img src="'+posterUrl(item.poster_path)+'" alt="'+t+'" loading="lazy"><div class="trending-info"><div class="title">'+t+'</div><div class="meta">'+y+' ~ '+rate+'</div></div>';
+        card.innerHTML = '<span class="trending-rank">'+(i+1)+'</span><img src="'+posterUrl(item.poster_path)+'" alt="'+t+'" loading="lazy" width="80" height="120" decoding="async"><div class="trending-info"><div class="title">'+t+'</div><div class="meta">'+y+' ~ '+rate+'</div></div>';
 
         list.appendChild(card);
     });
@@ -2109,28 +2109,39 @@ if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
     });
 }
 
-// 3. Scroll animations (IntersectionObserver)
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            observer.unobserve(entry.target);
-        }
-    });
-}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+// 3. Scroll animations (IntersectionObserver) — DISABLED in Telegram for perf
+if (!isTgMiniApp) {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
 
-function observeScroll() {
-    document.querySelectorAll('.section, .genre-grid, .trending-list, .grid, .genre-card, .trending-card').forEach(el => {
-        el.classList.add('fade-in');
-        observer.observe(el);
-    });
-}
+    function observeScroll() {
+        document.querySelectorAll('.section, .genre-grid, .trending-list, .grid, .genre-card, .trending-card').forEach(el => {
+            el.classList.add('fade-in');
+            observer.observe(el);
+        });
+    }
 
-// Run observer after initial load
-if (document.readyState === 'complete') {
-    observeScroll();
+    // Run observer after initial load
+    if (document.readyState === 'complete') {
+        observeScroll();
+    } else {
+        window.addEventListener('load', observeScroll);
+    }
 } else {
-    window.addEventListener('load', observeScroll);
+    // Telegram: skip fade-in, make everything visible immediately
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.fade-in, .section, .genre-grid, .trending-list, .grid, .genre-card, .trending-card').forEach(el => {
+            el.classList.add('visible');
+            el.style.opacity = '1';
+            el.style.transform = 'none';
+        });
+    });
 }
 
 // 4. Detail page hero reveal

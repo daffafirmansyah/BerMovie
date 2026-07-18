@@ -470,4 +470,15 @@ main, .section, .hero { transform: translateZ(0); }
 /* Smooth scroll for carousels */
 .carousel, .trending-list { -webkit-overflow-scrolling: touch; will-change: scroll-position; }
 
+/* Telegram Mini App: kill all fade-in animations */
+.fade-in { opacity: 1 !important; transform: none !important; transition: none !important; }
+.fade-in.visible { opacity: 1 !important; transform: none !important; }
+
+/* Image rendering: prevent reflow */
+img { content-visibility: auto; contain-intrinsic-size: 165px 248px; }
+.card-poster, .trending-card img { content-visibility: auto; }
+
+/* Reduce paint scope for off-screen */
+main { content-visibility: auto; contain-intrinsic-size: auto 800px; }
+
  
