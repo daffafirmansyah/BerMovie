@@ -13,7 +13,7 @@
 .hero-dots{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:5}
 .hero-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.3);cursor:pointer;transition:var(--transition);padding:0;touch-action:manipulation}
 .hero-dot.active{background:#fff;width:24px;border-radius:5px}
-.hero-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:5;width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,.4);color:#fff;font-size:1.8rem;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:var(--transition);touch-action:manipulation;border:1px solid rgba(255,255,255,.1)}
+.hero-arrow{display:none!important}
 .hero-arrow:hover{background:rgba(0,0,0,.7)}
 .hero-arrow-left{left:16px}
 .hero-arrow-right{right:16px}
