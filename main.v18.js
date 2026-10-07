@@ -22,11 +22,7 @@ if (isTgMiniApp) {
     tg.ready();
     document.documentElement.style.setProperty('--bg', tg.backgroundColor || '#0f0f13');
     // Don't override accent — keep our orange
-    let _tgScrollTimer;
-    window.addEventListener('scroll', () => {
-        clearTimeout(_tgScrollTimer);
-        _tgScrollTimer = setTimeout(() => { document.activeElement?.blur(); }, 500);
-    }, { passive: true });
+    // Scroll blur is now handled by unified handler below
 }
 
 // i18n
@@ -258,7 +254,7 @@ function createCard(item, type) {
         sessionStorage.setItem('bermovie_referrer', location.href);
     });
     div.innerHTML = `
-        <img class="card-poster" src="${posterUrl(item.poster_path)}" alt="${title}" loading="lazy" decoding="async" onerror="this.src='${NO_POSTER}'">
+        <img class="card-poster" src="${posterUrl(item.poster_path)}" alt="${title}" loading="lazy" decoding="async" width="165" height="248" onerror="this.src='${NO_POSTER}'">
         <div class="card-badges">
             <span class="card-type ${isTv ? 'type-tv' : 'type-movie'}">${isTv ? 'TV' : 'MOVIE'}</span>
             ${item.vote_average >= 8 ? '<span class="card-badge">TOP</span>' : ''}
@@ -961,7 +957,7 @@ async function loadTrending(filter) {
         card.className = 'trending-card';
         card.href = 'detail.html?id='+item.id+'&type='+mt;
         card.addEventListener('click', () => sessionStorage.setItem('bermovie_referrer', location.href));
-        card.innerHTML = '<span class="trending-rank">'+(i+1)+'</span><img src="'+posterUrl(item.poster_path)+'" alt="'+t+'" loading="lazy"><div class="trending-info"><div class="title">'+t+'</div><div class="meta">'+y+' ~ '+rate+'</div></div>';
+        card.innerHTML = '<span class="trending-rank">'+(i+1)+'</span><img src="'+posterUrl(item.poster_path)+'" alt="'+t+'" loading="lazy" width="80" height="120" decoding="async"><div class="trending-info"><div class="title">'+t+'</div><div class="meta">'+y+' ~ '+rate+'</div></div>';
 
         list.appendChild(card);
     });
@@ -1614,11 +1610,11 @@ function initGenrePills() {
     });
 }
 
-// SCROLL EVENTS (back to top + progress)
+// SCROLL EVENTS (back to top + progress + navbar compact)
 function initScrollEvents() {
     const btn = el('#backTop');
     const prog = el('#scrollProgress');
-    if (!btn && !prog) return;
+    const nav = document.querySelector('.navbar');
     let ticking = false;
     window.addEventListener('scroll', () => {
         if (!ticking) {
@@ -1627,6 +1623,9 @@ function initScrollEvents() {
                 const max = document.documentElement.scrollHeight - window.innerHeight;
                 if (prog) prog.style.width = `${(scroll / max) * 100}%`;
                 if (btn) btn.classList.toggle('show', scroll > 300);
+                if (nav) nav.classList.toggle('compact', scroll > 80);
+                // Blur active element on Telegram to dismiss keyboard
+                if (isTgMiniApp && scroll > 50) document.activeElement?.blur();
                 ticking = false;
             });
             ticking = true;
@@ -2091,12 +2090,7 @@ async function loadDetailPage(id, type) {
 
 // === FUTURISTIC JS ENHANCEMENTS ===
 
-// 1. Navbar compact on scroll
-window.addEventListener('scroll', () => {
-    const nav = document.querySelector('.navbar');
-    if (!nav) return;
-    nav.classList.toggle('compact', window.scrollY > 80);
-}, { passive: true });
+// 1. Navbar compact — merged into initScrollEvents() RAF handler
 
 // 2. Card 3D tilt (desktop only - kills mobile perf)
 if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
@@ -2115,28 +2109,39 @@ if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
     });
 }
 
-// 3. Scroll animations (IntersectionObserver)
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            observer.unobserve(entry.target);
-        }
-    });
-}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+// 3. Scroll animations (IntersectionObserver) — DISABLED in Telegram for perf
+if (!isTgMiniApp) {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
 
-function observeScroll() {
-    document.querySelectorAll('.section, .genre-grid, .trending-list, .grid, .genre-card, .trending-card').forEach(el => {
-        el.classList.add('fade-in');
-        observer.observe(el);
-    });
-}
+    function observeScroll() {
+        document.querySelectorAll('.section, .genre-grid, .trending-list, .grid, .genre-card, .trending-card').forEach(el => {
+            el.classList.add('fade-in');
+            observer.observe(el);
+        });
+    }
 
-// Run observer after initial load
-if (document.readyState === 'complete') {
-    observeScroll();
+    // Run observer after initial load
+    if (document.readyState === 'complete') {
+        observeScroll();
+    } else {
+        window.addEventListener('load', observeScroll);
+    }
 } else {
-    window.addEventListener('load', observeScroll);
+    // Telegram: skip fade-in, make everything visible immediately
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.fade-in, .section, .genre-grid, .trending-list, .grid, .genre-card, .trending-card').forEach(el => {
+            el.classList.add('visible');
+            el.style.opacity = '1';
+            el.style.transform = 'none';
+        });
+    });
 }
 
 // 4. Detail page hero reveal
